@@ -2,8 +2,8 @@
     <div class="container" style="padding-left: 30px; padding-right: 30px">
         Erectile Dysfunction (ED) Questionnaire: Step <span class="step_num">1</span>
     </div>
-    <div class="container text-dark mt-2" style="padding-left: 30px; padding-right: 30px;font-size:13px;">
-    <p>ED treatment kit consists of Sildenafil 50mg (Generic Viagra) x 10 tabs.</p>
+    <div class="container text-dark mt-1" style="padding-left: 30px; padding-right: 30px;font-size:13px;">
+    <p class="mb-0 pb-0">ED treatment kit consists of Sildenafil 50mg (Generic Viagra) x 10 tabs.</p>
     </div>
 </div>
 
@@ -15,7 +15,7 @@
 
         @include('landing.layout.error_message')
 
-        <div class="step active container" id="step-1">
+        <div class="step active container p-0" id="step-1">
 
             <div class="question-div">  
                 
@@ -501,10 +501,10 @@
         </div>
 
 
-        <div class="step-buttons mt-4">
-            <button class="button-custom d-none" type="button" id="prevBtn" onclick="changeStep(-1)" disabled>Previous</button>
+        <div class="step-buttons mt-4 container p-0">
+            <button class="button-custom d-none previous-button" type="button" id="prevBtn" onclick="changeStep(-1)" disabled>Previous</button>
             <div class="col text-end">
-            <button type="button" class="btn button-custom" id="nextBtn" style="float:right;" onclick="changeStep(1)">Next</button>
+                <button type="button" class="btn button-custom" id="nextBtn" style="float:right;" onclick="changeStep(1)">Next</button>
            </div>
             <a href="https://vacaymd.com/" class="btn button-custom d-none" id="failed_btn_ok"> Okay</a>
             <button type="submit" class="button-custom d-none" id="submitBtn">Continue</button>

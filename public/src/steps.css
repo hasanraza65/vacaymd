@@ -1,8 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap');
+
+:root {
+    --theme-orange: #EF951A;
+    --theme-gray: #58585A;
+}
+
+* {
+    font-family: 'Poppins', sans-serif!important;
+}
+
+
+
 .step_info {
     background-color: #dcdbdf;
     padding: 20px;
     /* padding-left: 150px; */
-    color: #de8812;
+    color: var(--theme-orange);
     font-weight: 600;
 }
 
@@ -42,7 +55,7 @@ input:focus {
 
 .step-form {
     /* max-width: 900px; */
-    margin: 50px auto;
+    margin: 15px auto;
     padding: 30px;
     border-radius: 5px;
 }
@@ -117,18 +130,18 @@ button:disabled {
 
 .button-container input:checked ~ .custom-button {
     background-color: white;
-    border: 2px solid #e6a03b;
+    border: 2px solid var(--theme-orange);
 }
 
 .button-container input:checked ~ .custom-button .radio-circle {
-    border-color: #e6a03b;
-    border: 2px solid #e6a03b;
+    border-color: var(--theme-orange);
+    border: 2px solid var(--theme-orange);
     background-color: white;
 }
 
 .button-container input:active ~ .custom-button .radio-circle {
-    border-color: #e6a03b;
-    border: 2px solid #e6a03b;
+    border-color: var(--theme-orange);
+    border: 2px solid var(--theme-orange);
     background-color: white;
 }
 
@@ -147,7 +160,7 @@ button:disabled {
     align-items: center;
     background-color: white;
     padding: 15px;
-    color: #e6a03b;
+    color: var(--theme-orange);
 }
 
 .logo {
@@ -160,7 +173,7 @@ button:disabled {
 .menu-button {
     font-size: 24px;
     cursor: pointer;
-    color: #e6a03b;
+    color: var(--theme-orange);
 }
 
 /* Menu */
@@ -206,14 +219,14 @@ button:disabled {
     box-shadow: -1px 2px 5px 2px rgba(128, 128, 128, 0.5);
 }
 .btn-custom:hover {
-    box-shadow: -1px 2px 5px 2px #e6a03b;
+    box-shadow: -1px 2px 5px 2px var(--theme-orange);
 }
 .read-more-button {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
-    background-color: #e6a03b;
+    background-color: var(--theme-orange);
     padding: 5px 20px;
     border-radius: 50px;
 }
@@ -229,7 +242,7 @@ button:disabled {
     background-color: white;
 }
 .custom-radio:hover {
-    box-shadow: -1px 2px 5px 2px #e6a03b;
+    box-shadow: -1px 2px 5px 2px var(--theme-orange);
 }
 .custom-radio input {
     display: inline;
@@ -259,13 +272,21 @@ button:disabled {
     margin: 0;
     padding: 10px;
 }
+.custom-radio-circle[type="radio"]:focus {
+    border: 2px solid var(--theme-orange)!important;
+}
+.custom-radio-circle[type="checkbox"]:focus {
+    border: 2px solid var(--theme-orange)!important;
+}
+
+
 .custom-radio-circle[type="radio"]::before {
     content: "";
     width: 1.2em;
     height: 1.2em;
     border-radius: 50%;
-    border: 2px solid #e6a03b;
-    background-color: #e6a03b;
+    border: 2px solid var(--theme-orange);
+    background-color: var(--theme-orange);
     transform: scale(0);
     transition: 120ms transform ease-in-out;
 }
@@ -274,7 +295,7 @@ button:disabled {
 }
 .custom-radio-circle[type="radio"]:checked {
     box-shadow: none;
-    border: 2px solid #e6a03b;
+    border: 2px solid var(--theme-orange);
     transition: 120ms transform ease-in-out;
     padding: 10px;
 }
@@ -285,7 +306,7 @@ button:disabled {
 /* change the style of .custom-radio class on selecting radio */
 
 .checked {
-    box-shadow: -1px 2px 5px 2px #e6a03b;
+    box-shadow: -1px 2px 5px 2px var(--theme-orange);
 }
 
 .mouse-none {
@@ -299,23 +320,31 @@ button:disabled {
     padding: 15px;
 }
 .textarea-custom:hover{
-    box-shadow: -1px 2px 5px 2px #e6a03b;
+    box-shadow: -1px 2px 5px 2px var(--theme-orange);
 }
 .textarea-custom:focus, .textarea-custom:active{
     border: none;
-    box-shadow: -1px 2px 5px 2px #e6a03b!important;
+    box-shadow: -1px 2px 5px 2px var(--theme-orange)!important;
 }
 .button-custom{
-    background-color: #e6a03b;
-    padding: 5px 20px;
+    background-color: var(--theme-orange);
+    padding: 5px 50px;
     border-radius: 50px;
     color: white;
+}
+.previous-button{
+    background-color: var(--theme-gray);
+}
+.previous-button:hover{
+    background-color: #434344!important;
 }
 .button-custom:hover{
     background-color: #de8812;
     color: white;
 }
-
+.button-custom:active, .button-custom:focus, .previous-button:active, .previous-button:focus{
+    box-shadow: none!important;
+}
 .input-custom{
     box-shadow: -1px 2px 5px 2px rgba(128, 128, 128, 0.1);
     padding-left: 20px;
@@ -323,7 +352,7 @@ button:disabled {
 .input-custom:hover,
 .input-custom:focus,
 .input-custom:active{
-    box-shadow: -1px 2px 5px 2px #e6a03b;
+    box-shadow: -1px 2px 5px 2px var(--theme-orange);
 }
 .login-link{
     color: #de8812;
@@ -334,8 +363,8 @@ button:disabled {
     width: 1.2em;
     height: 1.2em;
     border-radius: 50%;
-    border: 2px solid #e6a03b;
-    background-color: #e6a03b;
+    border: 2px solid var(--theme-orange);
+    background-color: var(--theme-orange);
     transform: scale(0);
     transition: 120ms transform ease-in-out;
 }
@@ -344,7 +373,7 @@ button:disabled {
 }
 .custom-radio-circle[type="checkbox"]:checked {
     box-shadow: none;
-    border: 2px solid #e6a03b;
+    border: 2px solid var(--theme-orange);
     transition: 120ms transform ease-in-out;
 }
 .custom-radio-circle + label {

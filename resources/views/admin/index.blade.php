@@ -19,7 +19,7 @@ $dashboard=App\Http\Controllers\Admin\UserController::dashboard();
                                         <div class="info-box">
                                             <div class="icon">
                                                 <span>
-                                                    <img src="/src/assets/img/orders.png" alt="money-bag">
+                                                    <img src="/src/assets/img/all-orders.png" alt="money-bag">
                                                 </span>
                                             </div>
 
@@ -71,7 +71,7 @@ $dashboard=App\Http\Controllers\Admin\UserController::dashboard();
                                         <div class="info-box">
                                             <div class="icon">
                                                 <span>
-                                                    <img src="/src/assets/img/orders.png" alt="money-bag">
+                                                    <img src="/src/assets/img/completed-orders.svg" alt="money-bag">
                                                 </span>
                                             </div>
 
@@ -97,7 +97,7 @@ $dashboard=App\Http\Controllers\Admin\UserController::dashboard();
                                         <div class="info-box">
                                             <div class="icon">
                                                 <span>
-                                                    <img src="/src/assets/img/orders.png" alt="money-bag">
+                                                    <img src="/src/assets/img/cancelled-orders.svg" alt="money-bag">
                                                 </span>
                                             </div>
 
@@ -123,7 +123,7 @@ $dashboard=App\Http\Controllers\Admin\UserController::dashboard();
                                         <div class="info-box">
                                             <div class="icon">
                                                 <span>
-                                                    <img src="/src/assets/img/orders.png" alt="money-bag">
+                                                    <img src="/src/assets/img/dispensed.svg" alt="money-bag">
                                                 </span>
                                             </div>
 
@@ -153,7 +153,7 @@ $dashboard=App\Http\Controllers\Admin\UserController::dashboard();
                                         <div class="info-box">
                                             <div class="icon">
                                                 <span>
-                                                    <img src="/src/assets/img/patients.png" alt="money-bag">
+                                                    <img src="/src/assets/img/patient.svg" alt="money-bag">
                                                 </span>
                                             </div>
 
@@ -178,7 +178,7 @@ $dashboard=App\Http\Controllers\Admin\UserController::dashboard();
                                         <div class="info-box">
                                             <div class="icon">
                                                 <span>
-                                                    <img src="/src/assets/img/patients.png" alt="money-bag">
+                                                    <img src="/src/assets/img/doctor.svg" alt="money-bag">
                                                 </span>
                                             </div>
 

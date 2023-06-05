@@ -4,6 +4,8 @@
 			@Import	Function
 	===============================
 */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap');
+
 /*
 	===============================
 			@Import	Mixins
@@ -21,7 +23,7 @@ body.dark {
   overflow-x: hidden;
   overflow-y: auto;
   letter-spacing: 0.0312rem;
-  font-family: "Nunito", sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 body.dark h1, body.dark h2, body.dark h3, body.dark h4, body.dark h5, body.dark h6 {
   color: #e0e6ed;

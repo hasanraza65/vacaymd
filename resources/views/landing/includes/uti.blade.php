@@ -2,8 +2,8 @@
     <div class="container" style="padding-left: 30px; padding-right: 30px">
     UTI Questionnaire: Step <span class="step_num">1</span>
     </div>
-    <div class="container text-dark mt-2" style="padding-left: 30px; padding-right: 30px;font-size:13px;">
-    <p>UTI kit contains Cranberry and Probiotic blend x 10 tabs, Urine Testing Strips x 2 and Nitrofurantoin x 10 tabs. This kit is designed to prevent UTI for 5 days and has a complete course of antibiotic.</p>
+    <div class="container text-dark mt-1" style="padding-left: 30px; padding-right: 30px;font-size:13px;">
+    <p class="mb-0">UTI kit contains Cranberry and Probiotic blend x 10 tabs, Urine Testing Strips x 2 and Nitrofurantoin x 10 tabs. This kit is designed to prevent UTI for 5 days and has a complete course of antibiotic.</p>
     </div>
 </div>
 
@@ -419,7 +419,7 @@
 
 
         <div class="step-buttons mt-4">
-            <button class="button-custom d-none" type="button" id="prevBtn" onclick="changeStep(-1)" disabled>Previous</button>
+            <button class="button-custom d-none previous-button" type="button" id="prevBtn" onclick="changeStep(-1)" disabled>Previous</button>
             <div class="col text-end">
              <button type="button" class="btn button-custom" id="nextBtn" style="float:right;" onclick="changeStep(1)">Next</button>
            </div>

@@ -2,8 +2,8 @@
     <div class="container" style="padding-left: 30px;">
     Hangover Questionnaire: Step <span class="step_num">1</span>
     </div>
-    <div class="container text-dark mt-2" style="padding-left: 30px; padding-right: 30px;font-size:13px;">
-    <p>Hangover care kit contains Ondansetron Oral dissolvable tabs x 10, Famotidine x 10 tabs and Liquid IV x 6 packets.</p>
+    <div class="container text-dark mt-1" style="padding-left: 30px; padding-right: 30px;font-size:13px;">
+    <p class="mb-0">Hangover care kit contains Ondansetron Oral dissolvable tabs x 10, Famotidine x 10 tabs and Liquid IV x 6 packets.</p>
     </div>
 </div>
 
@@ -320,7 +320,7 @@
                     <li>You will read the medication information provided with your prescription.</li>
                 </ul>
                 <ul>
-                    <li><a href="/terms_of_use" target="_blank">Terms of Use ABF</a></li>
+                    <li><a target="_blank" data-toggle="modal" data-target="#terms-of-use">Terms of Use ABF</a></li>
                     <li> <a href="/telemedicine" target="_blank">Telehealth Consent ABF</a></li>
                    
                 </ul>
@@ -357,7 +357,7 @@
 
         <div class="step-buttons mt-4">
             
-            <button class="btn button-custom d-none" type="button" id="prevBtn" onclick="changeStep(-1)" disabled>Previous</button>
+            <button class="btn button-custom d-none previous-button" type="button" id="prevBtn" onclick="changeStep(-1)" disabled>Previous</button>
            <div class="col text-end">
            <button type="button" class="btn button-custom" id="nextBtn" style="float:right;" onclick="changeStep(1)">Next</button>
            </div>
@@ -370,6 +370,26 @@
 </form>
 
 
+<!-- Modal -->
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="terms-of-use" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <script>

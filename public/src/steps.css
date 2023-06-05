@@ -1,0 +1,390 @@
+.step_info {
+    background-color: #dcdbdf;
+    padding: 20px;
+    /* padding-left: 150px; */
+    color: #de8812;
+    font-weight: 600;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #eaedf4;
+}
+
+li {
+    margin: 10px;
+}
+
+/*input field css */
+input {
+    display: inline-flex;
+    align-items: center;
+    background-color: white;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 100px;
+    box-shadow: rgba(0, 0, 0, 0.04)  0px 2px 8px;
+    width: 100%;
+    border: 0;
+    border-radius: 100px !important;
+}
+
+select {
+    border-radius: 100px !important;
+}
+
+input:focus {
+    background-color: white;
+    border: 0 !important;
+}
+/*ending input field css */
+
+.step-form {
+    /* max-width: 900px; */
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 5px;
+}
+.step {
+    display: none;
+}
+.step.active {
+    display: block;
+}
+.step-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+button {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Custom Button with Radio Button */
+.button-container {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+.button-container input {
+    position: absolute;
+    /* opacity: 0; */
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    left: 10;
+    z-index: 1;
+}
+
+.custom-button {
+    display: inline-flex;
+    align-items: center;
+    background-color: white;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 100px;
+    box-shadow: rgba(0, 0, 0, 0.04)  0px 2px 8px;
+    width: 100%;
+}
+
+.radio-circle {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.radio-square {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    border-radius: 2%;
+    margin-right: 10px;
+}
+
+.button-container input:checked ~ .custom-button {
+    background-color: white;
+    border: 2px solid #e6a03b;
+}
+
+.button-container input:checked ~ .custom-button .radio-circle {
+    border-color: #e6a03b;
+    border: 2px solid #e6a03b;
+    background-color: white;
+}
+
+.button-container input:active ~ .custom-button .radio-circle {
+    border-color: #e6a03b;
+    border: 2px solid #e6a03b;
+    background-color: white;
+}
+
+/* wrong option */
+/* ending wrong option */
+
+/* Header */
+.header-container {
+    position: relative;
+    background-color: white;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 15px;
+    color: #e6a03b;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.menu-button {
+    font-size: 24px;
+    cursor: pointer;
+    color: #e6a03b;
+}
+
+/* Menu */
+.menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #ffffff;
+    width: 200px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 99999;
+}
+
+.menu-item {
+    padding: 10px 15px;
+    border-bottom: 1px solid #f5f5f5;
+    list-style: none;
+}
+
+.menu-item:last-child {
+    border-bottom: none;
+}
+
+.menu-item a {
+    text-decoration: none;
+    color: #333333;
+    display: block;
+}
+/* Header End */
+
+.question {
+    font-size: 20px;
+    font-weight: 600;
+}
+.btn-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    text-align: left;
+    border-radius: 50px;
+    box-shadow: -1px 2px 5px 2px rgba(128, 128, 128, 0.5);
+}
+.btn-custom:hover {
+    box-shadow: -1px 2px 5px 2px #e6a03b;
+}
+.read-more-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background-color: #e6a03b;
+    padding: 5px 20px;
+    border-radius: 50px;
+}
+.read-more-button:hover {
+    background-color: #de8812;
+}
+.custom-radio {
+    box-shadow: -1px 2px 5px 2px rgba(182, 182, 182, 0.1);
+    border-radius: 50px;
+    align-items: center;
+    display: flex;
+    padding: 10px 15px;
+    background-color: white;
+}
+.custom-radio:hover {
+    box-shadow: -1px 2px 5px 2px #e6a03b;
+}
+.custom-radio input {
+    display: inline;
+    width: auto;
+    height: auto;
+    padding: 0;
+}
+.custom-radio label {
+    margin-left: 20px;
+    font-size: 16px;
+    font-weight: 600;
+    transform: translateY(1px);
+}
+
+.custom-radio-circle[type="radio"] {
+    /* position: relative; */
+    width: 1.7em;
+    height: 1.7em;
+    border-radius: 50%;
+    transition: 120ms transform ease-in-out;
+    display: grid;
+    place-content: center;
+    box-shadow: -1px 2px 5px 2px rgba(182, 182, 182, 0.3);
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    margin: 0;
+    padding: 10px;
+}
+.custom-radio-circle[type="radio"]::before {
+    content: "";
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 50%;
+    border: 2px solid #e6a03b;
+    background-color: #e6a03b;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+}
+.custom-radio-circle[type="radio"]:checked::before {
+    transform: scale(1);
+}
+.custom-radio-circle[type="radio"]:checked {
+    box-shadow: none;
+    border: 2px solid #e6a03b;
+    transition: 120ms transform ease-in-out;
+    padding: 10px;
+}
+.custom-radio-circle + label {
+    padding-left: 25px;
+}
+
+/* change the style of .custom-radio class on selecting radio */
+
+.checked {
+    box-shadow: -1px 2px 5px 2px #e6a03b;
+}
+
+.mouse-none {
+    pointer-events: none;
+}
+.textarea-custom{
+    box-shadow: -1px 2px 5px 2px rgba(128, 128, 128, 0.5);
+    border-radius: 25px;
+    resize: none;
+    height: 100px;
+    padding: 15px;
+}
+.textarea-custom:hover{
+    box-shadow: -1px 2px 5px 2px #e6a03b;
+}
+.textarea-custom:focus, .textarea-custom:active{
+    border: none;
+    box-shadow: -1px 2px 5px 2px #e6a03b!important;
+}
+.button-custom{
+    background-color: #e6a03b;
+    padding: 5px 20px;
+    border-radius: 50px;
+    color: white;
+}
+.button-custom:hover{
+    background-color: #de8812;
+    color: white;
+}
+
+.input-custom{
+    box-shadow: -1px 2px 5px 2px rgba(128, 128, 128, 0.1);
+    padding-left: 20px;
+}
+.input-custom:hover,
+.input-custom:focus,
+.input-custom:active{
+    box-shadow: -1px 2px 5px 2px #e6a03b;
+}
+.login-link{
+    color: #de8812;
+    text-decoration: none;
+}
+.custom-radio-circle[type="checkbox"]::before {
+    content: "";
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 50%;
+    border: 2px solid #e6a03b;
+    background-color: #e6a03b;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+}
+.custom-radio-circle[type="checkbox"]:checked::before {
+    transform: scale(1);
+}
+.custom-radio-circle[type="checkbox"]:checked {
+    box-shadow: none;
+    border: 2px solid #e6a03b;
+    transition: 120ms transform ease-in-out;
+}
+.custom-radio-circle + label {
+    padding-left: 25px;
+}
+.custom-radio-circle[type="checkbox"] {
+    position: relative;
+    width: 1.7em;
+    height: 1.7em;
+    border-radius: 50%;
+    transition: 120ms transform ease-in-out;
+    display: grid;
+    place-content: center;
+    box-shadow: -1px 2px 5px 2px rgba(182, 182, 182, 0.3);
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    margin: 0;
+    padding: 10px;
+}
+.custom-register-checkbox-container{
+    display: flex;
+    align-items: center;
+}
+.payments-method-container{
+    background-color: white;
+    display: flex;
+    border-radius: 40px;
+}
+.payments-method-container div{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 30px;
+    border-radius: 40px;
+}
+.payments-method-container .second{
+    box-shadow: -1px 2px 5px 2px rgba(182, 182, 182, 0.2);
+}
+.payments-method-container img{
+    width: 250px;
+}

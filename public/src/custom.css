@@ -1,0 +1,33 @@
+.clickable{
+
+    cursor: pointer;
+
+}
+
+.starlabel label:after {
+    content:" *";
+    color: red;
+  }
+
+
+  #sidebar ul.menu-categories li.menu > .dropdown-toggle[aria-expanded=true] {
+    background: #EBB66B!important;
+}
+
+.media-heading{
+
+  margin-bottom: -1px!important;
+}
+
+.media-text{
+  font-size: 16px!important;
+}
+
+.action_btn{
+  cursor: pointer;
+}
+
+#progress-text {
+  margin-top: 10px;
+  color: black;
+  }

@@ -1,0 +1,146 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Doctor;
+use Illuminate\Support\Facades\Hash;
+
+class DoctorController extends Controller
+{
+    public function index(){
+
+        $data = Doctor::with('userDetail')->get();
+        
+        return view('admin.doctors.index',compact(['data']));
+
+    }
+
+    public function create(){
+
+        return view('admin.doctors.create');
+
+    }
+
+    public function store(Request $request){
+
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => [
+                'required',
+                'string',
+                'min:8', // Minimum 6 characters
+                'regex:/[a-z]/', // At least one lowercase letter
+                'regex:/[A-Z]/', // At least one uppercase letter
+                'regex:/[0-9]/', // At least one number
+                'regex:/[@$!%*#?&]/', // At least one special character
+            ],
+            'gender' => 'string',
+        ]);
+    
+        $user = new User();
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->gender = $data['gender'];
+        $user->phone =$request->phone;
+        $user->user_role =2;
+        $user->password = Hash::make($data['password']);
+        $user->save();
+
+        $doctor = new Doctor();
+        $doctor->specialization = $request->specialization;
+        $doctor->experience = $request->experience;
+        $doctor->available_from = $request->available_from;
+        $doctor->available_to = $request->available_to;
+        $doctor->user_id = $user->id;
+        $doctor->save();
+        $this->sendEmail($user->id);
+        return redirect('/admin/doctors')->with('success', 'Doctor created successfully');
+
+        //return redirect()->back()->with('success', 'Doctor created successfully');
+
+    }
+
+    public function edit($id){
+
+        $data = Doctor::with('userDetail')
+                ->find($id);
+        
+        return view('admin.doctors.edit',compact(['data']));
+
+    }
+
+    public function update(Request $request, $id){
+
+        //check if email available
+        $check_email = User::where('email',$request->email)
+        ->whereNot('id',$request->user_id)
+        ->first();
+
+        if($check_email){
+
+            return redirect()->back()->withErrors(['email' => 'Email already exists']);
+
+        }
+        //ending check if email available
+
+        
+
+        $user = User::find($request->user_id);
+        
+      
+        if (!empty($data['password'])) {
+            $user->password = Hash::make($data['password']);
+        }else{
+            $old_pass=$user->password;
+            $request->merge([
+                'password' =>  $old_pass
+            ]);
+        }
+
+        if ($_FILES['file']['name']) {
+            if (!$_FILES['file']['error']) {
+                $request->validate([
+                    'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                ]);
+                $imageName = time().'.'.$request->file->extension();  
+                $destination = '/src/assets/uploads/Profile/' .  $imageName;
+                $request->file->move(public_path('src/assets/uploads/Profile'), $imageName);
+                $fullPath = public_path($destination);
+                $request->merge(['profile_pic'=> $destination]);
+                
+            } else {
+                $request->merge(['profile_pic'=> '']);
+                return response()->json(['message' => 'Error uploading profile picture. Please try again later.'], 400);
+            }
+        }
+
+        $data = $request->all();
+        $user->update($request->all());
+        // $user->fill($data);
+        // $user->save();
+
+        $doctor = Doctor::where('id',$id)->first();
+
+        $doctor->specialization = $request->specialization;
+        $doctor->experience = $request->experience;
+        $doctor->available_from = $request->available_from;
+        $doctor->available_to = $request->available_to;
+        $doctor_data = $doctor->update();
+        return redirect('/admin/doctors')->with('success', 'User updated successfully');
+        // return redirect()->back()->with('success', 'User updated successfully');
+
+    }
+    public function destroy($id){
+
+        $doctor = Doctor::where('id',$id)->first();
+        $data = User::find($doctor->user_id)->delete();
+        $data = Doctor::where('id',$id)->delete();
+       
+
+        return response('Deleted');
+    }
+}

@@ -15,6 +15,7 @@ $('#'+idname).addClass('d-none');
 
 }
 
+/*
 var selectedValues = {};
 
 $(document).ready(function() {
@@ -65,6 +66,7 @@ $(document).ready(function() {
   });
 });
 
+*/
 
 /*
 
@@ -846,9 +848,9 @@ $(document).ready(function() {
 });
 */
 
+/*
 $(document).ready(function() {
   $('input[type="checkbox"]').on('change', function() {
-
     var currentCheckbox = $(this);
     var checkBoxGroup = $(this).closest('.question-div').find('input[type="checkbox"]');
     var noOptionCheckbox = checkBoxGroup.filter(function() { 
@@ -857,7 +859,20 @@ $(document).ready(function() {
 
     if (currentCheckbox[0] == noOptionCheckbox[0]) {
       if (currentCheckbox.is(':checked')) {
-        checkBoxGroup.not(noOptionCheckbox).prop('checked', false);
+        checkBoxGroup.not(noOptionCheckbox).each(function() {
+          // If the checkbox is wrong-input and is checked, decrease the total wrongs count
+          if ($(this).hasClass("wrong-input") && $(this).is(":checked")) {
+            var totalErrors = parseInt($('#total_wrongs').val()) - 1;
+            $('#total_wrongs').val(totalErrors);
+            if (totalErrors > 0) {
+              $('.failed_result').removeClass('d-none');
+              $('.passed_result').addClass('d-none');
+            } else {
+              $('.failed_result').addClass('d-none');
+              $('.passed_result').removeClass('d-none');
+            }
+          }
+        }).prop('checked', false);
       }
     } else {
       if (currentCheckbox.is(':checked')) {
@@ -866,7 +881,102 @@ $(document).ready(function() {
     }
   });
 });
+
+*/
 //ending logic
+
+$(document).ready(function() {
+  var selectedValues = {};
+
+  $('input[type="checkbox"], input[type="radio"]').on('change', function() {
+    var name = $(this).attr("name");
+
+    // Logic for error count
+    var currentCheckbox = $(this);
+    var checkBoxGroup = $(this).closest('.question-div').find('input[type="checkbox"]');
+    var noOptionCheckbox = checkBoxGroup.filter(function() { 
+      return this.value.toLowerCase() == 'no' || this.value.toLowerCase() == 'none of the above' || this.value.toLowerCase() == 'none of these' || this.value.toLowerCase() == 'none' || this.value.toLowerCase() == 'none of the above apply to me';
+    });
+
+    if (currentCheckbox[0] == noOptionCheckbox[0]) {
+      if (currentCheckbox.is(':checked')) {
+        checkBoxGroup.not(noOptionCheckbox).each(function() {
+          // If the checkbox is wrong-input and is checked, decrease the total wrongs count
+          if ($(this).hasClass("wrong-input") && $(this).is(":checked")) {
+            if (!selectedValues.hasOwnProperty(name)) {
+              selectedValues[name] = "";
+              selectedValues[name + "_errors"] = 0;
+            }
+
+            selectedValues[name + "_errors"]--;
+
+            var totalErrors = 0;
+            for (var key in selectedValues) {
+              if (key.endsWith("_errors")) {
+                totalErrors += selectedValues[key];
+              }
+            }
+
+            $('#total_wrongs').val(totalErrors);
+
+            if (totalErrors > 0) {
+              $('.failed_result').removeClass('d-none');
+              $('.passed_result').addClass('d-none');
+            } else {
+              $('.failed_result').addClass('d-none');
+              $('.passed_result').removeClass('d-none');
+            }
+          }
+        }).prop('checked', false);
+      }
+    } else {
+      if (currentCheckbox.is(':checked')) {
+        noOptionCheckbox.prop('checked', false);
+      }
+    }
+
+    // Logic for checking wrong inputs
+    if (!selectedValues.hasOwnProperty(name)) {
+      selectedValues[name] = "";
+      selectedValues[name + "_errors"] = 0;
+    }
+
+    // Count the number of errors in this group
+    var groupErrors = 0;
+    $("input[name='" + name + "']").each(function() {
+      if ($(this).hasClass("wrong-input") && $(this).is(":checked")) {
+        groupErrors++;
+      }
+    });
+
+    selectedValues[name + "_errors"] = groupErrors;
+
+    var selectedOptions = $("input[name='" + name + "']:checked").map(function() {
+      return $(this).val();
+    }).get();
+
+    selectedValues[name] = selectedOptions.join(',');
+
+    var totalErrors = 0;
+    for (var key in selectedValues) {
+      if (key.endsWith("_errors")) {
+        totalErrors += selectedValues[key];
+      }
+    }
+
+    $('#total_wrongs').val(totalErrors);
+
+    if (totalErrors > 0) {
+      $('.failed_result').removeClass('d-none');
+      $('.passed_result').addClass('d-none');
+    } else {
+      $('.failed_result').addClass('d-none');
+      $('.passed_result').removeClass('d-none');
+    }
+  });
+});
+
+
 
 
 $(document).ready(function() {

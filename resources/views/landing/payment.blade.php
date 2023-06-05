@@ -65,6 +65,7 @@
         </div> --->
 
         <!--- invoice ---> 
+        @include('landing.layout.addons')
 
         <div class="card p-4 m-3">
             <h5>Invoice: </h5>
@@ -86,6 +87,9 @@
                 </tr>
             </table>
         </div>
+        <button style="border-radious:50px" type="button" class="btn btn-dark ms-3 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Add Addons Medicines
+        </button>
 
         <!--- ending invoice card --->
         

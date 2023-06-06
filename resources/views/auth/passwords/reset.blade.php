@@ -102,7 +102,7 @@
                                 <input type="hidden" name="token" value="{{ $token }}">
                                 <div class="col-12">
                                     <div class="mb-4">
-                                        <button type="submit" class="btn btn-secondary w-100">Reset Password</button>
+                                        <button type="submit" class="btn btn-primary w-100" style="border-radius: 50px;">Reset Password</button>
                                     </div>
                                 </div>
                                 

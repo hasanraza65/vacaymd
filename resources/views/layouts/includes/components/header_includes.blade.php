@@ -12,6 +12,8 @@
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
     <link href="/src/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="/src/bootstrap/js/bootstrap.min.js"></script>
+
     <link href="/layouts/modern-light-menu/css/light/plugins.css" rel="stylesheet" type="text/css" />
     <link href="/layouts/modern-light-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />
     <link href="/src/assets/css/light/scrollspyNav.css" rel="stylesheet" type="text/css" />

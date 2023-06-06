@@ -77,7 +77,7 @@
                                 </div>
                                 <div class="col-12">
                                     <div class="mb-4">
-                                        <button type="submit" class="btn btn-secondary w-100">Send Reset Link</button>
+                                        <button type="submit" class="btn btn-primary w-100 text-white" style="border-radius: 50px;">Send Reset Link</button>
                                     </div>
                                 </div>
                                 

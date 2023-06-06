@@ -22,7 +22,7 @@
             <input type="text" name="end_date" class="form-control" placeholder="End date" onfocus="(this.type='date')" onblur="(this.type='text')" value="">
         </div>
         <div class="col-md-4">
-            <input type="submit" class="btn btn-primary me-4 btn-lg" value="Filter Now">
+            <input type="submit" class="btn btn-primary me-4" value="Filter Now">
         </div>
     </form>
 </div>

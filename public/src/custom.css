@@ -1,7 +1,10 @@
+:root {
+  --theme-orange: #EF951A;
+  --theme-gray: #58585A;
+}
+
 .clickable{
-
     cursor: pointer;
-
 }
 
 .starlabel label:after {
@@ -9,9 +12,11 @@
     color: red;
   }
 
-
+  #sidebar ul.menu-categories li.menu.active > .dropdown-toggle.active{
+    background: var(--theme-orange)!important;
+  }
   #sidebar ul.menu-categories li.menu > .dropdown-toggle[aria-expanded=true] {
-    background: #EBB66B!important;
+    background: var(--theme-orange)!important;
 }
 
 .media-heading{
@@ -30,4 +35,4 @@
 #progress-text {
   margin-top: 10px;
   color: black;
-  }
+}

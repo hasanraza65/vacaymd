@@ -43,7 +43,7 @@
                     </style>
 
 <div class="step_info">
-    <div class="container" style="padding-left: 30px;">Sign Up</div>
+    <div class="container" style="padding-left: 30px; font-size:x-large">Sign Up</div>
 </div>
 
 @if($errors->any())
@@ -106,9 +106,9 @@
         <div class="progress mt-2">
             <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
         </div>
-        <p class="mt-2" id="password-strength-message"></p>
+        <p class="mt-2" class="te" id="password-strength-message"></p>
 
-        <ul style="font-size: 10px" class="mt-4" id="password-conditions">
+        <ul style="font-size: 14px" class="mt-4" id="password-conditions">
             <li id="length">Password must be at least 8 characters long</li>
             <li id="uppercase">Include at least one uppercase letter</li>
             <li id="special">Include at least one special character</li>
@@ -124,7 +124,7 @@
 
         <div id="password_message" class="m-2"></div>
 
-        <label class="button-container custom-register-checkbox-container w-100 mb-4 mt-4">
+        <label class="button-container custom-register-checkbox-container w-100 mb-4 mt-4 pt-4">
             <input type="checkbox" id="agree_terms" class="custom-radio-circle" name="i_agree_terms" id="form-check-default" required> 
             <label class="mouse-none" style="font-size: 10px">
                 I Agree to terms and privacy policy and consent to telehealth
@@ -209,7 +209,7 @@
                     <div class="col-12">
                         <label class="button-container custom-register-checkbox-container w-100 mb-4 mt-4">
                             <input type="checkbox" class="custom-radio-circle" name="allow_receive_text" id="form-check-default">
-                            <label class="mouse-none" style="font-size: 10px">
+                            <label class="mouse-none" style="font-size: 14px">
                                 I agree the to receive text messages (Msg & data rates may apply.)
                                 
                             </label>
@@ -369,7 +369,9 @@ $(document).ready(function() {
     } else {
       message = 'Password is very strong';
     }
-    $('#password-strength-message').text(message);
+    $('#password-strength-message').html('<span style="color: red;">' + message + '</span>');
+
+
 
     checkValidity();
   });

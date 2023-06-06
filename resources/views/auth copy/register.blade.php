@@ -64,13 +64,13 @@
                                 </div>
 
 
-                                <div class="col-6">
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">Name</label>
                                         <input placeholder="Enter Your Name" name="name" type="text" class="form-control add-billing-address-input">
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">Email</label>
                                         <input placeholder="Enter Your Email" name="email" type="email" class="form-control">
@@ -79,13 +79,13 @@
 
 
 
-                                <div class="col-6">
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">Password</label>
                                         <input placeholder="Enter Your Password" name="password" type="password" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">Confirm Password</label>
                                         <input placeholder="Enter Your Password Again" name="password_confirmation" type="password" class="form-control">
@@ -93,14 +93,14 @@
                                 </div>
 
 
-                                <div class="col-6">
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">Date of Birth</label>
                                         <input placeholder="Enter Your Date of Birth" name="dob" type="date" class="form-control">
                                     </div>
                                 </div>
 
-                                <div class="col-6">
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">Billing Address</label>
                                         <input placeholder="Enter Your Billing Address" name="billing_address" type="text" class="form-control">
@@ -150,7 +150,7 @@
 
                                 <div class="col-12">
                                     <div class="text-center">
-                                        <p class="mb-0">Already have an account ? <a href="/login" class="text-warning">Sign in</a></p>
+                                        <p class="mb-0">Already have an account ? <a href="/login" class="text  -warning">Sign in</a></p>
                                     </div>
                                 </div>
                                 

@@ -40,6 +40,21 @@ class DoctorController extends Controller
             ],
             'gender' => 'string',
         ]);
+
+        if ($_FILES['file']['name']) {
+            if (!$_FILES['file']['error']) {
+                
+                $image = $request->file('file');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('src/assets/uploads/Profile/'), $imageName);
+                $imagePath = '/src/assets/uploads/Profile/' . $imageName;
+                $profilepic = $imagePath;
+                
+            } else {
+                $profilepic = null;
+                return response()->json(['message' => 'Error uploading profile picture. Please try again later.'], 400);
+            }
+        }
     
         $user = new User();
         $user->name = $data['name'];
@@ -47,6 +62,7 @@ class DoctorController extends Controller
         $user->gender = $data['gender'];
         $user->phone =$request->phone;
         $user->user_role =2;
+        $user->profile_pic = $profilepic;
         $user->password = Hash::make($data['password']);
         $user->save();
 
@@ -87,17 +103,19 @@ class DoctorController extends Controller
         }
         //ending check if email available
 
-        
 
         $user = User::find($request->user_id);
         
       
-        if (!empty($data['password'])) {
-            $user->password = Hash::make($data['password']);
+        if (!empty($request->password)) {
+            $new_password = Hash::make($request->password);
+            $request->merge([
+                'password' =>  $new_password,
+            ]);
         }else{
             $old_pass=$user->password;
             $request->merge([
-                'password' =>  $old_pass
+                'password' =>  $old_pass,
             ]);
         }
 
@@ -119,6 +137,7 @@ class DoctorController extends Controller
         }
 
         $data = $request->all();
+        //dd($request->all());
         $user->update($request->all());
         // $user->fill($data);
         // $user->save();

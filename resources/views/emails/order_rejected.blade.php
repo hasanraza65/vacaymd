@@ -80,7 +80,7 @@
 
       </div>
       <div class="card-footer">
-      @include('emails.includes.footer')
+      @include('emails.includes.footercopyright')
       </div>
     </div>
   </body>

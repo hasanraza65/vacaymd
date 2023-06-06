@@ -37,6 +37,14 @@
         </div>
     @endif
 
+    @include('landing.layout.addons')
+
+    @if(session()->has('success'))
+    <div class="alert alert-success">
+        {{ session()->get('success') }}
+    </div>
+    @endif
+
     <h6 class="my-4">Enter your credit card details</h6>
 
     <form role="form" 
@@ -65,29 +73,52 @@
         </div> --->
 
         <!--- invoice ---> 
-        @include('landing.layout.addons')
+        @php
+        $consult_fee = 49;
+        $med_n_del_fee = 30;
+        @endphp
 
         <div class="card p-4 m-3">
             <h5>Invoice: </h5>
             <table class="table ">
                 <tr>
                     <td>Consult Fee</td>
-                    <td>$49</td>
+                    <td>$<span id="consult_fee">{{$consult_fee}}</span></td>
                 </tr>
                 <tr>
                     <td>Medication and Delivery</td>
-                    <td>$30</td>
+                    <td>$<span id="med_n_del">{{$med_n_del_fee}}</span></td>
                 </tr>
                 
+                <!--- addons items ---> 
+                @php 
+                $totaladdons_bill = 0;
+                @endphp
+                @foreach($orderaddons as $orderaddonss)
+                <tr>
+                    <td><a href="/remove_order_addon_item/{{$orderaddonss->id}}" class="remove_icon">x</a> {{$orderaddonss->itemDetail->item_name}} <span class="addon_label">- Addon </span> </td>
+                    <td>${{$orderaddonss->itemDetail->item_price}}</td>
+                </tr>
+                @php 
+                $totaladdons_bill = $totaladdons_bill+$orderaddonss->itemDetail->item_price;
+                @endphp
+                @endforeach
+                <!--- ending addons items --->
+
+                @php
+                $totalbill = $consult_fee+$med_n_del_fee+$totaladdons_bill;
+                @endphp
+
                 <tr>
                     <th>Total Bill: </th>
-                    <th>$79
-                        <input type="hidden" value="79" name="amount">
+                    <th>${{$totalbill}}
+                        <input type="hidden" value="{{$totalbill}}" name="amount">
                     </th>
                 </tr>
+
             </table>
         </div>
-        <button style="border-radious:50px" type="button" class="btn btn-dark ms-3 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button style="border-radious:50px" type="button" class="btn btn-dark ms-3 mb-3" data-bs-toggle="modal" data-bs-target="#addonsModal">
             Add Addons Medicines
         </button>
 
@@ -292,6 +323,29 @@ $(document).ready(function() {
     });
 });
 </script>
+
+
+@php 
+$countadded_addons = 0;
+@endphp
+@foreach($orderaddons as $orderaddonss)
+
+@php 
+$countadded_addons = $loop->count;
+@endphp
+
+@endforeach
+
+HASSAN RAZA {{$countadded_addons}}
+
+@if($countadded_addons == 0)
+<script>
+$(document).ready(function(){
+    $('#addonsModal').modal('show');
+});
+
+</script>
+@endif
 
 
 @include('landing.layout.footer')

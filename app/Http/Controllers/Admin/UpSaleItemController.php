@@ -10,9 +10,9 @@ class UpSaleItemController extends Controller
 {
     public function index()
     {
-        $data = UpSaleItem::all();
+        $items = UpSaleItem::all()->groupBy('item_name');
         
-        return view('admin.upsaleitems.index',compact(['data']));
+        return view('admin.upsaleitems.index',compact(['items']));
     }
 
     public function create()
@@ -49,6 +49,7 @@ class UpSaleItemController extends Controller
             $data->item_name = $request->item_name;
             $data->treatment = $request->treatment[$i];
             $data->item_price = $request->item_price;
+            $data->item_description = $request->item_description;
             $data->thumbnail = $thumbnail_image;
             $data->save();
 
@@ -61,9 +62,10 @@ class UpSaleItemController extends Controller
 
     public function edit($id)
     {
-        $data = UpSaleItem::find($id);
+        $item = UpSaleItem::find($id);
+        $data = UpSaleItem::where('item_name', $item->item_name)->get();
 
-        return view('admin.upsaleitems.edit',compact(['data']));
+        return view('admin.upsaleitems.edit',compact(['data', 'item']));
     }
 
     public function update(Request $request, $id)
@@ -100,6 +102,7 @@ class UpSaleItemController extends Controller
             $data->item_name = $request->item_name;
             $data->treatment = $request->treatment[$i];
             $data->item_price = $request->item_price;
+            $data->item_description = $request->item_description;
             $data->thumbnail = $thumbnail_image;
             $data->save();
 

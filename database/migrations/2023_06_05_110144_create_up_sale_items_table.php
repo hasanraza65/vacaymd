@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('thumbnail')->nullable();
             $table->string('item_name')->nullable();
             $table->double('item_price')->nullable();
+            $table->double('item_description')->nullable();
             $table->timestamps();
         });
     }

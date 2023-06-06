@@ -10,6 +10,7 @@ use Stripe\Charge;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\UpSaleItem;
+use App\Models\OrderAddon;
 use Auth;
 
 class PaymentController extends Controller
@@ -17,9 +18,64 @@ class PaymentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        return view('landing.payment');
+    public function index($id)
+    {   
+        //get order details 
+        $order = Order::find($id);
+        //ending get order details
+
+        //get order addons
+        $orderaddons = OrderAddon::with('itemDetail')->where('order_id',$id)->get();
+        //ending get order addons
+
+        //getting items
+        $items = UpSaleItem::where('treatment',$order->treatment_req)->get();
+        //ending getting items
+
+        return view('landing.payment',compact(['items','id','orderaddons']));
+    }
+
+    public function addAddons(Request $request){
+
+        $counter = 0;
+        for($i=0; $i<count($request->selected_items); $i++){
+
+            $data = new OrderAddon();
+            $data->order_id = $request->order_id;
+            $data->item_id = $request->selected_items[$i];
+            $data->item_price = $request->selected_item_price[$i];
+            $data->save();
+            $counter = $counter+1;
+
+            //update order amount
+            $order= Order::find($request->order_id);
+            $order->total_amount = $order->total_amount+$request->selected_item_price[$i];
+            $order->update();
+            //ending update order amount
+
+        }
+
+        if($counter > 1){
+        return back()->with('success', 'Addons have been added to your order');
+        }else{
+        return back()->with('success', 'Addon has been added to your order');
+        }
+
+    }
+
+    public function removeAddonItem($id){
+
+        $data = OrderAddon::find($id);
+        $data->delete();
+
+        //update order amount
+        $order= Order::find($data->order_id);
+        $order->total_amount = $order->total_amount-$data->item_price;
+        $order->update();
+        //ending update order amount
+        
+        return back()->with('success', 'Item has been removed from your order');
+
     }
 
     /**
@@ -38,6 +94,7 @@ class PaymentController extends Controller
 
         $order = Order::where('id',$request->order_id)->first();
         $authUser = User::find($order->user_id);
+
 
         $amount = $request->amount;
         //Stripe::setApiKey(config('services.stripe.secret'));
@@ -157,4 +214,5 @@ class PaymentController extends Controller
 
         return view('patient.payments.create');
     }
+
 }

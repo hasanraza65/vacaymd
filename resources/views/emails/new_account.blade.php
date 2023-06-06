@@ -80,7 +80,7 @@
 
       </div>
       <div class="card-footer">
-        <p>https://orders.vacaymd.com | 2023 © All rights Reserved – Vacay MD</p>
+        @include('emails.includes.footercopyright')
       </div>
     </div>
   </body>

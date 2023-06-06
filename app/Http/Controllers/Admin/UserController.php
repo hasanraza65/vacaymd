@@ -111,8 +111,8 @@ class UserController extends Controller
         $user = User::find($id);
         $old_passowrd=$user->password;
         
-        if (!empty($data['password'])) {
-            $new_password = Hash::make($data['password']);
+        if (!empty($request->password)) {
+            $new_password = Hash::make($request->password);
             $request->merge(['password'=> $new_password]);
         }else{
            

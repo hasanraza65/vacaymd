@@ -57,7 +57,7 @@
                             </div>
                         </div>
 
-                        <div class="row mt-2">
+                        <div class="row mt-4">
                             <div class="col">
                                 <label for="item_name">Medicine Name</label>
                                 <input type="text" id="item_name" placeholder="Enter item name" name="item_name" class="form-control">
@@ -71,8 +71,15 @@
                             </div>
                         </div>
 
+                        <div class="row mt-4">
+                            <div class="col">
+                                <label for="item_description">Item Description</label>
+                                <textarea name="item_description" id="item_description" class="form-control" placeholder="Enter description for Item"></textarea>
+                            </div>
+                        </div>
+
                         
-                        <div class="mt-2">
+                        <div class="mt-4">
                             <label for="item_image">Medicine Thumbnail</label>
                             <input type="file" id="item_image" placeholder="Choose Item Thumbnail" accept="image/png, image/jpeg, image/jpg" name="file" class="form-control">
                         </div>

@@ -1075,5 +1075,29 @@ $(document).ready(function() {
 });
 
 
+document.addEventListener('DOMContentLoaded', (event) => {
+  let removeElements = document.getElementsByClassName('remove_icon');
+
+  for(let i = 0; i < removeElements.length; i++) {
+      removeElements[i].addEventListener('click', function(e) {
+          e.preventDefault();
+          let href = this.getAttribute('href');
+
+          Swal.fire({
+              title: 'Are you sure?',
+              text: "This addon will be removed from your order!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, remove it!'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  window.location.href = href;
+              }
+          })
+      });
+  }
+});
 
 

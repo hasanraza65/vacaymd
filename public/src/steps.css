@@ -417,3 +417,14 @@ button:disabled {
 .payments-method-container img{
     width: 250px;
 }
+
+.addon_label{
+    font-size: 12px;
+}
+
+.remove_icon{
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none!important;
+    color: red;
+}

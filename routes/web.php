@@ -156,10 +156,6 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('messages/{id}', [App\Http\Controllers\Patient\MessagesController::class, 'destroy']);
         //delete msg
 
-         //update msg
-         Route::POST('updatemessage', [App\Http\Controllers\Patient\MessagesController::class, 'updateMessage']);
-         //update msg
-
     });
 
     //ending Patient Rotue
@@ -271,3 +267,11 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::POST('/update-profile-pic', [App\Http\Controllers\AuthController::class, 'updateProfilePic']);
+
+//add addons to order
+Route::POST('/add_addons_to_order', [App\Http\Controllers\Patient\PaymentController::class, 'addAddons']);
+//ending add addons to order
+//remove addons
+Route::get('/remove_order_addon_item/{id}', [App\Http\Controllers\Patient\PaymentController::class, 'removeAddonItem']);
+//ending remove addons
+

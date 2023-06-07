@@ -479,4 +479,14 @@ button:disabled {
     }
 }
 
+
+/* create a media query for mobile */
+@media screen and (max-width: 600px) {
+    .button-custom{
+        padding: 8px 32px;
+    }
+    .upload-label{
+        margin-top: 5px!important;
+    }
+}
 /*ending css by hr */

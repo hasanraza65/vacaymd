@@ -108,7 +108,7 @@
         </div>
         <p class="mt-2" id="password-strength-message"></p>
 
-        <ul style="font-size: 10px" class="mt-4" id="password-conditions">
+        <ul style="font-size: 14px" class="mt-4" id="password-conditions">
             <li id="length">Password must be at least 8 characters long</li>
             <li id="uppercase">Include at least one uppercase letter</li>
             <li id="special">Include at least one special character</li>
@@ -126,7 +126,7 @@
 
         <label class="button-container custom-register-checkbox-container w-100 mb-4 mt-4">
             <input type="checkbox" id="agree_terms" class="custom-radio-circle" name="i_agree_terms" id="form-check-default" required> 
-            <label class="mouse-none" style="font-size: 10px">
+            <label class="mouse-none" style="font-size: 14px">
                 I Agree to terms and privacy policy and consent to telehealth
             </label>
         </label>
@@ -211,7 +211,7 @@
 
                     <div class="col-12">
                         <div class="mb-3">
-                            <label class="form-label">Upload a valid ID (Drivers license or passport)</label>
+                            <label class="form-label upload-label">Upload a valid ID (Drivers license or passport)</label>
                             <input  name="files[]" accept="image/*,.pdf" type="file" class="form-control input-custom" style="padding-left: 10px;" multiple>
                         </div>
                     </div>
@@ -219,7 +219,7 @@
                     <div class="col-12">
                         <label class="button-container custom-register-checkbox-container w-100 mb-2 mt-4">
                             <input type="checkbox" class="custom-radio-circle" name="allow_receive_text" id="form-check-default">
-                            <label class="mouse-none" style="font-size: 10px">
+                            <label class="mouse-none" style="font-size: 14px">
                                 I agree the to receive text messages (Msg & data rates may apply.)
                                 
                             </label>
@@ -228,7 +228,7 @@
                     <div class="col-12">
                         <label class="button-container custom-register-checkbox-container w-100 mb-4 mt-1">
                             <input type="checkbox" class="custom-radio-circle" name="our_pharmacy_text" id="form-check-default" required>
-                            <label class="mouse-none" style="font-size: 10px">
+                            <label class="mouse-none" style="font-size: 14px">
                              By clicking the box, you agree to have this medication dispensed by our partner pharmacy only
                                 
                             </label>
@@ -242,7 +242,7 @@
         </div>
 
         <div class="step-buttons mt-4">
-            <button class="button-custom" type="button" id="prevBtn" onclick="changeStep(-1)" disabled>Previous</button>
+            <button class="button-custom previous-button" type="button" id="prevBtn" onclick="changeStep(-1)" disabled>Previous</button>
             <button type="button" class="button-custom" id="nextBtn" onclick="changeStep(1)" disabled>Submit & Next</button>
             <button type="submit" class="button-custom d-none" id="submitBtn">Submit and Pay</button>
         </div>
@@ -388,7 +388,7 @@ $(document).ready(function() {
     } else {
       message = 'Password is very strong';
     }
-    $('#password-strength-message').text(message);
+    $('#password-strength-message').html('<span style="color: red;">' + message + '</span>');
 
     checkValidity();
   });

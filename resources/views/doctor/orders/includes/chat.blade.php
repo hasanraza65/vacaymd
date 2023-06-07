@@ -48,6 +48,19 @@
                     <h4 class="media-heading"><?=$sendername;?>: {{$messages_data->userDetail->name}}</h4>
                     <span class="message_date mb-4">{{ \Carbon\Carbon::parse($data->created_at)->format('m/d/Y') }}</span>
                     <p id="media-text{{$messages_data->id}}" class="media-text mt-2">{{$messages_data->message}}</p>
+                   <?php 
+                      if($messages_data->attachment){
+                        if (strpos($messages_data->attachment, 'mp3') != false ){
+                                        
+                                        ?>
+                                        
+                                        <div class="m-2">
+                                        <audio src="{{$messages_data->attachment}}" controls></audio>
+                                        </div>
+                                        <?php
+                         }
+                    }
+                    ?>
                 </div>
                 @if($messages_data->user_id == Auth::user()->id)
                 <div id="action_btn_div{{$messages_data->id}}" class="action_btn_div d-none">
@@ -267,7 +280,7 @@
 
             </div>
             <div class="modal-footer">
-                <button class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
+                <button type="button" class="btn btn btn-light-dark" data-bs-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
                 <button type="submit" class="btn btn-primary">Update</button>
             </div>
         </div>

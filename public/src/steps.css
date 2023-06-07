@@ -428,3 +428,55 @@ button:disabled {
     text-decoration: none!important;
     color: red;
 }
+
+
+/* css by hr */ 
+
+@media screen and (min-width: 730px) {
+    .result_step{
+
+        margin-top: 50px!important;
+        background: white;
+        padding: 50px;
+        border-radius: 20px;
+        width: 70%;
+        align-items: center;
+        vertical-align: baseline;
+        margin: auto;
+    
+    }
+
+    .result_steps_button{
+
+        width: 25%!important;
+        margin: auto!important;
+        margin-top: 25px!important;
+    
+    }
+}
+
+@media screen and (max-width: 729px) {
+    .result_step{
+
+        margin-top: 50px!important;
+        background: white;
+        padding: 20px;
+        padding-top: 30px;
+        border-radius: 20px;
+        width: 100%;
+        align-items: center;
+        vertical-align: baseline;
+        margin: auto;
+    
+    }
+
+    .result_steps_button{
+
+        width: 100%!important;
+        margin: auto!important;
+        margin-top: 15px!important;
+    
+    }
+}
+
+/*ending css by hr */

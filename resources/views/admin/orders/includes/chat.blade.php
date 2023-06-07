@@ -37,6 +37,19 @@
             <div class="media-body">
                 <h4 class="media-heading">{{$m->userDetail?->name}}</h4>
                 <p class="media-text">{{$m->message}}</p>
+                <?php 
+                      if($m->attachment){
+                        if (strpos($m->attachment, 'mp3') != false ){
+                                        
+                                        ?>
+                                        
+                                        <div class="m-2">
+                                        <audio src="{{$m->attachment}}" controls></audio>
+                                        </div>
+                                        <?php
+                         }
+                    }
+                    ?>
             </div>
         </div>
         <!--- message 1 ending --->

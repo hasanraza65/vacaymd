@@ -1,6 +1,5 @@
 @include('landing.layout.header')
-  <div class="container my-4 pt-4">
-    <h3 class="mt-2 my-4 ">Telemedicine Consent</h3>
+  <div class="container">
     <p class="text-justify">BY CLICKING "I AGREE," YOU ACKNOWLEDGE THAT YOU HAVE READ, ACCEPTED, AND AGREED TO BE BOUND BY
       THIS CONSENT. IF YOU DO NOT AGREE TO THIS CONSENT, DO NOT CREATE AN ACCOUNT OR USE THE SERVICE.<br>
       IF YOU ARE EXPERIENCING A MEDICAL EMERGENCY OR LIFE-THREATENING SITUATION, CALL "911"</p>

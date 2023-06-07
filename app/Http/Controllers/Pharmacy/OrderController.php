@@ -178,12 +178,13 @@ class OrderController extends Controller
 
         $data = Order::with('orderDetail')
         ->with('userDetail')
+        ->with('addons')
         ->with('prescriptionDetailImg')
         ->with('prescriptionDetail.prescriptionMedicines')
         ->find($id);
 
         //return print_r($data);
-      
+    
 
         $prescriptions = Prescription::all();
         

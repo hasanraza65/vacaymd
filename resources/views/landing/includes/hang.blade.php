@@ -295,7 +295,7 @@
 
         </div>
 
-        <div class="step" id="step-6">
+        <div class="step result_step" id="step-6">
 
             <div class="question-div text-center ">
                 <p class="question failed_result d-none">Based on the information you have provided; we think you <b><span style="color: red">would not</span></b> be a good candidate for treatment with our Hangover treatment kit.</p>
@@ -320,9 +320,10 @@
                     <li>You will read the medication information provided with your prescription.</li>
                 </ul>
                 <ul>
-                    <li><a target="_blank" data-toggle="modal" data-target="#terms-of-use">Terms of Use ABF</a></li>
-                    <li> <a href="/telemedicine" target="_blank">Telehealth Consent ABF</a></li>
-                   
+                    <!---<li><a href="/terms_of_use" target="_blank">Terms of Use ABF</a></li>
+                    <li> <a href="/telemedicine" target="_blank">Telehealth Consent ABF</a></li> -->
+                    <b><span style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#termsModal">Terms of Use ABF</span></b><br>
+                    <b><span style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#telmedModal">Telehealth Consent ABF</span></b>
                 </ul>
                 
                
@@ -437,7 +438,16 @@
         }
 
        
+        //custom button style for result steps
+        if(currentStep === 6){
 
+            $('.step-buttons').addClass('result_steps_button');
+
+            }else{
+
+            $('.step-buttons').removeClass('result_steps_button');
+        }
+        //ending custom button style for result steps
         
          if (currentStep > 1) {
 

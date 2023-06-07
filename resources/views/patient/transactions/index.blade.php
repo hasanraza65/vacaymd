@@ -39,7 +39,7 @@
                                             <td class="d-none">{{$datas->id}}</td>
                                             <td>{{$datas->userDetail?->name}}</td>
                                             <td>{{$datas->orderDetail?->id}}</td>
-                                            <td>{{$datas->amount}}</td>
+                                            <td>{{number_format($datas->amount,2)}}</td>
                                             <td>{{$datas->t_id}}</td>
                                             <td>{{$datas->method}}</td>
                                             

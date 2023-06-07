@@ -239,6 +239,9 @@ Route::get('/terms_of_use', function () {
 Route::get('/telemedicine', function () {
     return view('landing.telemedicine');
 });
+Route::get('/thank_u', function () {
+    return view('landing.thank_u');
+});
 
 Route::post('/patient/order', [App\Http\Controllers\Patient\OrdersController::class, 'store']);
 

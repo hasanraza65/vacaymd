@@ -23,9 +23,14 @@
 
 <div class="step_info">
     <div class="container" style="padding-left: 30px;">Make a payment</div>
+    <div class="container text-dark mt-1" style="padding-left: 30px; padding-right: 30px;font-size:13px;">
+    <p class="mb-0 pb-0">You won't be charged until the doctor will approve your order.</p>
+    </div>
 </div>
 
+
 <div class="container" style="padding: 30px;">
+
 
     @if($errors->any())
         <div class="alert alert-danger m-4">
@@ -160,7 +165,7 @@
             <div class="mt-3 w-100 text-end">
                 <button type="submit" class="button-custom submitbtn">Submit</button>
             </div>
-            <span style="font-style:italic">You won't be charged until the doctor will approve your order.</span>
+            
 
         </div>
     </form>
@@ -336,7 +341,6 @@ $countadded_addons = $loop->count;
 
 @endforeach
 
-HASSAN RAZA {{$countadded_addons}}
 
 @if($countadded_addons == 0)
 <script>

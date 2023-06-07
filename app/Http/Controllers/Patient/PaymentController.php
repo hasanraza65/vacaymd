@@ -167,7 +167,7 @@ class PaymentController extends Controller
 
             //return back()->with('success_message', 'Payment successful!');
 
-            return redirect()->to('/patient/orders/')->with('success', 'Order Created Successful!');
+            return redirect()->to('/thank_u')->with('success', 'Order Created Successful!');
 
         }   catch (\Exception $ex) {
             return back()->withErrors('Error! ' . $ex->getMessage());

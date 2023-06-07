@@ -41,7 +41,7 @@
                                         <tr id="row_{{$datas->id}}">
                                             <td class="d-none">{{$datas->id}}</td>
                                             <td class="action_btn"  onclick="window.location ='/patient/orders/{{$datas->id}}'">{{$datas->order_num}}</td>
-                                            <td class="action_btn"  onclick="window.location ='/patient/orders/{{$datas->id}}'">{{$datas->total_amount}}</td>
+                                            <td class="action_btn"  onclick="window.location ='/patient/orders/{{$datas->id}}'">{{number_format($datas->total_amount,2)}}</td>
                                             <td>{{ \Carbon\Carbon::parse($datas->created_at)->format('m/d/Y') }}</td>
                                             <td>@if($datas->payment_status == 1)
                                                 <span class="badge badge-light-success mb-2 me-4">Paid</span>
@@ -51,7 +51,7 @@
                                             </td>
                                             <td>
                                                 @if($datas->payment_status == 1)
-                                                <form action="/admin/invoice" method="post">
+                                                <form action="/patient/invoice" method="post">
                                                     @csrf 
                                                     <input type="hidden" name="id" value="{{$datas->id}}" id="">
                                                     <input type="submit" name="" value="Invoice" class="form-control btn btn-outline-success" id="">

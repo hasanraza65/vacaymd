@@ -178,13 +178,51 @@
                                         <td>{{$data->billing_address}}</td>
                                         <td>{{$data->delivery_location}}</td>
                                         <td>{{ \Carbon\Carbon::parse($data->userDetail->dob)->format('m/d/Y') }}</td>
-                                        <td>${{$data->total_amount}}</td>
+                                        <td>${{number_format($data->total_amount,2)}}</td>
                                         <td>{{ \Carbon\Carbon::parse($data->created_at)->format('m/d/Y') }}</td>
                                     </tr>
 
                                 </table>
                             </div>
                         </div>
+                        @if($data->addons && $data->addons->count() > 0)
+
+                        <div class="widget-content widget-content-area br-8 p-4 mb-2">
+                            <b>Addons Medicines</b>
+                            <div class="table-responsive mt-4">
+                                <table class="table table-bordered">
+                                    
+                                    <tr>
+                                            
+                                            <th>Image view</th>
+                                            <th>Item name</th>
+                                            <th>Item description</th>
+                                            
+                                        
+                                    </tr>
+                                  
+                                   
+                                    @foreach($data->addons as $ao)
+                                    
+                                    <tr>
+                                      
+                                        <td><img width="60" height="auto" src="{{$ao?->itemDetail->thumbnail }}"></td>
+                                        <td>{{$ao?->itemDetail->item_name }}</td>
+                                        <td>{{$ao?->itemDetail->item_description }}</td>
+                                       
+                                        
+                                       
+                                    </tr>
+                                    
+                                      
+                                       
+                                    @endforeach
+                                  
+
+                                </table>
+                            </div>
+                        </div>
+                        @endif
 
                         <!--- questions table ---> 
 

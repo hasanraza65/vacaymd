@@ -39,6 +39,10 @@ class Order extends Model
     {
         return $this->hasMany(Prescription::class,'id','prescription_id');
     }
+    public function addons()
+    {
+        return $this->hasMany(OrderAddon::class,'order_id','id');
+    }
     public function prescriptionDetailImg()
     {
         return $this->belongsTo(Prescription::class,'prescription_id');

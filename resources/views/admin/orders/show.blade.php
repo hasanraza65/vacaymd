@@ -91,7 +91,7 @@
                                         <td>{{$data->billing_address}}</td>
                                         <td>{{$data->delivery_location}}</td>
                                         <td>{{ \Carbon\Carbon::parse($data->userDetail->dob)->format('m/d/Y') }}</td>
-                                        <td>${{$data->total_amount}}</td>
+                                        <td>${{number_format($data->total_amount,2)}}</td>
                                         <td>{{ \Carbon\Carbon::parse($data->created_at)->format('m/d/Y') }}</td>
                                     </tr>
 
@@ -113,7 +113,7 @@
                                     @foreach($data->orderDetail as $orderDetails)
                                     <tr>
                                         <td>{{$orderDetails->key}}</td>
-                                        <td>{{$orderDetails->value}}</td>
+                                        <td><?=$orderDetails->value?></td>
                                     </tr>
                                     @endforeach
 

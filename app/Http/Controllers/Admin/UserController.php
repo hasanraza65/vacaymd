@@ -109,14 +109,14 @@ class UserController extends Controller
         
 
         $user = User::find($id);
-        $old_passowrd=$user->password;
+        $old_password=$user->password;
         
         if (!empty($request->password)) {
             $new_password = Hash::make($request->password);
             $request->merge(['password'=> $new_password]);
         }else{
            
-            $request->merge(['password'=> $old_passowrd]);
+            $request->merge(['password'=> $old_password]);
         }
         $data = $request->all();
         $user->fill($data);

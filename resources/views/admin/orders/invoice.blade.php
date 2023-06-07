@@ -112,7 +112,7 @@
                                                                                 <td>1</td>
                                                                                 <td>{{$data?->orderDetail?->treatment_req}}</td>
                                                                                 <td class="text-end">{{$data?->method}}</td>
-                                                                                <td class="text-end">{{$data?->amount}}</td>
+                                                                                <td class="text-end">{{number_format($data?->amount,2)}}</td>
                                                                                 
                                                                             </tr>
                                                                            
@@ -134,7 +134,7 @@
                                                                                     <p class="">Sub Total :</p>
                                                                                 </div>
                                                                                 <div class="col-sm-4 col-5">
-                                                                                    <p class="">$ {{$data?->amount}}</p>
+                                                                                    <p class="">$ {{number_format($data?->amount,2)}}</p>
                                                                                 </div>
                                                                                 <div class="col-sm-8 col-7">
                                                                                     <p class="">Tax :</p>

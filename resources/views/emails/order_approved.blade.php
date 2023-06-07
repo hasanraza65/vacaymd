@@ -74,13 +74,25 @@
       <div class="card-body">
         <br>
         <center>
-        <b><p>Your order # {{$orderData->order_num}} has been approved by our doctor.</p></b><br>
+        <b><p>Your order # {{$orderData->order_num}} has been approved by our doctor.</p></b>
+        <p>Note: When you reach Nevada, please make sure to inform us. <br> Click Here to change status. <a href="https://orders.vacaymd.com/login">Login</a></p>
+         <br>
+
+         @if($orderData->treatment_req=='ED')
+         @include('emails.includes.ed')
+        @elseif($orderData->treatment_req=='HANGOVER')
+         @include('emails.includes.hangover')
+        @elseif($orderData->treatment_req=='UTI')
+         @include('emails.includes.uti')
+        @endif
         </center>
+       
+        
 
 
       </div>
       <div class="card-footer">
-      @include('emails.includes.footer')
+           @include('emails.includes.footer')
       </div>
     </div>
   </body>

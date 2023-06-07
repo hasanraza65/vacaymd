@@ -38,7 +38,7 @@
                                         <td class="d-none">{{ $itemsGroup[0]->id }}</td>
                                         <td><img width="60" height="auto" src="{{ $itemsGroup[0]->thumbnail }}"></td>
                                         <td>{{ $name }}</td>
-                                        <td>${{ $itemsGroup[0]->item_price }}</td>
+                                        <td>${{ number_format($itemsGroup[0]->item_price,2) }}</td>
                                         <td>
                                         @foreach ($itemsGroup as $item)
                                             {{ $item->treatment }},

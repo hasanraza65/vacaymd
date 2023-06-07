@@ -57,7 +57,7 @@
                                             <td class="{{$bold_class}}" >{{$datas->billing_address}}</td>
                                             <td class="{{$bold_class}}" >{{$datas->delivery_location}}</td>
                                             <td class="{{$bold_class}}" >{{ \Carbon\Carbon::parse($datas->userDetail->dob)->format('m/d/Y') }}</td>
-                                            <td class="{{$bold_class}}" >${{$datas->total_amount}}</td>
+                                            <td class="{{$bold_class}}" >${{number_format($datas->total_amount,2)}}</td>
                                             <td class="{{$bold_class}}" >@if($datas->payment_status == 1)
                                                 Paid 
                                                 @else 

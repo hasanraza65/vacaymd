@@ -3,7 +3,7 @@
     UTI Questionnaire: Step <span class="step_num">1</span>
     </div>
     <div class="container text-dark mt-1" style="padding-left: 30px; padding-right: 30px;font-size:13px;">
-    <p class="mb-0">UTI kit contains Cranberry and Probiotic blend x 10 tabs, Urine Testing Strips x 2 and Nitrofurantoin x 10 tabs. This kit is designed to prevent UTI for 5 days and has a complete course of antibiotic.</p>
+    <p class="mb-0">UTI kit contains Cranberry and Probiotic blend x 10 tabs, Urine Testing Strips x 2 and Nitrofurantoin x 10 tabs.<br> This kit is designed to prevent UTI for 5 days and has a complete course of antibiotic.</p>
     </div>
 </div>
 
@@ -153,8 +153,8 @@
             <div class="question-div mt-4">
                 <span class="question">If you have been successfully treated for a UTI before, please write down the name of the anti-biotic your physician prescribed </span>
                 <label class="button-container custom-radio w-100 mb-4 mt-3 ">
-                    <input id="If_you_have_been_successfully_treated_for_a_UTI_before_please_write_down_the_name_of_the_anti_biotic_your_physician_prescribed" type="checkbox" class="custom-radio-circle surgery-uti-input" name="If_you_have_been_successfully_treated_for_a_UTI_before,_please_write_down_the_name_of_the_anti_biotic_your_physician_prescribed" value="I do not remember the name of the antibiotic I was prescribed">
-                    <label class="mouse-none">I do not remember the name of the antibiotic I was prescribed
+                    <input id="If_you_have_been_successfully_treated_for_a_UTI_before_please_write_down_the_name_of_the_anti_biotic_your_physician_prescribed" type="checkbox" class="custom-radio-circle surgery-uti-input" name="If_you_have_been_successfully_treated_for_a_UTI_before,_please_write_down_the_name_of_the_anti_biotic_your_physician_prescribed" value="I was not prescribed OR I do not remember the name of the antibiotic I was prescribed.">
+                    <label class="mouse-none">I was not prescribed OR I do not remember the name of the antibiotic I was prescribed.
                     </label>
                 </label>
                 <textarea id="If_you_have_been_successfully_treated_for_a_UTI_before_please_write_down_the_name_of_the_anti_biotic_your_physician_prescribed_text" class="form-control mt-3 textarea-custom" name="If_you_have_been_successfully_treated_for_a_UTI_before,_please_write_down_the_name_of_the_anti-biotic_your_physician_prescribed" placeholder="Write down the names of the anti-biotic here"></textarea>
@@ -337,8 +337,8 @@
 
                 <textarea id="Are_you_allergic_to_any_other_meds" class="form-control mt-3 textarea-custom d-none" placeholder="Each medicine name at one line which you are allergic." name="Are_you_allergic_to_any_other_meds_(Meds_Names))" class="mt-4" ></textarea>
 
-                <label class="button-container custom-radio w-100 mb-4 mt-3 meds-uti-section wrong-custom-button" onclick="hideField('Are_you_allergic_to_any_other_meds')">
-                    <input type="radio" class="custom-radio-circle meds-uti-input wrong-input" name="Are_you_allergic_to_any_other_meds?" value="No" required>
+                <label class="button-container custom-radio w-100 mb-4 mt-3 meds-uti-section" onclick="hideField('Are_you_allergic_to_any_other_meds')">
+                    <input type="radio" class="custom-radio-circle meds-uti-input" name="Are_you_allergic_to_any_other_meds?" value="No" required>
                     <label class="mouse-none">
                         No
                     </label>
@@ -358,11 +358,11 @@
 
         </div>
 
-        <div class="step" id="step-6">
+        <div class="step result_step" id="step-6">
 
             <div class="question-div text-center ">
-                <p class="question failed_result d-none">Based on the information you have provided; we think you <b><span style="color: red">would not</span></b> be a good candidate for treatment with our UTI kit.</p>
-                <p class="question passed_result d-none">Based on the information you have provided; we think you <b><span style="color: green">would</span></b> be a good candidate for treatment with our UTI kit.</p>
+                <p class="question failed_result d-none">Based on the information you have provided;<br> we think you <b><span style="color: red">would not</span></b> be a good candidate for treatment with our UTI kit.</p>
+                <p class="question passed_result d-none">Based on the information you have provided;<br> we think you <b><span style="color: green">would</span></b> be a good candidate for treatment with our UTI kit.</p>
                 <!-- <p>We will send your information to our medical provider for review and let you know when <br>your prescription will be approved.</p> -->
             </div>
 
@@ -384,8 +384,10 @@
                     <li>You will read the medication information provided with your prescription.</li>
                 </ul>
                 <ul>
-                    <li><a href="/terms_of_use" target="_blank">Terms of Use ABF</a></li>
-                    <li> <a href="/telemedicine" target="_blank">Telehealth Consent ABF</a></li>
+                    <!---<li><a href="/terms_of_use" target="_blank">Terms of Use ABF</a></li>
+                    <li> <a href="/telemedicine" target="_blank">Telehealth Consent ABF</a></li> -->
+                    <b><span style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#termsModal">Terms of Use ABF</span></b><br>
+                    <b><span style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#telmedModal">Telehealth Consent ABF</span></b>
                 </ul>
 
                 <label class="button-container custom-radio w-100 mb-4 mt-4 agree-uti-section">
@@ -478,7 +480,16 @@
             prevBtn.removeAttribute('disabled');
         }
 
-        
+        //custom button style for result steps
+        if(currentStep === 6){
+
+            $('.step-buttons').addClass('result_steps_button');
+
+        }else{
+
+            $('.step-buttons').removeClass('result_steps_button');
+        }
+        //ending custom button style for result steps
 
         
         if (currentStep > 1) {

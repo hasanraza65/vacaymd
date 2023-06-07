@@ -33,6 +33,9 @@
 @endif
 
 
+@include('landing.layout.telemed_modal')
+@include('landing.layout.terms_n_conditions_modal')
+
 <input type="hidden" value="0" id="total_wrongs" class="form-control m-4">
 
 

@@ -35,7 +35,7 @@ class OrderController extends Controller
     function showemail(){
         $orderData = Order::with('userDetail')
         ->find(2);
-        return view('emails.updated_location', compact(['orderData']));
+        return view('emails.order_approved', compact(['orderData']));
     }
     public function index(){
 
@@ -204,16 +204,17 @@ class OrderController extends Controller
            
             $deualt_filepath='/src/assets/uploads/Gallery/1683886370_UTI.mp3';
            }
-           $defualt_message="Hi,This is Dr Kulkarni. I have reviewed the information that you have provided and feel that you are a good candidate for treatment. Please follow the instructions sent with your prescription and contact me through your account if you have any questions. Thank you.";
-           $p = new PatientNote();
-           $p->attachment = $deualt_filepath;
-           $p->order_id = $request->order_id;
-           $p->user_id = $data->user_id;
-           $p->doctor_id = Auth::user()->id;
-           $p->save();
+           $defualt_message="Transcription of audio message - Hi, This is Dr Kulkarni. I have reviewed the information that you have provided and feel that you are a good candidate for treatment. Please follow the instructions sent with your prescription and contact me through your account if you have any questions. Thank you.";
+        //    $p = new PatientNote();
+        //    $p->attachment = $deualt_filepath;
+        //    $p->order_id = $request->order_id;
+        //    $p->user_id = $data->user_id;
+        //    $p->doctor_id = Auth::user()->id;
+        //    $p->save();
 
            $mess = new Message();
            $mess->message =  $defualt_message;
+           $mess->attachment = $deualt_filepath;
            $mess->order_id = $request->order_id;
            $mess->user_id = Auth::user()->id;
            $mess->save();

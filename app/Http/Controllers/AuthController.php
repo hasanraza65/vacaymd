@@ -110,7 +110,7 @@ class AuthController extends Controller
         //ending sending mail
 
         //sending sms
-        if($request->phone){
+        if(isset($request->phone)){
             $this->sendSMS($request->phone, 'Your Order has been placed');
         }
        
@@ -263,8 +263,6 @@ class AuthController extends Controller
     public function sendSMS($phone_num = null, $message = null){
 
         $this->twilioService->sendSMS($phone_num, $message);
-
-        echo "done";
 
     }
 

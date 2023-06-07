@@ -156,6 +156,8 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('messages/{id}', [App\Http\Controllers\Patient\MessagesController::class, 'destroy']);
         //delete msg
 
+        Route::get('/make-payment/{orderid}', [App\Http\Controllers\Patient\PaymentController::class, 'index']);
+
     });
 
     //ending Patient Rotue
@@ -244,8 +246,6 @@ Route::get('/thank_u', function () {
 });
 
 Route::post('/patient/order', [App\Http\Controllers\Patient\OrdersController::class, 'store']);
-
-Route::get('/patient/make-payment/{orderid}', [App\Http\Controllers\Patient\PaymentController::class, 'index']);
 
 Route::get('/patient/sendsms', [App\Http\Controllers\Patient\OrdersController::class, 'sendSMS']);
 

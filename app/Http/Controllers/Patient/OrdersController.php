@@ -263,24 +263,30 @@ class OrdersController extends Controller
         $data->update();
         $this->sendEmailUpdatelocPharmacy($request->order_id);
         $this->sendEmailUpdatelocToDoctor($request->order_id);
-        $this->sendEmailUpdatelocToMe($request->order_id);
+        //$this->sendEmailUpdatelocToMe($request->order_id);
         return redirect()->back()->with('success', 'Data updated successfully');
     }
     public function sendEmailUpdatelocPharmacy($orderid){
         //getting order data
-        $orderData = Order::with(['userDetail','pharmacyDetail.userDetail'])
+        $orderData = Order::with(['userDetail','pharmacyDetail','pharmacyDetail.userDetail'])
         ->find($orderid);
         // $to = $orderData['userDetail']['email'];
         $to =$orderData->pharmacyDetail->userDetail->email;
-        $to_name =$orderData->userDetail->name;
+        $to_name =$orderData->pharmacyDetail->userDetail->name;
         //ending getting order data
         $email = new Mail();
-        $email->setFrom("notification@skvclients.com", "Vacay MD");
+        $from_email=env('MAIL_FROM_ADDRESS');
+        $email->setFrom($from_email, "Vacay MD");
         $email->setSubject("Patient Reached Nevada");
         $email->addTo($to, $to_name);
         $htmlContent = View::make('emails.updated_location')
         ->with(['orderData' => $orderData])
         ->render();
+
+        $sms_message = "Patient of order #".$orderData->order_num.' has been reached Nevada';
+        if($orderData->pharmacyDetail->pharmacy_phone != null && $orderData->pharmacyDetail->pharmacy_phone != ""){
+            $this->sendSMS($orderData->pharmacyDetail->pharmacy_phone, $sms_message);
+            }
         
         $email->addContent("text/html", $htmlContent);
         
@@ -295,15 +301,21 @@ class OrdersController extends Controller
         ->find($orderid);
         // $to = $orderData['userDetail']['email'];
         $to =$orderData->doctorDetail->email;
-        $to_name =$orderData->userDetail->name;
+        $to_name =$orderData->doctorDetail->name;
         //ending getting order data
         $email = new Mail();
-        $email->setFrom("notification@skvclients.com", "Vacay MD");
+        $from_email=env('MAIL_FROM_ADDRESS');
+        $email->setFrom($from_email, "Vacay MD");
         $email->setSubject("Patient Reached Nevada");
         $email->addTo($to, $to_name);
         $htmlContent = View::make('emails.updated_location')
         ->with(['orderData' => $orderData])
         ->render();
+
+        $sms_message = "Patient of order #".$orderData->order_num.' has been reached Nevada';
+        if($orderData->doctorDetail->phone != null && $orderData->doctorDetail->phone != ""){
+            $this->sendSMS($orderData->doctorDetail->phone, $sms_message);
+            }
         
         $email->addContent("text/html", $htmlContent);
         
@@ -335,11 +347,9 @@ class OrdersController extends Controller
         $response = $sendgrid->send($email);
         
     }
-    public function sendSMS($phone_num = '+17029641642', $message = 'Hey there'){
+    public function sendSMS($phone_num = null, $message = null){
 
         $this->twilioService->sendSMS($phone_num, $message);
-
-        echo "done";
 
     }
 

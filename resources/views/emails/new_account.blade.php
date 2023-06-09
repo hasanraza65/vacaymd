@@ -69,12 +69,12 @@
   <body>
     <div class="card">
       <div class="card-header">
-        <img src="https://vacaymd.skvclients.com/src/assets/logos/logo.png" alt="Logo" class="logo" />
+        <img src="https://orders.vacaymd.com/src/assets/logos/logo.png" alt="Logo" class="logo" />
       </div>
       <div class="card-body">
         <br>
         <center>
-        <b><p>Welcome! {{$userData->name}} your account has been created. You can login from there <a href="https://vacaymd.skvclients.com/login">https://vacaymd.skvclients.com/login</a></p></b><br>
+        <b><p>Welcome! {{$userData->name}} your account has been created. <br><a href="https://orders.vacaymd.com/login"> Click here to login. </a></b><br>
         </center>
 
 

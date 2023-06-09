@@ -62,7 +62,7 @@
                             <div class="col">
                             <label for="user_role">User Role</label>
                             <select id="user_role" name="user_role" class="form-control" required>
-                                <option value="1">Admin</option>
+                                <!---<option value="1">Admin</option> --->
                                 <option value="2">Doctor</option>
                                 <!---<option value="4">Patient</option>--->
                             </select>

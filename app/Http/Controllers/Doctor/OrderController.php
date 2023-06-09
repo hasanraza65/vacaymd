@@ -145,10 +145,85 @@ class OrderController extends Controller
         $data->update();
 
         $pharmacy = Pharmacy::find($request->pharmacy_id);
+
         $sms_message = "A new order has been sent to you by the doctor.";
-        $this->sendSMS($pharmacy->pharmacy_phone, $sms_message);
+        //$this->sendSMS($pharmacy->pharmacy_phone, $sms_message);
+
+        $this->sendToPharEmail_todoctor($request->order_id);
+        $this->sendToPharEmail_toPharmacy($request->order_id);
 
         return redirect()->back()->with('success', 'Data updated successfully');
+
+    }
+
+    public function sendToPharEmail_todoctor($orderid){
+
+        $orderData = Order::with('userDetail')
+        ->find($orderid);
+
+        //get admin email
+        $user = User::find($orderData->assigned_to);
+        //ending get admin email
+
+        $to = $user->email;
+        $to_name = $user->name;
+
+        $email = new Mail();
+        $from_email=env('MAIL_FROM_ADDRESS');
+        $email->setFrom($from_email, "Vacay MD");
+
+        $email->setSubject("Order Sent To Pharmacy.");
+        $sms_message='Order  #'.$orderData->order_num.' has been sent to pharmacy.';
+
+        if($user->phone != null && $user->phone != ""){
+        $this->sendSMS($user->phone, $sms_message);
+        }
+
+        $email->addTo($to, $to_name);
+
+        $htmlContent = View::make('emails.order_sent_pharmacy_doc')->with(['data' => $orderData])->render();
+
+        $email->addContent("text/html", $htmlContent);
+        
+        $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
+        
+        $response = $sendgrid->send($email);
+
+    }
+
+    public function sendToPharEmail_toPharmacy($orderid){
+
+        $orderData = Order::with('userDetail')
+        ->find($orderid);
+
+        //get admin email
+        $phrmacy = Pharmacy::find($orderData->pharmacy_id);
+        $user = User::find($phrmacy->manager_id);
+        //ending get admin email
+
+        $to = $user->email;
+        $to_name = $user->name;
+
+        $email = new Mail();
+        $from_email=env('MAIL_FROM_ADDRESS');
+        $email->setFrom($from_email, "Vacay MD");
+
+        $email->setSubject("New Order Received.");
+        $sms_message='A new order #'.$orderData->order_num.' has been sent to you by the doctor.';
+
+        if($user->phone != null && $user->phone != ""){
+        $this->sendSMS($user->phone, $sms_message);
+        }
+
+        $email->addTo($to, $to_name);
+
+        $htmlContent = View::make('emails.order_sent_pharmacy_pharm')->with(['data' => $orderData])->render();
+
+        $email->addContent("text/html", $htmlContent);
+        
+        $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
+        
+        $response = $sendgrid->send($email);
 
     }
 
@@ -162,6 +237,8 @@ class OrderController extends Controller
             $data->confirm_patient_id =$request->confirm_patient_id;
             //$data->payment_status = 1;
             $data->update();
+
+            $this->sendAssignedEmail($request->order_id);
             //ending assigning order to doctor
 
 
@@ -484,6 +561,41 @@ class OrderController extends Controller
         ->whereNot('order_status','Rejected')
         ->count();
         return $data;
+    }
+
+    public function sendAssignedEmail($orderid){
+
+        $orderData = Order::with('userDetail')
+        ->find($orderid);
+
+        $user = User::find($orderData->assigned_to);
+        
+        $to = $user->email;
+        $to_name = $user->name;
+        $phone = $user->phone;
+
+
+        $email = new Mail();
+        $from_email=env('MAIL_FROM_ADDRESS');
+        $email->setFrom($from_email, "Vacay MD");
+
+        $email->setSubject("New Patient Has Been Assigned.");
+        $sms_message='A new patient '.$orderData['userDetail']['name'].' has been assigned to you.';
+
+        if($phone != null && $phone != ""){
+        $this->sendSMS($phone, $sms_message);
+        }
+
+        $email->addTo($to, $to_name);
+
+        $htmlContent = View::make('emails.patient_assigned')->with(['data' => $orderData])->render();
+
+        $email->addContent("text/html", $htmlContent);
+        
+        $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
+        
+        $response = $sendgrid->send($email);
+
     }
 
 }

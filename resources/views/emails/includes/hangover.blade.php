@@ -2,6 +2,6 @@
            <b class=""><p>Hangover Kit Instructions.</p></b>
            <p>The best way to avoid a hangover is to avoid excessive alcohol and adequate hydration</p>
            <p>*Please read information included with your kit</p>
-           <img src="/src/assets/uploads/Instructions/hangover.png" width="600px" alt="">
+           <img src="https://orders.vacaymd.com/src/assets/uploads/Instructions/hangover.png" width="600px" alt="">
            
 </div>

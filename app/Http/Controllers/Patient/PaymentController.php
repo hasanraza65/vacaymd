@@ -12,12 +12,23 @@ use App\Models\User;
 use App\Models\UpSaleItem;
 use App\Models\OrderAddon;
 use Auth;
+use Carbon\Carbon;
+use SendGrid\Mail\Mail;
+use Swift_TransportException;
+use Illuminate\Support\Facades\View;
+use App\Services\TwilioService;
 
 class PaymentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    protected $twilioService;
+
+    public function __construct(TwilioService $twilioService)
+    {
+        $this->twilioService = $twilioService;
+    }
     public function index($id)
     {   
         //get order details 
@@ -102,14 +113,6 @@ class PaymentController extends Controller
 
         try {
 
-            /*
-            $charge = Charge::create([
-                'amount' => $amount * 100, // Amount in cents
-                'currency' => 'usd',
-                'source' => $request->input('stripeToken'),
-                'description' => 'VACAY MD',
-            ]); */
-
             //storing card for future
 
             if($authUser->stripe_token == "" || $authUser->stripe_token == null){
@@ -131,41 +134,9 @@ class PaymentController extends Controller
                 $customertoken = $authUser->stripe_token;
             }
 
-            /*
-
-            $donepayment = Charge::create ([
-            
-                "amount" => $amount * 100,
-                "currency" => "USD",
-                "customer" => $customertoken,
-                "description" => "Payment By VACAY MD"
-            ]); */
-
-
-
-            //ending storting card for future
-
-            // Save the charge details to your database or perform other actions as needed.
-            /*
-            $order = Order::where('id',$request->order_id)->first();
-            $order->payment_status = 1;
-            $order->update(); */
-
-            //adding transaction
-
-            /*
-
-            $transaction = new Payment();
-            $transaction->amount = $amount;
-            $transaction->order_id = $request->order_id;
-            //$transaction->t_id = $charge->id;
-            $transaction->method = 'Stripe';
-            $transaction->user_id = Auth::user()->id;
-            $transaction->save(); */
-
-            //ending adding transaction
-
-            //return back()->with('success_message', 'Payment successful!');
+            //sending email
+            $this->sendEmail($request->order_id);
+            //ending sending email
 
             return redirect()->to('/thank_u')->with('success', 'Order Created Successful!');
 
@@ -173,9 +144,42 @@ class PaymentController extends Controller
             return back()->withErrors('Error! ' . $ex->getMessage());
         }
 
-
-        //return redirect()->to('/patient');
         
+    }
+
+    public function sendEmail($orderid){
+
+        $orderData = Order::with('userDetail')
+        ->find($orderid);
+
+        //get admin email
+        $admin = User::where('user_role',1)->first();
+        //ending get admin email
+
+        $to = $admin->email;
+        $to_name = $admin->name;
+
+        $email = new Mail();
+        $from_email=env('MAIL_FROM_ADDRESS');
+        $email->setFrom($from_email, "Vacay MD");
+
+        $email->setSubject("You have received a new order.");
+        $sms_message='New order  #'.$orderData->order_num.' has been received.';
+
+        if($admin->phone != null && $admin->phone != ""){
+        $this->sendSMS($admin->phone, $sms_message);
+        }
+
+        $email->addTo($to, $to_name);
+
+        $htmlContent = View::make('emails.order_completed')->with(['orderData' => $orderData])->render();
+
+        $email->addContent("text/html", $htmlContent);
+        
+        $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
+        
+        $response = $sendgrid->send($email);
+
     }
 
     /**
@@ -213,6 +217,12 @@ class PaymentController extends Controller
     public function paymentForm($orderid){
 
         return view('patient.payments.create');
+    }
+
+    public function sendSMS($phone_num = null, $message = null){
+
+        $this->twilioService->sendSMS($phone_num, $message);
+
     }
 
 }

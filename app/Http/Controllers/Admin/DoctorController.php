@@ -7,9 +7,20 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Doctor;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
+use SendGrid\Mail\Mail;
+use Swift_TransportException;
+use Illuminate\Support\Facades\View;
+use App\Services\TwilioService;
 
 class DoctorController extends Controller
 {
+    protected $twilioService;
+
+    public function __construct(TwilioService $twilioService)
+    {
+        $this->twilioService = $twilioService;
+    }
     public function index(){
 
         $data = Doctor::with('userDetail')
@@ -163,5 +174,43 @@ class DoctorController extends Controller
        
 
         return response('Deleted');
+    }
+
+    public function sendEmail($userid){
+
+        //get admin email
+        $user = User::find($userid);
+        //ending get admin email
+
+        $to = $user->email;
+        $to_name = $user->name;
+
+        $email = new Mail();
+        $from_email=env('MAIL_FROM_ADDRESS');
+        $email->setFrom($from_email, "Vacay MD");
+
+        $email->setSubject("New Account Created");
+        $sms_message='Your new account has been created.';
+
+        if($user->phone != null && $user->phone != ""){
+        $this->sendSMS($user->phone, $sms_message);
+        }
+
+        $email->addTo($to, $to_name);
+
+        $htmlContent = View::make('emails.new_account')->with(['userData' => $user])->render();
+
+        $email->addContent("text/html", $htmlContent);
+        
+        $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
+        
+        $response = $sendgrid->send($email);
+
+    }
+
+    public function sendSMS($phone_num = null, $message = null){
+
+        $this->twilioService->sendSMS($phone_num, $message);
+
     }
 }

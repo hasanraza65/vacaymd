@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Patient reached nevada</title>
+    <title>New Order Recieved</title>
     <style>
       /* Set the background color of the body to light grey */
       body {
@@ -69,19 +69,18 @@
   <body>
     <div class="card">
       <div class="card-header">
-      <img src="https://vacaymd.skvclients.com/src/assets/logos/logo.png" alt="Logo" class="logo" />
-      <h1>Order # {{$orderData->order_num}}</h1>
+        <img src="https://orders.vacaymd.com/src/assets/logos/logo.png" alt="Logo" class="logo" />
       </div>
       <div class="card-body">
         <br>
         <center>
-        <b><p>Patient {{$orderData?->userDetail?->name}} has been reached to Nevada.</p></b><br>
+        <b><p>You have received an order #{{$data->order_num}}. <br><a href="https://orders.vacaymd.com/login"> Click here to login. </a></b><br>
         </center>
 
 
       </div>
       <div class="card-footer">
-      @include('emails.includes.footercopyright')
+        @include('emails.includes.footercopyright')
       </div>
     </div>
   </body>

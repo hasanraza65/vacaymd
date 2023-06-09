@@ -57,9 +57,9 @@
                            <div class="col">
                            <label for="user_role">User Role</label>
                             <select id="user_role" name="user_role" class="form-control">
-                                <option value="1" {{ ($data->user_role == 1) ? 'selected' : '' }}>Admin</option>
+                                <!---<option value="1" {{ ($data->user_role == 1) ? 'selected' : '' }}>Admin</option> --->
                                 <option value="2" {{ ($data->user_role == 2) ? 'selected' : '' }}>Doctor</option>
-                                <option value="3" {{ ($data->user_role == 3) ? 'selected' : '' }}>Pharmacy Manager</option>
+                                <!---<option value="3" {{ ($data->user_role == 3) ? 'selected' : '' }}>Pharmacy Manager</option> --->
                                 <!---<option value="4" {{ ($data->user_role == 4) ? 'selected' : '' }}>Patient</option> --->
                             </select>
                            </div>

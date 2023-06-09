@@ -219,7 +219,8 @@ class OrderController extends Controller
         }
 
         $this->sendEmail_Status($request->order_id,$request->order_status);
-       
+        $this->sendEmail_Status_doctor($request->order_id,$request->order_status);
+        
         return redirect()->back()->with('success', 'Data updated successfully');
 
     }
@@ -259,13 +260,7 @@ class OrderController extends Controller
         }
         
     }
-    public function sendSMS($phone_num = '+17029641642', $message = 'Hey there'){
-
-        $this->twilioService->sendSMS($phone_num, $message);
-
-        echo "done";
-
-    }
+    
     public function sendEmail_Status($orderid,$status){
 
         //getting order data
@@ -279,7 +274,9 @@ class OrderController extends Controller
         //ending getting order data
         
         $email = new Mail();
-        $email->setFrom("notification@skvclients.com", "Vacay MD");
+        $from_email=env('MAIL_FROM_ADDRESS');
+        $email->setFrom($from_email, "Vacay MD");
+
         if($status=='Delivered'){
             $email->setSubject("Your medication has been dispensed");
             $sms_message='Your medication  #'.$orderData->order_num.' has been dispensed and will be delivered shortly';
@@ -289,13 +286,20 @@ class OrderController extends Controller
         }else{
             $email->setSubject("Your order has been Cancelled");
         }
+        
         $this->sendSMS($orderData['userDetail']['phone'], $sms_message);
+        
         $email->addTo($to, $to_name);
+
+        if($status == 'Delivered'){
+
+            $htmlContent = View::make('emails.order_delivered')->with(['orderData' => $orderData])->render();
+
+        }
+
         if($status=='Completed'){
             $htmlContent = View::make('emails.order_delivered')->with(['orderData' => $orderData])->render();
         }else if($status=='Cancelled'){
-            $htmlContent = View::make('emails.order_cancelled')->with(['orderData' => $orderData])->render();
-        }else{
             $htmlContent = View::make('emails.order_cancelled')->with(['orderData' => $orderData])->render();
         }
        
@@ -304,6 +308,67 @@ class OrderController extends Controller
         $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
         
         $response = $sendgrid->send($email);
+
+    }
+
+    public function sendEmail_Status_doctor($orderid,$status){
+
+        //getting order data
+
+        $orderData = Order::with('userDetail')
+        ->find($orderid);
+
+        $user = User::find($orderData->assigned_to);
+        
+        $to = $user->email;
+        $to_name = $user->name;
+
+        //ending getting order data
+        
+        $email = new Mail();
+        $from_email=env('MAIL_FROM_ADDRESS');
+        $email->setFrom($from_email, "Vacay MD");
+
+        if($status=='Delivered'){
+            $email->setSubject("Your patient medication has been dispensed");
+            $sms_message='Order #'.$orderData->order_num.' has been dispensed and will be delivered shortly to patient.';
+        }else if($status=='Cancelled'){
+            $email->setSubject("Your order has been Cancelled. If you were charged for this order so, you will get the refund withing 5-10 business days.");
+            $sms_message='Order #'.$orderData->order_num.' has been cancelled.';
+        }else{
+            $email->setSubject("Order has been cancelled by pharmacy.");
+        }
+        
+        if($user->phone != null && $user->phone != ""){
+            $this->sendSMS($user->phone, $sms_message);
+        }
+        
+        $email->addTo($to, $to_name);
+
+        if($status == 'Delivered'){
+
+            $htmlContent = View::make('emails.order_delivered_doc')->with(['orderData' => $orderData])->render();
+        }
+
+        if($status=='Completed'){
+            $htmlContent = View::make('emails.order_completed_doc')->with(['orderData' => $orderData])->render();
+        }else if($status=='Cancelled'){
+            $htmlContent = View::make('emails.order_cancelled_doc')->with(['orderData' => $orderData])->render();
+        }
+
+        
+       
+        $email->addContent("text/html", $htmlContent);
+        
+        $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
+        
+        $response = $sendgrid->send($email);
+
+    }
+
+    public function sendSMS($phone_num = null, $message = null){
+
+        $this->twilioService->sendSMS($phone_num, $message);
 
     }
 

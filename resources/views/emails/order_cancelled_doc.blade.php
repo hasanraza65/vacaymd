@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Patient reached nevada</title>
+    <title>Order Cancelled</title>
     <style>
       /* Set the background color of the body to light grey */
       body {
@@ -75,13 +75,13 @@
       <div class="card-body">
         <br>
         <center>
-        <b><p>Patient {{$orderData?->userDetail?->name}} has been reached to Nevada.</p></b><br>
+        <b><p>Order has been <span style="color:red">cancelled</span> by the pharmacy.</p></b><br>
         </center>
 
 
       </div>
       <div class="card-footer">
-      @include('emails.includes.footercopyright')
+        @include('emails.includes.footercopyright')
       </div>
     </div>
   </body>

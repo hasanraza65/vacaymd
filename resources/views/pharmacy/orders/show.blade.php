@@ -119,7 +119,9 @@
                                         <th>Patient Name</th>
                                         <th>Patient Email</th>
                                         <th>Billing Address</th>
+                                        @if($data->state == 'Coming to Nevada' && $data->reached_nevada == 1)
                                         <th>Dilvery Location</th>
+                                        @endif
                                         <th>Patient Age</th>
                                         <th>Bill Amount</th>
                                         <th>Date</th>
@@ -130,7 +132,9 @@
                                         <td>{{$data->userDetail->name}}</td>
                                         <td>{{$data->userDetail->email}}</td>
                                         <td>{{$data->billing_address}}</td>
+                                        @if($data->state == 'Coming to Nevada' && $data->reached_nevada == 1)
                                         <td>{{$data->delivery_location}}</td>
+                                        @endif
                                         <td>{{ \Carbon\Carbon::parse($data->userDetail->dob)->format('m/d/Y') }}</td>
                                         <td>${{number_format($data->total_amount,2)}}</td>
                                         <td>{{ \Carbon\Carbon::parse($data->created_at)->format('m/d/Y') }}</td>

@@ -43,14 +43,18 @@
                                             <td class="action_btn"  onclick="window.location ='/patient/orders/{{$datas->id}}'">{{$datas->order_num}}</td>
                                             <td class="action_btn"  onclick="window.location ='/patient/orders/{{$datas->id}}'">{{number_format($datas->total_amount,2)}}</td>
                                             <td>{{ \Carbon\Carbon::parse($datas->created_at)->format('m/d/Y') }}</td>
-                                            <td>@if($datas->payment_status == 1)
+                                            <td>
+                                                @if($datas->payment_status == 1)
                                                 <span class="badge badge-light-success mb-2 me-4">Paid</span>
                                                 @elseif($datas->payment_status == 0)
                                                 <span class="badge badge-light-danger mb-2 me-4">Unpaid</span>
+                                                @elseif($datas->payment_status == 2)
+                                                <span class="badge badge-light-warning mb-2 me-4">Refunded</span>
                                                 @endif
+
                                             </td>
                                             <td>
-                                                @if($datas->payment_status == 1)
+                                                @if($datas->payment_status != 0)
                                                 <form action="/patient/invoice" method="post">
                                                     @csrf 
                                                     <input type="hidden" name="id" value="{{$datas->id}}" id="">

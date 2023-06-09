@@ -24,7 +24,7 @@
 <div class="step_info">
     <div class="container" style="padding-left: 30px;">Make a payment</div>
     <div class="container text-dark mt-1" style="padding-left: 30px; padding-right: 30px;font-size:13px;">
-    <p class="mb-0 pb-0">You won't be charged until the doctor will approve your order.</p>
+    <p class="mb-0 pb-0">You will not be charged till your prescription is approved.</p>
     </div>
 </div>
 

@@ -38,6 +38,9 @@
        <img style="border-radius:200px; height:50px; max-width:50px; background: #9ABC66; margin:0 auto;" src="/src/assets/img/ICONN.png" alt="">
         <h1 class="mt-4">Thank You</h1> 
         <p>Thank you submitting you information. <br> Your information in under review and you will be notified <br> once your prescription has been approved.</p>
+
+        <br>
+        <span style="font-size:16px">You will not be charged till your prescription is approved.</span>
       
          <div class="m-4" style="margin-top:40px !important;">
          <a class="btn button-custom previous-button m-2"  href="https://vacaymd.com/">Homepage</a>

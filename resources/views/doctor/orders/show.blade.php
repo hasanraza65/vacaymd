@@ -80,11 +80,12 @@
                                     </div>
                                     @else 
 
+                                    @if($data->order_status != 'Cancelled')
                                     <form action="/doctor/update_order_status" method="POST">
                                         @csrf
                                         <input type="hidden" name="order_id" value="{{$data->id}}">
                                     <div class="input-group mt-2 mb-1">
-                                        <select class="form-select" name="order_status">
+                                        <select class="form-select" name="order_status" id="orderstatus_select">
                                             <option value="In Process" {{ ($data->order_status == 'In Process') ? 'selected' : '' }}>In Process</option>
                                             <option value="Pending" {{ ($data->order_status == 'Pending') ? 'selected' : '' }}>Pending</option>
                                             <option value="Completed" {{ ($data->order_status == 'Completed') ? 'selected' : '' }}>Completed</option>
@@ -94,6 +95,10 @@
                                     </div>
 
                                     </form>
+                                    @else 
+                                    <br>
+                                    <span class="mt-2">Order has been closed. <br>Status cannot be changed now.</span>
+                                    @endif
 
                                     @endif
 

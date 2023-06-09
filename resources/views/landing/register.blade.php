@@ -164,6 +164,7 @@
                         </div>
                     </div>
 
+                    <span class="mt-2 mb-2" style="font-size:14px">By law, we can only provide consultations if you are present in Nevada</span>
                     <div class="col-md-12">
                         <div class="mb-3">
                             <input placeholder="Home Address: " name="billing_address" type="text" class="form-control input-custom" >
@@ -204,7 +205,7 @@
 
                         <div class="col-md-6 nevada_options d-none">
                             <div class="mb-3">
-                                <input placeholder="Hotel Address:" name="hotel_name" type="text" class="form-control input-custom" >
+                                <input placeholder="Las Vegas delivery address:" name="hotel_name" type="text" class="form-control input-custom" >
                             </div>
                         </div>
     
@@ -213,6 +214,7 @@
                         <div class="mb-3">
                             <label class="form-label upload-label">Upload a valid ID (Drivers license or passport)</label>
                             <input  name="files[]" accept="image/*,.pdf" type="file" class="form-control input-custom" style="padding-left: 10px;" multiple>
+                            <span class="mt-2" style="font-size:14px">A state issued ID is required by law (Driver’s license, Tribal ID, or Passport)</span>
                         </div>
                     </div>
 
@@ -388,7 +390,7 @@ $(document).ready(function() {
     } else {
       message = 'Password is very strong';
     }
-    $('#password-strength-message').html('<span style="color: red;">' + message + '</span>');
+    $('#password-strength-message').html('<span style="color: green;">' + message + '</span>');
 
     checkValidity();
   });

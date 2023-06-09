@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Models\OrderDetail;
 use App\Models\OrderAmounts;
+use App\Models\OrderAddon;
 use App\Models\PatientNote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -71,8 +72,9 @@ class OrdersController extends Controller
     public function invoiceView(Request $request)
     {
         $data = Payment::with(['userDetail','orderDetail'])->where('order_id', $request->id)->first();
+        $orderaddons = OrderAddon::with('itemDetail')->where('order_id',$request->id)->get();
         
-        return view('patient.orders.invoice',compact(['data']));
+        return view('patient.orders.invoice',compact(['data','orderaddons']));
     }
     /**
      * Store a newly created resource in storage.

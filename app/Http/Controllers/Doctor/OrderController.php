@@ -13,9 +13,10 @@ use App\Models\Pharmacy;
 use App\Models\Payment;
 use App\Models\Passport;
 use Auth;
-
+use Carbon\Carbon;
 use Stripe\Stripe;
 use Stripe\Charge;
+use Stripe\Refund;
 use App\Services\TwilioService;
 use SendGrid\Mail\Mail;
 use Illuminate\Support\Facades\Mail as MailFacade;
@@ -143,13 +144,15 @@ class OrderController extends Controller
         $data->assigned_to = Auth::user()->id;
         $data->update();
 
+        $pharmacy = Pharmacy::find($request->pharmacy_id);
+        $sms_message = "A new order has been sent to you by the doctor.";
+        $this->sendSMS($pharmacy->pharmacy_phone, $sms_message);
+
         return redirect()->back()->with('success', 'Data updated successfully');
 
     }
 
     public function updateOrderStatus(Request $request){
-
-       
 
         if($request->order_status == "Approved"){
 
@@ -160,9 +163,6 @@ class OrderController extends Controller
             //$data->payment_status = 1;
             $data->update();
             //ending assigning order to doctor
-
-
-          
 
 
             //charging customer 
@@ -182,7 +182,7 @@ class OrderController extends Controller
 
                 if($paymentIntent){
                     $payment_trasanction = Payment::create([
-                        'amount' => $paymentIntent->amount ,
+                        'amount' => $amount ,
                         'order_id' => $request->order_id,
                         'user_id' => $data->user_id,
                         't_id' => $paymentIntent->id,
@@ -232,8 +232,6 @@ class OrderController extends Controller
                     return redirect()->back()->withErrors(['error' => 'Error: There are some issue with the patient payment card. So, order cannot be approved.']);
 
                 }
-
-                
               
                 // Handle successful charge
             
@@ -264,8 +262,24 @@ class OrderController extends Controller
              
             $this->sendEmail_Status($request->order_id,$request->order_status);
         }
+
+        if($request->order_status == "Cancelled"){
+            $data = Order::find($request->order_id);
+            $data->order_status = $request->order_status;
+            $data->payment_status = 2;
+            $data->update();
+             
+            $this->sendEmail_Status($request->order_id,$request->order_status);
+        }
+
+        if($request->order_status == "In Process"){
+            $data = Order::find($request->order_id);
+            $data->order_status = $request->order_status;
+            $data->update();
+             
+            $this->sendEmail_Status($request->order_id,$request->order_status);
+        }
         
-       
 
         return redirect()->back()->with('success', 'Data updated successfully');
 
@@ -351,8 +365,6 @@ class OrderController extends Controller
 
         $this->twilioService->sendSMS($phone_num, $message);
 
-        echo "done";
-
     }
     public function sendEmail_Status($orderid,$status){
 
@@ -380,7 +392,12 @@ class OrderController extends Controller
             $sms_message='Your order #'.$orderData->order_num.' has been rejected';
         }else if($status=='Cancelled'){
             $email->setSubject("Your order has been cancelled");
-            $sms_message='Your order #'.$orderData->order_num.' has been cancelled';
+            $sms_message='Your order #'.$orderData->order_num.' has been cancelled. <br> If you were charged for this order, you will get refund in 5-10 business days.';
+
+            if($orderData->payment_status == 1){
+            $this->refundAmount($orderid);
+            }
+
         }else if($status=='Pending'){
             $email->setSubject("Your order status has been changed to Pending");
             $sms_message='Your order #'.$orderData->order_num.' status has been changed to Pending';
@@ -397,7 +414,7 @@ class OrderController extends Controller
         }else if($status=='Rejected'){
             $htmlContent = View::make('emails.order_rejected')->with(['orderData' => $orderData])->render();
         }else if($status=='Cancelled'){
-            $htmlContent = View::make('emails.order_doc_cancelld')->with(['orderData' => $orderData])->render();
+            $htmlContent = View::make('emails.order_doc_cancelled')->with(['orderData' => $orderData])->render();
         }else if($status=='Pending'){
             $htmlContent = View::make('emails.order_pending')->with(['orderData' => $orderData])->render();
         }else {
@@ -411,6 +428,43 @@ class OrderController extends Controller
         $response = $sendgrid->send($email);
 
     }
+
+    public function refundAmount($orderid){
+
+        $orderData = Order::with('userDetail')
+        ->find($orderid);
+
+
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $paymentData = Payment::where('order_id',$orderid)->first();
+        $chargeid = $paymentData->t_id;
+
+        try {
+            $payment_intent = \Stripe\PaymentIntent::retrieve($chargeid);
+            
+            if ($payment_intent->status == 'succeeded') {
+                foreach ($payment_intent->charges->data as $charge) {
+                    $refund = Refund::create([
+                        'charge' => $charge->id, 
+                    ]);
+                }
+
+                $paymentData->is_refunded = 1;
+                $paymentData->refund_date = Carbon::now();;
+                $paymentData->refund_id = $refund->id;
+                $paymentData->update();
+                //return response()->json(['refund' => $refund]);
+            } else {
+                return response()->json(['error' => 'PaymentIntent has not been paid.'], 400);
+            }
+        } catch (\Stripe\Exception\ApiErrorException $e) {
+            // Handle error
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+        
+    }
+
 
 
     public static function dashboard(){

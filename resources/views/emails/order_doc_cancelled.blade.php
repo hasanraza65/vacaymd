@@ -75,6 +75,7 @@
         <br>
         <center>
         <b><p>Your order # {{$orderData->order_num}} has been <span style="color:red">cancelled</span> by our doctor.</p></b><br>
+        <p>If you were charged for this order so, you will get the <br>refund within next 5-10 business days in your account.</p>
         </center>
 
 

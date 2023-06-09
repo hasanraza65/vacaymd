@@ -51,8 +51,8 @@
                                                                            </div>
                                                                          </div>
                                                                         </div>
-                                                                        <p class="inv-street-addr mt-3">WacayMD</p>
-                                                                        <p class="inv-email-address">notification@skvclients.com</p>
+                                                                        <p class="inv-street-addr mt-3">VacayMD</p>
+                                                                        <p class="inv-email-address">notifications@skvclients.com</p>
                                                                         <!-- <p class="inv-email-address">(120) 456 789</p> -->
                                                                     </div>
                                                                     
@@ -60,6 +60,15 @@
                                                                         <p class="inv-list-number mt-sm-3 pb-sm-2 mt-4"><span class="inv-title">Invoice : </span> <span class="inv-number">{{$data?->orderDetail?->order_num}}</span></p>
                                                                         <p class="inv-created-date mt-sm-5 mt-3"><span class="inv-title">Invoice Date : </span> <span class="inv-date">{{date('m/d/Y',strtotime($data?->orderDetail?->created_at))}}</span></p>
                                                                         <p class="inv-due-date"><span class="inv-title">TID : </span> <span class="inv-date">{{$data?->t_id}}</span></p>
+                                                                        <p class="inv-due-date"><span class="inv-title">Status : </span> <span class="inv-date">
+                                                                            @if($data?->is_refunded == 0)
+                                                                            <span class="badge badge-light-success mb-2 me-4">Paid</span>
+                                                                            @elseif($data?->is_refunded == 1)
+                                                                            <span class="badge badge-light-warning mb-2 me-4">Refunded</span>
+                                                                            @endif
+
+                                                                        </span></p>
+                                                                        
                                                                     </div>                                                                
                                                                 </div>
                                                                 
@@ -85,7 +94,7 @@
                                                                     </div>
                                                                     
                                                                     <div class="col-xl-4 col-lg-5 col-md-6 col-sm-8 col-12 order-sm-0 order-1 text-sm-end">
-                                                                        <p class="inv-customer-name">WacayMD</p>
+                                                                        <p class="inv-customer-name">VacayMD</p>
                                                                         <!-- <p class="inv-street-addr">2161 Ferrell Street, MN, 56545 </p> -->
                                                                         <p class="inv-email-address">notification@skvclients.com</p>
                                                                         <!-- <p class="inv-email-address">(218) 356 9954</p> -->
@@ -94,6 +103,15 @@
                                                                 </div>
                                                                 
                                                             </div>
+
+                                                            @php $addons_total = 0 @endphp
+
+                                                            @foreach($orderaddons as $orderaddonss)
+                                                            @php 
+                                                            $addons_total = $addons_total+$orderaddonss->itemDetail->item_price;
+                                                            $subtotal = $data->amount-$addons_total;
+                                                            @endphp
+                                                            @endforeach
     
                                                             <div class="inv--product-table-section">
                                                                 <div class="table-responsive">
@@ -101,7 +119,7 @@
                                                                         <thead class="">
                                                                             <tr>
                                                                                 <th scope="col">S.No</th>
-                                                                                <th scope="col">Treatment</th>
+                                                                                <th scope="col">Treatment/Item</th>
                                                                                 <th class="text-end" scope="col">Method</th>
                                                                                 <th class="text-end" scope="col">Amount</th>
                                                                                
@@ -112,9 +130,19 @@
                                                                                 <td>1</td>
                                                                                 <td>{{$data?->orderDetail?->treatment_req}}</td>
                                                                                 <td class="text-end">{{$data?->method}}</td>
-                                                                                <td class="text-end">{{number_format($data?->amount,2)}}</td>
-                                                                                
+                                                                                <td class="text-end">${{number_format($subtotal,2)}}</td>
                                                                             </tr>
+                                                                            @php $counter = 1 @endphp
+                                                                            @foreach($orderaddons as $orderaddonss)
+                                                                            <tr>
+                                                                                <td>{{$counter}}</td>
+                                                                                <td>{{$orderaddonss->itemDetail->item_name}} <span class="addon_label">- Addon </span> </td>
+                                                                                <td class="text-end">{{$data?->method}}</td>
+                                                                                <td class="text-end">${{number_format($orderaddonss->itemDetail->item_price,2)}}</td>
+                                                                            </tr>
+
+                                                                            @php $counter++ @endphp
+                                                                            @endforeach
                                                                            
                                                                             
                                                                         </tbody>
@@ -131,17 +159,19 @@
                                                                         <div class="text-sm-end">
                                                                             <div class="row">
                                                                                 <div class="col-sm-8 col-7">
-                                                                                    <p class="">Sub Total :</p>
+                                                                                    <p class="">Total :</p>
                                                                                 </div>
                                                                                 <div class="col-sm-4 col-5">
                                                                                     <p class="">$ {{number_format($data?->amount,2)}}</p>
                                                                                 </div>
+                                                                                <!---
                                                                                 <div class="col-sm-8 col-7">
                                                                                     <p class="">Tax :</p>
                                                                                 </div>
                                                                                 <div class="col-sm-4 col-5">
                                                                                     <p class="">$ 0.00</p>
                                                                                 </div>
+                                                                                
                                                                                 <div class="col-sm-8 col-7">
                                                                                     <p class=" discount-rate">Shipping :</p>
                                                                                 </div>
@@ -153,7 +183,7 @@
                                                                                 </div>
                                                                                 <div class="col-sm-4 col-5">
                                                                                     <p class="">$ 0.00</p>
-                                                                                </div>
+                                                                                </div> --->
                                                                                 <div class="col-sm-8 col-7 grand-total-title mt-3">
                                                                                     <h4 class="">Grand Total : </h4>
                                                                                 </div>

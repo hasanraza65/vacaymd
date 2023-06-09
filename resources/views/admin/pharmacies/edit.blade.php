@@ -23,7 +23,7 @@
                 <!--- form card start --->
                 <div class="card p-4">
 
-                    <form method="POST" action="/admin/pharmacies/{{$data->id}}">
+                    <form method="POST" action="/admin/pharmacies/{{$data->id}}" id="pharmacy_form">
 
                         @csrf
                         @method('PUT')
@@ -35,8 +35,9 @@
 
                         <div class="row mt-4">
                             <div class="col">
-                                <label for="name">Pharmacy Phone #</label>
-                                <input type="text" value="{{$data->pharmacy_phone}}" id="name" placeholder="Enter Pharmacy Phone" name="pharmacy_phone" class="form-control">
+                                <label for="phone">Pharmacy Phone #</label>
+                                <input type="text" value="{{$data->pharmacy_phone}}" id="phone" placeholder="Enter Pharmacy Phone" name="pharmacy_phone" class="form-control">
+                                <div id="phone_message" class="m-2"></div>
                             </div>
                             <div class="col">
                                 <div class="col">
@@ -191,6 +192,45 @@ $(document).ready(function() {
     $('#password-strength-message').text(message);
   });
 });
+
+
+// Assume phoneValidity is globally declared and initially set to false.
+var phoneValidity = false;
+
+// Phone validation
+$('#phone').on('keyup', function() {
+  var phone = $(this).val().trim();
+
+  if (!phone.match(/^\d{10}$/)) {
+    $('#phone_message').html('Invalid Phone Number').css('color', 'red');
+    phoneValidity = false;
+  } else {
+    $('#phone_message').html('Valid Phone Number').css('color', 'green');
+    phoneValidity = true;
+  }
+
+  //checkValidity();
+});
+
+// Prevent form submission until phone number is valid
+$('#pharmacy_form').on('submit', function(e) {
+  if (!phoneValidity) {
+    e.preventDefault();
+
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Please provide a valid phone number before submitting the form.',
+      confirmButtonText: 'Okay'
+    }).then((result) => {
+
+  });
+    
+
+
+  }
+});
+//ending
 
 </script>
 

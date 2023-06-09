@@ -18,6 +18,10 @@ use App\Mail\NewOrderMail;
 use SendGrid\Mail\Mail;
 use Illuminate\Support\Facades\Mail as MailFacade;
 use Swift_TransportException;
+use Stripe\Stripe;
+use Stripe\Charge;
+use Stripe\Refund;
+use App\Models\Payment;
 
 class OrderController extends Controller
 {
@@ -207,10 +211,52 @@ class OrderController extends Controller
         $data->order_status = $request->order_status;
         $data->update();
 
+        if($request->order_status == 'Cancelled'){
+            if($data->payment_status == 1){
+                $this->refundAmount($request->order_id);
+                }
+        }
+
         $this->sendEmail_Status($request->order_id,$request->order_status);
        
         return redirect()->back()->with('success', 'Data updated successfully');
 
+    }
+
+    public function refundAmount($orderid){
+
+        $orderData = Order::with('userDetail')
+        ->find($orderid);
+
+
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $paymentData = Payment::where('order_id',$orderid)->first();
+        $chargeid = $paymentData->t_id;
+
+        try {
+            $payment_intent = \Stripe\PaymentIntent::retrieve($chargeid);
+            
+            if ($payment_intent->status == 'succeeded') {
+                foreach ($payment_intent->charges->data as $charge) {
+                    $refund = Refund::create([
+                        'charge' => $charge->id, 
+                    ]);
+                }
+
+                $paymentData->is_refunded = 1;
+                $paymentData->refund_date = Carbon::now();;
+                $paymentData->refund_id = $refund->id;
+                $paymentData->update();
+                //return response()->json(['refund' => $refund]);
+            } else {
+                return response()->json(['error' => 'PaymentIntent has not been paid.'], 400);
+            }
+        } catch (\Stripe\Exception\ApiErrorException $e) {
+            // Handle error
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+        
     }
     public function sendSMS($phone_num = '+17029641642', $message = 'Hey there'){
 
@@ -237,8 +283,8 @@ class OrderController extends Controller
             $email->setSubject("Your medication has been dispensed");
             $sms_message='Your medication  #'.$orderData->order_num.' has been dispensed and will be delivered shortly';
         }else if($status=='Cancelled'){
-            $email->setSubject("Your order has been Cancelled");
-            $sms_message='Your order #'.$orderData->order_num.' has been cancelled';
+            $email->setSubject("Your order has been Cancelled. If you were charged for this order so, you will get the refund withing 5-10 business days.");
+            $sms_message='Your order #'.$orderData->order_num.' has been cancelled. If you were charged for this order so, you will get the refund withing 5-10 business days.';
         }else{
             $email->setSubject("Your order has been Cancelled");
         }

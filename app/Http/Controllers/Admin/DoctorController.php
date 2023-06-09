@@ -12,7 +12,9 @@ class DoctorController extends Controller
 {
     public function index(){
 
-        $data = Doctor::with('userDetail')->get();
+        $data = Doctor::with('userDetail')
+        ->whereHas('userDetail')
+        ->get();
         
         return view('admin.doctors.index',compact(['data']));
 

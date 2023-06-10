@@ -43,6 +43,7 @@
                                             <th>Patient Email</th>
                                             <th>Billing Address</th>
                                             <th>Dilvery Location</th>
+                                            <th>Payment Status</th>
                                             <th>Patient DOB</th>
                                             <th>Date</th>
                                             <th class="no-content">Action</th>
@@ -59,6 +60,16 @@
                                             <td>{{$datas->userDetail->email}}</td>
                                             <td>{{$datas->billing_address}}</td>
                                             <td>{{$datas->delivery_location}}</td>
+                                            <td>
+                                                @if($datas->payment_status == 1)
+                                                <span class="badge badge-light-success mb-2 me-4">Paid</span>
+                                                @elseif($datas->payment_status == 0)
+                                                <span class="badge badge-light-danger mb-2 me-4">Unpaid</span>
+                                                @elseif($datas->payment_status == 2)
+                                                <span class="badge badge-light-warning mb-2 me-4">Refunded</span>
+                                                @endif
+
+                                            </td>
                                             <td>{{ \Carbon\Carbon::parse($datas->userDetail->dob)->format('m/d/Y') }}</td>
                                             <td>{{ \Carbon\Carbon::parse($datas->created_at)->format('m/d/Y') }}</td>
                                             <td class="">
@@ -84,6 +95,7 @@
                                             <th>Patient Email</th>
                                             <th>Billing Address</th>
                                             <th>Dilvery Location</th>
+                                            <th>Payment Status</th>
                                             <th>Patient DOB</th>
                                             <th>Date</th>
                                             <th class="no-content">Action</th>
@@ -98,6 +110,16 @@
                                             <td>{{$datas->userDetail->email}}</td>
                                             <td>{{$datas->billing_address}}</td>
                                             <td>{{$datas->delivery_location}}</td>
+                                            <td>
+                                                @if($datas->payment_status == 1)
+                                                <span class="badge badge-light-success mb-2 me-4">Paid</span>
+                                                @elseif($datas->payment_status == 0)
+                                                <span class="badge badge-light-danger mb-2 me-4">Unpaid</span>
+                                                @elseif($datas->payment_status == 2)
+                                                <span class="badge badge-light-warning mb-2 me-4">Refunded</span>
+                                                @endif
+
+                                            </td>
                                             <td>{{ \Carbon\Carbon::parse($datas->userDetail->dob)->format('m/d/Y') }}</td>
                                             <td>{{ \Carbon\Carbon::parse($datas->created_at)->format('m/d/Y') }}</td>
                                             <td class="">
@@ -122,6 +144,7 @@
                                             <th>Patient Email</th>
                                             <th>Billing Address</th>
                                             <th>Dilvery Location</th>
+                                            <th>Payment Status</th>
                                             <th>Patient DOB</th>
                                             <th>Date</th>
                                             <th class="no-content">Action</th>
@@ -136,6 +159,16 @@
                                             <td>{{$datas->userDetail->email}}</td>
                                             <td>{{$datas->billing_address}}</td>
                                             <td>{{$datas->delivery_location}}</td>
+                                            <td>
+                                                @if($datas->payment_status == 1)
+                                                <span class="badge badge-light-success mb-2 me-4">Paid</span>
+                                                @elseif($datas->payment_status == 0)
+                                                <span class="badge badge-light-danger mb-2 me-4">Unpaid</span>
+                                                @elseif($datas->payment_status == 2)
+                                                <span class="badge badge-light-warning mb-2 me-4">Refunded</span>
+                                                @endif
+
+                                            </td>
                                             <td>{{ \Carbon\Carbon::parse($datas->userDetail->dob)->format('m/d/Y') }}</td>
                                             <td>{{ \Carbon\Carbon::parse($datas->created_at)->format('m/d/Y') }}</td>
                                             <td class="">

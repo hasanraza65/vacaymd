@@ -67,6 +67,8 @@ class DoctorController extends Controller
                 $profilepic = null;
                 return response()->json(['message' => 'Error uploading profile picture. Please try again later.'], 400);
             }
+        }else{
+            $profilepic = null;
         }
     
         $user = new User();

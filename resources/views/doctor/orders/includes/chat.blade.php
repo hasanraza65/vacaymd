@@ -35,7 +35,8 @@
             <div style="border-radius: 10px" class="media shadow-sm p-4 m-2">
                 <img class="rounded" src="{{ empty($messages_data->userDetail->profile_pic) ? '/src/assets/img/default_pic.webp' : $messages_data->userDetail->profile_pic }}" alt="pic1">
                 <div class="media-body">
-                <?php $messageRole=App\Http\Controllers\AuthController::getUserRole($messages_data->user_id);
+                <?php 
+                $messageRole=App\Http\Controllers\AuthController::getUserRole($messages_data->user_id);
                     if($messageRole->user_role==2){
                         $sendername='Doctor';
                     }else if($messageRole->user_role==4){

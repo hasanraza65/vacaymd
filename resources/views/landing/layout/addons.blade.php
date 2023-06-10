@@ -10,6 +10,7 @@
         @csrf
       <div class="modal-body">
         <h4>Choose Items</h4>
+        <div class="table-responsive">
         <table class="table">
 
           <tr>
@@ -33,6 +34,7 @@
           <input type="hidden" value="{{ $id }}" name="order_id">
 
         </table>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No Thanks</button>

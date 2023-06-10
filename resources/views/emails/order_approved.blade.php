@@ -75,7 +75,7 @@
         <br>
         <center>
         <b><p>Your order # {{$orderData->order_num}} has been approved by our doctor.</p></b>
-        <p>Note: When you reach Nevada, please make sure to inform us. <br> Click Here to change status. <a href="https://orders.vacaymd.com/login">Login</a></p>
+        <p>Note: Please update your location in your account when you are in Nevada. <br> Click Here to change status. <a href="https://orders.vacaymd.com/login">Login</a></p>
          <br>
 
          @if($orderData->treatment_req=='ED')
@@ -88,7 +88,10 @@
         </center>
        
         
-
+          <br>
+          <center>
+          <p>By law, we can only provide consultations if you are present in Nevada</p>
+          </center>
 
       </div>
       <div class="card-footer">

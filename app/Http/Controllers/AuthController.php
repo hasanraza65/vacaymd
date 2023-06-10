@@ -111,7 +111,7 @@ class AuthController extends Controller
 
         //sending sms
         if(isset($request->phone)){
-            $this->sendSMS($request->phone, 'Your Order has been placed');
+            $this->sendSMS($request->phone, 'Your Order has been placed. Please update your location in your account when you are in Nevada');
         }
        
         //ending sending sms

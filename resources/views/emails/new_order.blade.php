@@ -112,8 +112,13 @@
           
           
         </table>
-  
 
+        <br>
+        <center>
+        <p>Please update your location in your account when you are in Nevada</p>  
+        <br>
+        <p>By law, we can only provide consultations if you are present in Nevada</p>
+        </center>
       </div>
       <div class="card-footer">
       @include('emails.includes.footer')

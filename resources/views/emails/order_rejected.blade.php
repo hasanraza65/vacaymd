@@ -75,6 +75,8 @@
         <br>
         <center>
         <b><p>Your order # {{$orderData->order_num}} has been <span style="color:red">rejected</span> by our doctor.</p></b><br>
+
+        <p>By law, we can only provide consultations if you are present in Nevada</p>
         </center>
 
 

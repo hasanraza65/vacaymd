@@ -198,7 +198,9 @@ class OrdersController extends Controller
         $messages = Message::with('userDetail')
         ->where('order_id',$id)->get();
         $notes = PatientNote::with('userDetail')
-        ->where('order_id',$id)->get();
+        ->where('order_id',$id)
+        ->whereHas('userDetail')
+        ->get();
 
         return view('patient.orders.show',compact(['data','messages','notes']));
     }

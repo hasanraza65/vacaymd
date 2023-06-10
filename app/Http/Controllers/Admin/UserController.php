@@ -36,7 +36,7 @@ class UserController extends Controller
     public static function dashboard(){
 
         $data['patients'] = User::where('user_role',4)->count();
-        $data['doctors'] = Doctor::count();
+        $data['doctors'] = User::where('user_role',2)->count();
         $data['orders'] = Order::whereNotNull('user_id')->whereHas('userDetail')->count();
         $data['orders_completed'] = Order::whereNotNull('user_id')->whereHas('userDetail', function ($query) {
             $query->whereNotNull('stripe_token');

@@ -128,7 +128,9 @@ class OrderController extends Controller
         $passports = Passport::where('user_id',$data->user_id)->get();
 
         $messages = Message::with('userDetail')
-        ->where('order_id',$id)->get();
+        ->where('order_id',$id)
+        ->whereHas('userDetail')
+        ->get();
         $notes = PatientNote::with('userDetail')
         ->where('order_id',$id)->get();
 
@@ -197,8 +199,8 @@ class OrderController extends Controller
         ->find($orderid);
 
         //get admin email
-        $phrmacy = Pharmacy::find($orderData->pharmacy_id);
-        $user = User::find($phrmacy->manager_id);
+        $pharmacy = Pharmacy::find($orderData->pharmacy_id);
+        $user = User::find($pharmacy->manager_id);
         //ending get admin email
 
         $to = $user->email;
@@ -209,10 +211,10 @@ class OrderController extends Controller
         $email->setFrom($from_email, "Vacay MD");
 
         $email->setSubject("New Order Received.");
-        $sms_message='A new order #'.$orderData->order_num.' has been sent to you by the doctor.';
+        $sms_message='New order received at pharmacy.';
 
-        if($user->phone != null && $user->phone != ""){
-        $this->sendSMS($user->phone, $sms_message);
+        if($pharmacy->pharmacy_phone != null && $pharmacy->pharmacy_phone != ""){
+        $this->sendSMS($pharmacy->pharmacy_phone, $sms_message);
         }
 
         $email->addTo($to, $to_name);
@@ -463,7 +465,7 @@ class OrderController extends Controller
             $sms_message='Your order  #'.$orderData->order_num.' has been completed';
         }else if($status=='Approved'){
             $email->setSubject("Your order has been approved");
-            $sms_message='Your order #'.$orderData->order_num.' has been approved';
+            $sms_message='Your order #'.$orderData->order_num.' has been approved. Please update your location in your account when you are in Nevada.';
         }else if($status=='Rejected'){
             $email->setSubject("Your order has been rejected");
             $sms_message='Your order #'.$orderData->order_num.' has been rejected';

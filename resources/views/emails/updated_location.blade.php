@@ -75,7 +75,7 @@
       <div class="card-body">
         <br>
         <center>
-        <b><p>Patient {{$orderData?->userDetail?->name}} has been reached to Nevada.</p></b><br>
+        <b><p>Patient {{$orderData?->userDetail?->name}} has reached Nevada.</p></b><br>
         </center>
 
 

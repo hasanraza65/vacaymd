@@ -40,6 +40,28 @@
 .input-container {
     position: relative;
   }
+  
+  /* date css */
+  
+  @media screen and (max-width: 750px) {
+      
+  .dob_label{
+    margin-bottom: -50px;
+    margin-top: 8px;
+    z-index: 5;
+  }
+  
+  @media screen and (min-width: 750px) {
+  
+  .dob_label{
+      display:none!important;
+  }
+  
+  }
+  
+}
+  
+
                     </style>
 
 <div class="step_info">
@@ -133,6 +155,7 @@
     </div>
 </div>
 
+
                 </div>
 
             </div>
@@ -160,7 +183,8 @@
 
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <input placeholder="Birthdate: " name="dob" type="text" onfocus="(this.type='date')" class="form-control input-custom" required>
+                            <label class="dob_label d-md-none" for="dob" id="dobLabel">DOB</label>
+                            <input type="date" id="dob" class="form-control datepicker" placeholder="Birthdate: " name="dob" pattern="\d{2}\d{2}\d{4}" required>
                         </div>
                     </div>
 
@@ -505,6 +529,20 @@ $(document).ready(function() {
 
                     </script>
 
+
+
+<script>
+  const dobInput = document.getElementById('dob');
+  const dobLabel = document.getElementById('dobLabel');
+
+  dobInput.addEventListener('change', function() {
+    if (dobInput.value) {
+      dobLabel.style.display = 'none';
+    } else {
+      dobLabel.style.display = 'block';
+    }
+  });
+</script>
 
 
 @include('landing.layout.footer')

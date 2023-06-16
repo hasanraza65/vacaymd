@@ -67,12 +67,14 @@ class OrderController extends Controller
         ->whereNotNull('user_id')
         ->where('payment_status', 1)
         ->whereHas('userDetail')
+        ->whereNot('order_status','Rejected')
         ->whereNot('order_status', 'Completed');
     
         $completedQuery = Order::with('userDetail')
         ->where('order_status', 'Completed')
         ->whereNotNull('user_id')
         ->whereHas('userDetail')
+        ->whereNot('order_status','Rejected')
         ->where('payment_status', 1);
     
         if (!empty($start_date)) {

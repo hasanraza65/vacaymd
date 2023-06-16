@@ -268,6 +268,13 @@ $(document).ready(function() {
         const cardType = $.payment.cardType($(this).val());
         const cardIconUrl = `/src/assets/img/${cardType}.png`;
 
+        // Update the placeholder of the CVV input
+        if (cardType === 'amex') {
+            $('#cardCVV').attr('placeholder', 'CVC ex. 1234');
+        } else {
+            $('#cardCVV').attr('placeholder', 'CVC ex. 311');
+        }
+
         if (cardType) {
             if ($('.credit-card-icon').length === 0) {
                 $(this).css('padding-left', '45px');
@@ -283,8 +290,16 @@ $(document).ready(function() {
 
     // Validate CVC input
     $('#cardCVV').on('input', function() {
-        if (this.value.length > 3) {
-            this.value = this.value.slice(0, 3);
+        var cardType = $.payment.cardType($('#cardNumber').val());
+
+        if (cardType === 'amex') {
+            if (this.value.length > 4) {
+                this.value = this.value.slice(0, 4);
+            }
+        } else {
+            if (this.value.length > 3) {
+                this.value = this.value.slice(0, 3);
+            }
         }
     });
 

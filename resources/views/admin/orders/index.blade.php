@@ -26,6 +26,7 @@
                                         <tr>
                                             <th class="d-none">ID</th>
                                             <th>Order ID</th>
+                                            <th>Order Status</th>
                                             <th>Patient Name</th>
                                             <th>Patient Email</th>
                                             <th>Billing Address</th>
@@ -52,6 +53,16 @@
                                         <tr id="row_{{$datas->id}}">
                                             <td class="d-none">{{$datas->id}}</td>
                                             <td class="{{$bold_class}} action_btn" onclick="window.location ='/admin/orders/{{$datas->id}}'">{{$datas->order_num}}</td>
+                                            <td class="{{$bold_class}} action_btn"> @if($datas->order_status == 'Pending')
+                                                                                    <span style="font-size: 17px" class="badge badge-light-warning ">{{$datas->order_status}}</span>
+                                                                                    @elseif($datas->order_status == 'Completed' || $datas->order_status == 'Approved')
+                                                                                    <span style="font-size: 17px" class="badge badge-light-success">{{$data->order_status}}</span>
+                                                                                    @elseif($datas->order_status == 'In Process')
+                                                                                    <span style="font-size: 17px" class="badge badge-light-info ">{{$datas->order_status}}</span>
+                                                                                    @elseif($datas->order_status == 'Cancelled' || $datas->order_status == 'Rejected')
+                                                                                    <span style="font-size: 17px" class="badge badge-light-danger ">{{$datas->order_status}}</span>
+                                                                                    @endif
+                                            </td>
                                             <td class="{{$bold_class}} action_btn"  onclick="window.location ='/admin/orders/{{$datas->id}}'">{{$datas->userDetail->name}}</td>
                                             <td class="{{$bold_class}}" >{{$datas->userDetail->email}}</td>
                                             <td class="{{$bold_class}}" >{{$datas->billing_address}}</td>

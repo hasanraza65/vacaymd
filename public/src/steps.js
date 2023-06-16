@@ -757,7 +757,7 @@ $("#state").change(function() {
   if(this.value === 'Coming To Nevada'){
     $('.nevada_options').removeClass('d-none');
   }else{
-    $('.nevada_options').addClass('d-none');
+    $('.nevada_options').removeClass('d-none');
   }
 
 });

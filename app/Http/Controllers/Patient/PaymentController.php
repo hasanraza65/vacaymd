@@ -17,6 +17,8 @@ use SendGrid\Mail\Mail;
 use Swift_TransportException;
 use Illuminate\Support\Facades\View;
 use App\Services\TwilioService;
+use net\authorize\api\contract\v1 as AnetAPI;
+use net\authorize\api\controller as AnetController;
 
 class PaymentController extends Controller
 {
@@ -224,5 +226,156 @@ class PaymentController extends Controller
         $this->twilioService->sendSMS($phone_num, $message);
 
     }
+
+    //////////////////////////////////////////
+    //////////////////////////////////////////
+    /* AUTHORIZE.NET PAYMENT GATEWAY STARTS */
+    public function makeAPayment(Request $request)
+    {
+        /* Create a merchantAuthenticationType object with authentication details
+        retrieved from the constants file */
+        $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
+        $merchantAuthentication->setName(env('AUTHORIZE_NET_API_LOGIN_ID'));
+        $merchantAuthentication->setTransactionKey(env('AUTHORIZE_NET_TRANSACTION_KEY'));
+
+        // Set the transaction's refId
+        $refId = 'ref' . time();
+
+        // Create the payment data for a credit card
+        $creditCard = new AnetAPI\CreditCardType();
+        $creditCard->setCardNumber("4111111111111111");
+        $creditCard->setExpirationDate("2038-12");
+        $creditCard->setCardCode("123");
+
+        // Add the payment data to a paymentType object
+        $paymentOne = new AnetAPI\PaymentType();
+        $paymentOne->setCreditCard($creditCard);
+
+        // Create a transaction
+        $transactionRequestType = new AnetAPI\TransactionRequestType();
+        $transactionRequestType->setTransactionType("authCaptureTransaction");
+        $transactionRequestType->setAmount(200);
+        $transactionRequestType->setPayment($paymentOne);
+
+        // Assemble the complete transaction request
+        $request = new AnetAPI\CreateTransactionRequest();
+        $request->setMerchantAuthentication($merchantAuthentication);
+        $request->setRefId($refId);
+        $request->setTransactionRequest($transactionRequestType);
+
+        // Create the controller and get the response
+        $controller = new AnetController\CreateTransactionController($request);
+        $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+
+        // Check the response
+        if ($response != null) {
+            if ($response->getMessages()->getResultCode() == "Ok") {
+                return response()->json(['message' => 'Transaction successful'], 200);
+            } else {
+                $errorMessages = $response->getMessages()->getMessage();
+                return response()->json(['message' => $errorMessages[0]->getText()], 500);
+            }
+        } else {
+            return response()->json(['message' => 'No response returned'], 500);
+        }
+    }
+
+    public function createCustomerProfile(Request $request)
+    {
+        // Set up merchant authentication
+        $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
+        $merchantAuthentication->setName(env('AUTHORIZE_NET_API_LOGIN_ID'));
+        $merchantAuthentication->setTransactionKey(env('AUTHORIZE_NET_TRANSACTION_KEY'));
+
+        // Create the customer profile data object
+        $customerProfile = new AnetAPI\CustomerProfileType();
+        $customerProfile->setMerchantCustomerId('M_' . time());
+        $customerProfile->setEmail('karwish.com@gmail.com');
+
+        // Create the API request object
+        $apiRequest = new AnetAPI\CreateCustomerProfileRequest();
+        $apiRequest->setMerchantAuthentication($merchantAuthentication);
+        $apiRequest->setProfile($customerProfile);
+
+        // Send the API request
+        $controller = new AnetController\CreateCustomerProfileController($apiRequest);
+        $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+
+        // Handle the response (e.g., store the customerProfileId in your database)
+
+        return $customerProfileId = $response->getCustomerProfileId();
+    }
+
+    public function createCustomerPaymentProfile(Request $request, $customerProfileId=512333904)
+    {
+        // Set up merchant authentication
+        $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
+        $merchantAuthentication->setName(env('AUTHORIZE_NET_API_LOGIN_ID'));
+        $merchantAuthentication->setTransactionKey(env('AUTHORIZE_NET_TRANSACTION_KEY'));
+
+        // Create the credit card object
+        $creditCard = new AnetAPI\CreditCardType();
+        $creditCard->setCardNumber("4111111111111111");
+        $creditCard->setExpirationDate("2038-12");
+        $creditCard->setCardCode("123");
+
+        // Add the payment data to a paymentType object
+        $paymentCreditCard = new AnetAPI\PaymentType();
+        $paymentCreditCard->setCreditCard($creditCard);
+
+        // Create a customer payment profile object
+        $paymentprofile = new AnetAPI\CustomerPaymentProfileType();
+        $paymentprofile->setCustomerType('individual');
+        $paymentprofile->setPayment($paymentCreditCard);
+
+        // Create the API request object
+        $apiRequest = new AnetAPI\CreateCustomerPaymentProfileRequest();
+        $apiRequest->setMerchantAuthentication($merchantAuthentication);
+        $apiRequest->setCustomerProfileId($customerProfileId);
+        $apiRequest->setPaymentProfile($paymentprofile);
+
+        // Send the API request
+        $controller = new AnetController\CreateCustomerPaymentProfileController($apiRequest);
+        $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+
+        return $response;
+        // Handle the response (e.g., store the customerPaymentProfileId in your database)
+    }
+
+    public function chargeCustomerProfile(Request $request, $customerProfileId=512333904, $customerPaymentProfileId=518847137, $amount=50)
+    {
+        // Set up merchant authentication
+        $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
+        $merchantAuthentication->setName(env('AUTHORIZE_NET_API_LOGIN_ID'));
+        $merchantAuthentication->setTransactionKey(env('AUTHORIZE_NET_TRANSACTION_KEY'));
+
+        // Set the profile to charge
+        $profileToCharge = new AnetAPI\CustomerProfilePaymentType();
+        $profileToCharge->setCustomerProfileId($customerProfileId);
+        $paymentProfile = new AnetAPI\PaymentProfileType();
+        $paymentProfile->setPaymentProfileId($customerPaymentProfileId);
+        $profileToCharge->setPaymentProfile($paymentProfile);
+
+        // Create the transaction data
+        $transactionRequestType = new AnetAPI\TransactionRequestType();
+        $transactionRequestType->setTransactionType("authCaptureTransaction");
+        $transactionRequestType->setAmount($amount);
+        $transactionRequestType->setProfile($profileToCharge);
+
+        // Create the API request object
+        $apiRequest = new AnetAPI\CreateTransactionRequest();
+        $apiRequest->setMerchantAuthentication($merchantAuthentication);
+        $apiRequest->setTransactionRequest($transactionRequestType);
+
+        // Send the API request
+        $controller = new AnetController\CreateTransactionController($apiRequest);
+        $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+
+        return $response;
+        // Handle the response (e.g., check if the transaction was successful and update your database accordingly)
+    }
+
+
+    /* AUTHORIZE.NET PAYMENT GATEWAY ENDS */
 
 }

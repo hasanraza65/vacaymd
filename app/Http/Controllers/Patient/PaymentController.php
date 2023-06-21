@@ -412,7 +412,12 @@ class PaymentController extends Controller
         $controller = new AnetController\CreateTransactionController($apiRequest);
         $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
 
-        return $response;
+        if ($response != null && $response->getMessages()->getResultCode() == "Ok") {
+        $tresponse = $response->getTransactionResponse();
+        return $tresponse->getTransId();
+        }else{
+            return 0;
+        }
         // Handle the response (e.g., check if the transaction was successful and update your database accordingly)
     }
 

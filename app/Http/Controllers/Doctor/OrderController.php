@@ -559,7 +559,7 @@ class OrderController extends Controller
         $data['pending_orders'] = Order::whereNull('assigned_to')
         ->whereNotNull('user_id')
         ->whereHas('userDetail', function ($query) {
-            $query->whereNotNull('stripe_token');
+            $query->whereNotNull('authorized_user_payment_id');
         })
         ->whereHas('userDetail')
         ->whereNot('order_status','Rejected')

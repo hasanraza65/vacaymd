@@ -39,16 +39,16 @@ class UserController extends Controller
         $data['doctors'] = User::where('user_role',2)->count();
         $data['orders'] = Order::whereNotNull('user_id')->whereHas('userDetail')->count();
         $data['orders_completed'] = Order::whereNotNull('user_id')->whereHas('userDetail', function ($query) {
-            $query->whereNotNull('stripe_token');
+            $query->whereNotNull('authorized_user_payment_id');
         })->where('order_status','Completed')->count();
         $data['orders_dispensed'] = Order::whereNotNull('user_id')->whereHas('userDetail', function ($query) {
-            $query->whereNotNull('stripe_token');
+            $query->whereNotNull('authorized_user_payment_id');
         })->where('order_status','Dispensed')->count();
         $data['orders_cancelled'] = Order::whereNotNull('user_id')->whereHas('userDetail', function ($query) {
-            $query->whereNotNull('stripe_token');
+            $query->whereNotNull('authorized_user_payment_id');
         })->where('order_status','Cancelled')->count();
         $data['orders_open'] = Order::whereNull('assigned_to')->whereNotNull('user_id')->whereHas('userDetail', function ($query) {
-            $query->whereNotNull('stripe_token');
+            $query->whereNotNull('authorized_user_payment_id');
         })->whereNot('order_status','Rejected')->count();
         return $data;
     }

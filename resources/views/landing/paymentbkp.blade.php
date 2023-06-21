@@ -11,18 +11,26 @@
     .credit-card-icon {
         position: absolute;
         top: 50%;
-        left: 10px;
+        left: 20px;
         transform: translateY(-50%);
-        height: 20px;
+        height: 22px;
         width: auto;
+    }
+    .card-number-wrapper {
+        position: relative;
     }
 </style>
 
 <div class="step_info">
     <div class="container" style="padding-left: 30px;">Make a payment</div>
+    <div class="container text-dark mt-1" style="padding-left: 30px; padding-right: 30px;font-size:13px;">
+    <p class="mb-0 pb-0">You will not be charged till your prescription is approved.</p>
+    </div>
 </div>
 
+
 <div class="container" style="padding: 30px;">
+
 
     @if($errors->any())
         <div class="alert alert-danger m-4">
@@ -32,6 +40,14 @@
                 @endforeach
             </ul>
         </div>
+    @endif
+
+    @include('landing.layout.addons')
+
+    @if(session()->has('success'))
+    <div class="alert alert-success">
+        {{ session()->get('success') }}
+    </div>
     @endif
 
     <h6 class="my-4">Enter your credit card details</h6>
@@ -62,30 +78,54 @@
         </div> --->
 
         <!--- invoice ---> 
+        @php
+        $consult_fee = 49;
+        $med_n_del_fee = 30;
+        @endphp
 
         <div class="card p-4 m-3">
             <h5>Invoice: </h5>
             <table class="table ">
                 <tr>
                     <td>Consult Fee</td>
-                    <td>$500</td>
+                    <td>$<span id="consult_fee">{{$consult_fee}}</span></td>
                 </tr>
                 <tr>
-                    <td>Medication Price</td>
-                    <td>$600</td>
+                    <td>Medication and Delivery</td>
+                    <td>$<span id="med_n_del">{{$med_n_del_fee}}</span></td>
                 </tr>
+                
+                <!--- addons items ---> 
+                @php 
+                $totaladdons_bill = 0;
+                @endphp
+                @foreach($orderaddons as $orderaddonss)
                 <tr>
-                    <td>Delivery Charges</td>
-                    <td>$20</td>
+                    <td><a href="/remove_order_addon_item/{{$orderaddonss->id}}" class="remove_icon">x</a> {{$orderaddonss->itemDetail->item_name}} <span class="addon_label">- Addon </span> </td>
+                    <td>${{$orderaddonss->itemDetail->item_price}}</td>
                 </tr>
+                @php 
+                $totaladdons_bill = $totaladdons_bill+$orderaddonss->itemDetail->item_price;
+                @endphp
+                @endforeach
+                <!--- ending addons items --->
+
+                @php
+                $totalbill = $consult_fee+$med_n_del_fee+$totaladdons_bill;
+                @endphp
+
                 <tr>
                     <th>Total Bill: </th>
-                    <th>$1120
-                        <input type="hidden" value="1120" name="amount">
+                    <th>${{$totalbill}}
+                        <input type="hidden" value="{{$totalbill}}" name="amount">
                     </th>
                 </tr>
+
             </table>
         </div>
+        <button style="border-radious:50px" type="button" class="btn btn-dark ms-3 mb-3" data-bs-toggle="modal" data-bs-target="#addonsModal">
+            Add Addons Medicines
+        </button>
 
         <!--- ending invoice card --->
         
@@ -96,29 +136,25 @@
 
 
         <div class="row stripediv">
-            <div class="col-md-6 mt-3">
-                <input size='4' type="text" class="form-control input-custom py-2 px-4" id="cardName" placeholder="Cardholder Name:">
+            <div class="col-md-12 mt-3">
+                <input size='4' type="text" class="form-control input-custom py-2 px-4" id="cardName" placeholder="Cardholder name:">
             </div>
+
+            <div class="col-md-12 mt-3 required card-number-wrapper">
+                <input type="text" class="form-control input-custom card-number" size='16' id="cardNumber" placeholder="Credit Card Number:">
+                <span class="invalid_card_num d-none text-danger m-2">Invalid Card Number</span>
+            </div>
+            
+            <div class="col-md-6 mt-3 expiration required">
+                <input type="text" class="form-control input-custom py-2 px-4 card-expiry" id="cardExpiry" placeholder="Card Expiration (MM / YYYY):">
+            </div>
+
+            <span class="invalid_card_date d-none text-danger m-2">Invalid Card Expiry Date</span>
 
             <div class="col-md-6 mt-3 cvc required">
                 <input type="text" class="form-control input-custom py-2 px-4 card-cvc" id="cardCVV" placeholder='CVC ex. 311' size='4'>
                 <span class="invalid_card_cvc d-none text-danger m-2">Invalid Card CVC</span>
             </div>
-
-            <div class="col-md-12 mt-3  required">
-                <input type="text" class="form-control input-custom py-2 px-4 card-number" size='20' id="cardNumber" placeholder="Credit Card Number:">
-                <span class="invalid_card_num d-none text-danger m-2">Invalid Card Number</span>
-            </div>
-            
-            <div class="col-md-6 mt-3 expiration required">
-                <input type="text" class="form-control input-custom py-2 px-4 card-expiry-month" id="cardExpiryMonth" placeholder="Card Expiration Month:">
-            </div>
-
-            <div class="col-md-6 mt-3 expiration required">
-                <input type="text" class="form-control input-custom py-2 px-4 card-expiry-year" id="cardExpiryYear" placeholder="Card Expiration Year:">
-            </div>
-
-            <span class="invalid_card_date d-none text-danger m-2">Invalid Card Expiry Date</span>
 
             <div class='form-row row mt-4 mb-2'>
                 <div class='col-md-12 error form-group d-none'>
@@ -127,8 +163,9 @@
             </div>
 
             <div class="mt-3 w-100 text-end">
-                <button type="submit" class="button-custom">Submit Payment</button>
+                <button type="submit" class="button-custom submitbtn">Submit</button>
             </div>
+            
 
         </div>
     </form>
@@ -175,14 +212,18 @@ $(function() {
         });
      
         if (!$form.data('cc-on-file')) {
-          e.preventDefault();
-          Stripe.setPublishableKey($form.data('stripe-publishable-key'));
-          Stripe.createToken({
-            number: $('.card-number').val(),
-            cvc: $('.card-cvc').val(),
-            exp_month: $('.card-expiry-month').val(),
-            exp_year: $('.card-expiry-year').val()
-          }, stripeResponseHandler);
+            e.preventDefault();
+            Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+
+            // Get the expiry date value
+            const expiryDate = $('#cardExpiry').payment('cardExpiryVal');
+            
+            Stripe.createToken({
+                number: $('.card-number').val(),
+                cvc: $('.card-cvc').val(),
+                exp_month: expiryDate.month,
+                exp_year: expiryDate.year
+            }, stripeResponseHandler);
         }
     
     });
@@ -217,7 +258,7 @@ $(document).ready(function() {
     $('#cardNumber').payment('formatCardNumber');
 
     // Format card expiry input
-    $('#cardExpiryMonth, #cardExpiryYear').payment('formatCardExpiry');
+    $('#cardExpiry').payment('formatCardExpiry');
 
     // Format card CVC input
     $('#cardCVV').payment('formatCardCVC');
@@ -227,10 +268,17 @@ $(document).ready(function() {
         const cardType = $.payment.cardType($(this).val());
         const cardIconUrl = `/src/assets/img/${cardType}.png`;
 
+        // Update the placeholder of the CVV input
+        if (cardType === 'amex') {
+            $('#cardCVV').attr('placeholder', 'CVC ex. 1234');
+        } else {
+            $('#cardCVV').attr('placeholder', 'CVC ex. 311');
+        }
+
         if (cardType) {
             if ($('.credit-card-icon').length === 0) {
-                $(this).css('padding-left', '35px');
-                $(this).before(`<img class="credit-card-icon" src="${cardIconUrl}" />`);
+                $(this).css('padding-left', '45px');
+                $('<img class="credit-card-icon" src="' + cardIconUrl + '" />').insertBefore($(this));
             } else {
                 $('.credit-card-icon').attr('src', cardIconUrl);
             }
@@ -242,25 +290,81 @@ $(document).ready(function() {
 
     // Validate CVC input
     $('#cardCVV').on('input', function() {
-        if (this.value.length > 3) {
-            this.value = this.value.slice(0, 3);
+        var cardType = $.payment.cardType($('#cardNumber').val());
+
+        if (cardType === 'amex') {
+            if (this.value.length > 4) {
+                this.value = this.value.slice(0, 4);
+            }
+        } else {
+            if (this.value.length > 3) {
+                this.value = this.value.slice(0, 3);
+            }
         }
     });
 
-    // Validate card expiry input
-    $('#cardExpiryMonth').on('input', function() {
-        if (this.value.length > 2) {
-            this.value = this.value.slice(0, 2);
+    // Handle Expiry Date input
+    $('#cardExpiry').on('input', function() {
+        const maxLength = 9; // Format: MM / YYYY (9 characters)
+
+        if (this.value.length > maxLength) {
+            this.value = this.value.slice(0, maxLength);
         }
     });
 
-    $('#cardExpiryYear').on('input', function() {
-        if (this.value.length > 4) {
-            this.value = this.value.slice(0, 4);
-        }
+    // Validate Cardholder Name input
+    $('#cardName').on('input', function() {
+        this.value = this.value.replace(/[^a-zA-Z\s]+/g, '');
+    });
+});
+
+</script>
+
+<script>
+    function checkAllFields() {
+    const cardNumberValid = $.payment.validateCardNumber($('#cardNumber').val());
+    const cardExpiryValid = $.payment.validateCardExpiry($('#cardExpiry').payment('cardExpiryVal'));
+    const cardCVCValid = $.payment.validateCardCVC($('#cardCVV').val());
+    const cardNameValid = $('#cardName').val().trim().length > 0;
+
+    if (cardNumberValid && cardExpiryValid && cardCVCValid && cardNameValid) {
+        $('#submitBtn').prop('disabled', false);
+    } else {
+        $('#submitBtn').prop('disabled', true);
+    }
+}
+
+$(document).ready(function() {
+    // ... (Rest of your existing JavaScript code in the $(document).ready function) ...
+
+    // Add event listeners to each input field
+    $('#cardNumber, #cardExpiry, #cardCVV, #cardName').on('input', function() {
+        checkAllFields();
     });
 });
 </script>
+
+
+@php 
+$countadded_addons = 0;
+@endphp
+@foreach($orderaddons as $orderaddonss)
+
+@php 
+$countadded_addons = $loop->count;
+@endphp
+
+@endforeach
+
+
+@if($countadded_addons == 0)
+<script>
+$(document).ready(function(){
+    $('#addonsModal').modal('show');
+});
+
+</script>
+@endif
 
 
 @include('landing.layout.footer')

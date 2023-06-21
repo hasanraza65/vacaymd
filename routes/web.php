@@ -279,7 +279,7 @@ Route::get('/remove_order_addon_item/{id}', [App\Http\Controllers\Patient\Paymen
 //ending remove addons
 
 //authorize.net payment gateway route
-Route::get('/makeapayment', [App\Http\Controllers\Patient\PaymentController::class,'makeAPayment']);
+Route::post('/makeapayment', [App\Http\Controllers\Patient\PaymentController::class,'makeAPayment']);
 Route::get('/createcustomer', [App\Http\Controllers\Patient\PaymentController::class,'createCustomerProfile']);
 Route::get('/customerpayment', [App\Http\Controllers\Patient\PaymentController::class,'createCustomerPaymentProfile']);
 Route::get('/chargecustomer', [App\Http\Controllers\Patient\PaymentController::class,'chargeCustomerProfile']);

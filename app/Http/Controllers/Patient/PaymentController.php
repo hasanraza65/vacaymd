@@ -111,6 +111,7 @@ class PaymentController extends Controller
 
         $amount = $request->amount;
         //Stripe::setApiKey(config('services.stripe.secret'));
+        /*
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         try {
@@ -144,9 +145,18 @@ class PaymentController extends Controller
 
         }   catch (\Exception $ex) {
             return back()->withErrors('Error! ' . $ex->getMessage());
-        }
+        } */ 
 
-        
+        //creating authorized.net customer profile
+        $customerid = $this->createCustomerProfile($authUser->email);
+        //creating authorized.net customer payment profile
+        $customer_paymentid = $this->createCustomerPaymentProfile($request->card_number, $request->card_expiry, $request->card_code, $customerid);
+
+        $authUser->authorized_user_id = $customerid;
+        $authUser->authorized_user_payment_id = $customer_paymentid;
+        $authUser->update();
+
+        return redirect()->to('/thank_u')->with('success', 'Order Created Successful!');
     }
 
     public function sendEmail($orderid){
@@ -232,6 +242,21 @@ class PaymentController extends Controller
     /* AUTHORIZE.NET PAYMENT GATEWAY STARTS */
     public function makeAPayment(Request $request)
     {
+        //dd($request->all());
+        $data = $request->all();
+
+        // Formatting the card number
+        $cardNumber = str_replace(' ', '', $data['card_number']);
+
+        // Formatting the card expiry
+        $cardExpiryParts = explode('/', $data['card_expiry']);
+        $cardExpiryMonth = trim($cardExpiryParts[0]);
+        $cardExpiryYear = trim($cardExpiryParts[1]);
+        $cardExpiry = $cardExpiryYear . '-' . $cardExpiryMonth;
+
+        // Card code does not need formatting
+        $cardCode = $data['card_code'];
+
         /* Create a merchantAuthenticationType object with authentication details
         retrieved from the constants file */
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
@@ -243,9 +268,9 @@ class PaymentController extends Controller
 
         // Create the payment data for a credit card
         $creditCard = new AnetAPI\CreditCardType();
-        $creditCard->setCardNumber("4111111111111111");
-        $creditCard->setExpirationDate("2038-12");
-        $creditCard->setCardCode("123");
+        $creditCard->setCardNumber($cardNumber);
+        $creditCard->setExpirationDate($cardExpiry);
+        $creditCard->setCardCode($cardCode);
 
         // Add the payment data to a paymentType object
         $paymentOne = new AnetAPI\PaymentType();
@@ -273,14 +298,15 @@ class PaymentController extends Controller
                 return response()->json(['message' => 'Transaction successful'], 200);
             } else {
                 $errorMessages = $response->getMessages()->getMessage();
-                return response()->json(['message' => $errorMessages[0]->getText()], 500);
+                //return response()->json(['message' => $errorMessages[0]->getText()], 500);
+                return back()->withErrors('Error! ' . $errorMessages[0]->getText());
             }
         } else {
             return response()->json(['message' => 'No response returned'], 500);
         }
     }
 
-    public function createCustomerProfile(Request $request)
+    public function createCustomerProfile($email=null)
     {
         // Set up merchant authentication
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
@@ -290,7 +316,7 @@ class PaymentController extends Controller
         // Create the customer profile data object
         $customerProfile = new AnetAPI\CustomerProfileType();
         $customerProfile->setMerchantCustomerId('M_' . time());
-        $customerProfile->setEmail('karwish.com@gmail.com');
+        $customerProfile->setEmail($email);
 
         // Create the API request object
         $apiRequest = new AnetAPI\CreateCustomerProfileRequest();
@@ -303,11 +329,25 @@ class PaymentController extends Controller
 
         // Handle the response (e.g., store the customerProfileId in your database)
 
-        return $customerProfileId = $response->getCustomerProfileId();
+        return $response->getCustomerProfileId();
     }
 
-    public function createCustomerPaymentProfile(Request $request, $customerProfileId=512333904)
+    public function createCustomerPaymentProfile($card_num=null, $card_exp=null, $card_cvv=null, $customerProfileId=null)
     {
+
+        // Formatting the card number
+        $cardNumber = str_replace(' ', '', $card_num);
+
+        // Formatting the card expiry
+        $cardExpiryParts = explode('/', $card_exp);
+        $cardExpiryMonth = trim($cardExpiryParts[0]);
+        $cardExpiryYear = trim($cardExpiryParts[1]);
+        $cardExpiry = $cardExpiryYear . '-' . $cardExpiryMonth;
+
+        // Card code does not need formatting
+        $cardCode = $card_cvv;
+
+
         // Set up merchant authentication
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
         $merchantAuthentication->setName(env('AUTHORIZE_NET_API_LOGIN_ID'));
@@ -315,9 +355,9 @@ class PaymentController extends Controller
 
         // Create the credit card object
         $creditCard = new AnetAPI\CreditCardType();
-        $creditCard->setCardNumber("4111111111111111");
-        $creditCard->setExpirationDate("2038-12");
-        $creditCard->setCardCode("123");
+        $creditCard->setCardNumber($cardNumber);
+        $creditCard->setExpirationDate($cardExpiry);
+        $creditCard->setCardCode($cardCode);
 
         // Add the payment data to a paymentType object
         $paymentCreditCard = new AnetAPI\PaymentType();
@@ -338,11 +378,12 @@ class PaymentController extends Controller
         $controller = new AnetController\CreateCustomerPaymentProfileController($apiRequest);
         $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
 
-        return $response;
+        //return $response;
+        return $response->getCustomerPaymentProfileId();
         // Handle the response (e.g., store the customerPaymentProfileId in your database)
     }
 
-    public function chargeCustomerProfile(Request $request, $customerProfileId=512333904, $customerPaymentProfileId=518847137, $amount=50)
+    public function chargeCustomerProfile(Request $request, $customerProfileId=512333904, $customerPaymentProfileId=518847137, $amount=140)
     {
         // Set up merchant authentication
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();

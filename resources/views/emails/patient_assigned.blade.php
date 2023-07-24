@@ -74,7 +74,7 @@
       <div class="card-body">
         <br>
         <center>
-        <b><p>A new patient {{$data->userDetail->name}} has been assigned to you. <br><a href="https://orders.vacaymd.com/login"> Click here to login. </a></b><br>
+        <b><p>A new patient has been assigned to you. <br><a href="https://orders.vacaymd.com/login"> Click here to login. </a></b><br>
         </center>
 
 

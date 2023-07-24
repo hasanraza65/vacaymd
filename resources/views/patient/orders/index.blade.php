@@ -66,12 +66,14 @@
                                             </td>
                                             <td>
                                                 @if($datas->payment_status == 1)
+                                                <a href="/steps?type={{strtolower($datas->treatment_req)}}" class="btn btn-primary">Reorder</a>
+                                                <!---
                                                   <form action="/patient/re-order" method="post">
                                                     @csrf 
                                                     <input type="hidden" name="order_id" value="{{$datas->id}}" id="">
                                                   <button class="btn btn-primary">Reorder</button>
                                                   </form>
-                                                
+                                                --->
                                                 @endif
                                             </td>
                                             <td class="">

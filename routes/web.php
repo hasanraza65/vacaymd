@@ -45,6 +45,9 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/info', [AuthController::class, 'showBasicForm']);
+Route::POST('/basic_info', [AuthController::class, 'basicInfo']);
+
 // Add any other routes that require authentication inside the auth middleware group.
 Route::middleware(['auth'])->group(function () {
 

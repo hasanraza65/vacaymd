@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\Mail as MailFacade;
 use Swift_TransportException;
 use Illuminate\Support\Facades\View;
 use App\Models\Message;
+use net\authorize\api\contract\v1 as AnetAPI;
+use net\authorize\api\controller as AnetController;
 
 class OrderController extends Controller
 {
@@ -57,7 +59,7 @@ class OrderController extends Controller
         ->whereNotNull('user_id')
         ->whereNull('pharmacy_id')
         ->whereHas('userDetail', function ($query) {
-            $query->whereNotNull('stripe_token');
+            $query->whereNotNull('authorized_user_payment_id');
         })
         ->whereHas('userDetail')
         ->whereNot('order_status','Rejected');
@@ -249,24 +251,15 @@ class OrderController extends Controller
             //charging customer 
             $amount = $data->total_amount;
             $user = User::find($data->user_id);
-
-            Stripe::setApiKey(env('STRIPE_SECRET'));
             
-            try {
-                $paymentIntent = \Stripe\PaymentIntent::create([
-                    'amount' => $amount * 100, // Amount in cents
-                    'currency' => 'usd',
-                    'customer' => $user->stripe_token, // Replace this with the customer ID
-                    'description' => 'VACAYMD',
-                    'confirm' => true,
-                ]);
+            $is_payment = $this->chargeCustomerProfile($user->authorized_user_id,$user->authorized_user_payment_id, $amount);
 
-                if($paymentIntent){
+                if($is_payment != 0){
                     $payment_trasanction = Payment::create([
                         'amount' => $amount ,
                         'order_id' => $request->order_id,
                         'user_id' => $data->user_id,
-                        't_id' => $paymentIntent->id,
+                        't_id' => $is_payment,
                         'method' => 'Card',
                     ]);
                       
@@ -310,26 +303,15 @@ class OrderController extends Controller
                     $order_data->payment_status = 0;
                     $order_data->update();
 
+                    $this->sendEmail_carddeclined($order_data->id);
+
                     return redirect()->back()->withErrors(['error' => 'Error: There are some issue with the patient payment card. So, order cannot be approved.']);
 
                 }
               
                 // Handle successful charge
-            
-             
-            } catch (\Stripe\Exception\CardException $e) {
-                return redirect()->back()->withErrors(['error' => 'Error: There are some issue with the patient payment card. So, order cannot be approved. 1']);
-            } catch (\Stripe\Exception\RateLimitException $e) {
-                return redirect()->back()->withErrors(['error' => 'Error: There are some issue with the patient payment card. So, order cannot be approved. 2']);
-            } catch (\Stripe\Exception\InvalidRequestException $e) {
-                return redirect()->back()->withErrors(['error' => 'Error: There are some issue with the patient payment card. So, order cannot be approved. 3: '.$e]);
-            } catch (\Stripe\Exception\AuthenticationException $e) {
-                return redirect()->back()->withErrors(['error' => 'Error: There are some issue with the patient payment card. So, order cannot be approved. 4']);
-            } catch (\Stripe\Exception\ApiConnectionException $e) {
-                return redirect()->back()->withErrors(['error' => 'Error: There are some issue with the patient payment card. So, order cannot be approved. 5']);
-            } catch (\Stripe\Exception\ApiErrorException $e) {
-                return redirect()->back()->withErrors(['error' => 'Error: There are some issue with the patient payment card. So, order cannot be approved. 6']);
-            }
+        
+           
             //edning charging customer
         }
         if($request->order_status == "Completed"){
@@ -584,7 +566,7 @@ class OrderController extends Controller
         $email->setFrom($from_email, "Vacay MD");
 
         $email->setSubject("New Patient Has Been Assigned.");
-        $sms_message='A new patient '.$orderData['userDetail']['name'].' has been assigned to you.';
+        $sms_message='A new patient has been assigned to you.';
 
         if($phone != null && $phone != ""){
         $this->sendSMS($phone, $sms_message);
@@ -594,6 +576,89 @@ class OrderController extends Controller
 
         $htmlContent = View::make('emails.patient_assigned')->with(['data' => $orderData])->render();
 
+        $email->addContent("text/html", $htmlContent);
+        
+        $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
+        
+        $response = $sendgrid->send($email);
+
+    }
+
+
+    public function chargeCustomerProfile($customerProfileId=null, $customerPaymentProfileId=null, $amount=null)
+    {
+        // Set up merchant authentication
+        $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
+        $merchantAuthentication->setName(env('AUTHORIZE_NET_API_LOGIN_ID'));
+        $merchantAuthentication->setTransactionKey(env('AUTHORIZE_NET_TRANSACTION_KEY'));
+    
+        // Set the profile to charge
+        $profileToCharge = new AnetAPI\CustomerProfilePaymentType();
+        $profileToCharge->setCustomerProfileId($customerProfileId);
+        $paymentProfile = new AnetAPI\PaymentProfileType();
+        $paymentProfile->setPaymentProfileId($customerPaymentProfileId);
+        $profileToCharge->setPaymentProfile($paymentProfile);
+    
+        // Create the transaction data
+        $transactionRequestType = new AnetAPI\TransactionRequestType();
+        $transactionRequestType->setTransactionType("authCaptureTransaction");
+        $transactionRequestType->setAmount($amount);
+        $transactionRequestType->setProfile($profileToCharge);
+    
+        // Create the API request object
+        $apiRequest = new AnetAPI\CreateTransactionRequest();
+        $apiRequest->setMerchantAuthentication($merchantAuthentication);
+        $apiRequest->setTransactionRequest($transactionRequestType);
+        
+        // Send the API request
+        $controller = new AnetController\CreateTransactionController($apiRequest);
+        $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::PRODUCTION);
+        
+    
+        if ($response != null && $response->getMessages()->getResultCode() == "Ok") {
+            
+            $tresponse = $response->getTransactionResponse();
+            return $tresponse->getTransId();
+        } else {
+            if ($response != null) {
+                $errorMessages = $response->getMessages()->getMessage();
+                
+                // Return the first error message if there are any
+                if (count($errorMessages) > 0) {
+                     $errorMessages[0]->getCode() . " " . $errorMessages[0]->getText();
+                }
+            }
+            return 0;
+        }
+
+        // Handle the response (e.g., check if the transaction was successful and update your database accordingly)
+    }
+
+
+    public function sendEmail_carddeclined($orderid){
+
+        //getting order data
+
+        $orderData = Order::with('userDetail')
+        ->find($orderid);
+        
+        $to = $orderData['userDetail']['email'];
+        $to_name = $orderData['userDetail']['name'];
+
+        //ending getting order data
+        
+        $email = new Mail();
+        $from_email=env('MAIL_FROM_ADDRESS');
+        $email->setFrom($from_email, "Vacay MD");
+        $email->setSubject("Your payment was declined");
+        $htmlContent = View::make('emails.order_payment_declined')->with(['orderData' => $orderData])->render();
+        
+        $sms_message='Your payment for order  #'.$orderData->order_num.' has been declined. Kindly update your card details.';
+    
+        $this->sendSMS($orderData['userDetail']['phone'], $sms_message);
+        $email->addTo($to, $to_name);
+
+       
         $email->addContent("text/html", $htmlContent);
         
         $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));

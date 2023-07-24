@@ -141,7 +141,30 @@ class OrdersController extends Controller
 
         //return redirect()->back()->with('success', 'Order created successfully');
         // return view('landing.register');
-        return redirect()->to('/register');
+
+        if(Auth::check()){
+
+            /*
+            $order = Order::where('order_num',$order_num)->first();
+            $order->user_id = Auth::user()->id;
+            $order->update();
+
+            //sending mail
+            $this->sendEmail($orderid);
+            //ending sending mail
+
+            //sending sms
+            if(isset(Auth::user()->phone)){
+                $this->sendSMS(Auth::user()->phone, 'Your Order has been placed. Please update your location in your account when you are in Nevada');
+            } */
+
+            return redirect()->to('/info');
+            
+        }else{
+            return redirect()->to('/patient/register');
+        }
+
+        
     }
     public function reOrder(Request $request)
     {
@@ -197,6 +220,7 @@ class OrdersController extends Controller
         
         $messages = Message::with('userDetail')
         ->where('order_id',$id)->get();
+        
         $notes = PatientNote::with('userDetail')
         ->where('order_id',$id)
         ->whereHas('userDetail')
@@ -263,8 +287,15 @@ class OrdersController extends Controller
         $data->reached_nevada = 1;
         $data->state = $request->state;
         $data->update();
+        
+        if($data->pharmacy_id != null && $data->pharmacy_id != ""){
         $this->sendEmailUpdatelocPharmacy($request->order_id);
+        }
+        
+        if($data->assigned_to != null && $data->assigned_to != ""){
         $this->sendEmailUpdatelocToDoctor($request->order_id);
+        }
+        
         //$this->sendEmailUpdatelocToMe($request->order_id);
         return redirect()->back()->with('success', 'Data updated successfully');
     }
@@ -359,6 +390,45 @@ class OrdersController extends Controller
     public function register(){
 
         return view('landing.register');
+
+    }
+
+
+    public function sendEmail($orderid){
+
+        //getting order data
+
+        $orderData = Order::with('userDetail')
+        ->find($orderid);
+        
+        $to = $orderData['userDetail']['email'];
+        $to_name = $orderData['userDetail']['name'];
+
+        //ending getting order data
+        
+        $email = new Mail();
+        $from_email=env('MAIL_FROM_ADDRESS');
+        $email->setFrom($from_email, "Vacay MD");
+        $email->setSubject("New Order");
+        $email->addTo($to, $to_name);
+        
+        $htmlContent = View::make('emails.new_order')
+        ->with(['orderData' => $orderData])
+        ->render();
+        
+        $email->addContent("text/html", $htmlContent);
+        
+        $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
+        
+        $response = $sendgrid->send($email);
+        
+        /*
+
+        $to = $orderData['userDetail']['email'];
+
+        Mail::to($to)->send(new NewOrderMail($orderData)); */
+
+        //return back()->with('success', 'Email sent successfully');
 
     }
     

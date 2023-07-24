@@ -755,9 +755,17 @@ function validateStep(step) {
 $("#state").change(function() {
 
   if(this.value === 'Coming To Nevada'){
-    $('.nevada_options').removeClass('d-none');
+    //$('.nevada_options').removeClass('d-none');
+    $('#nevada_delivery_address').removeClass('d-none');
+    $('#arrival_date').removeClass('d-none');
+    $('#nevada_delivery_address').removeClass('col-md-12');
+    $('#nevada_delivery_address').addClass('col-md-6');
+    
   }else{
-    $('.nevada_options').removeClass('d-none');
+    $('#nevada_delivery_address').removeClass('d-none');
+    $('#nevada_delivery_address').removeClass('col-md-6');
+    $('#nevada_delivery_address').addClass('col-md-12');
+    $('#arrival_date').addClass('d-none');
   }
 
 });

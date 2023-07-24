@@ -173,8 +173,8 @@
 
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <select name="gender" class="form-select input-custom" required>
-                                <option>Sex assigned at birth</option>
+                            <label class="gender_label" for="gender" >Sex assigned at birth</label>
+                            <select id="gender" name="gender" class="form-select input-custom" required>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
@@ -183,7 +183,7 @@
 
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label class="dob_label d-md-none" for="dob" id="dobLabel">DOB</label>
+                            <label class="dob_label" for="dob">Date of birth</label>
                             <input type="date" id="dob" class="form-control datepicker" placeholder="Birthdate: " name="dob" pattern="\d{2}\d{2}\d{4}" required>
                         </div>
                     </div>
@@ -214,20 +214,20 @@
                     <div class="col-md-6">
                         <div class="mb-">
                             <select id="state" name="state" class="form-select input-custom" required>
-                                <option value="">Are you in Nevada?</option>
+                                <option value="">Are you in Nevada now?</option>
                                 <option value="Nevada">Yes</option>
                                 <option value="Coming To Nevada">Coming to Nevada</option>
                             </select>
                         </div>
                     </div>
 
-                        <div class="col-md-6 nevada_options d-none">
+                        <div id="arrival_date" class="col-md-6 nevada_options d-none">
                             <div class="mb-3">
                                 <input placeholder="When you will reach Nevada: " name="nevada_arrival_date" type="text" onfocus="(this.type='date')" class="form-control input-custom">
                             </div>
                         </div>
 
-                        <div class="col-md-6 nevada_options d-none">
+                        <div id="nevada_delivery_address" class="col-md-6 nevada_options d-none">
                             <div class="mb-3">
                                 <input placeholder="Las Vegas delivery address:" name="hotel_name" type="text" class="form-control input-custom" >
                             </div>

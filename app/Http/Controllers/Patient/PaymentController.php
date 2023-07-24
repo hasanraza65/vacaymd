@@ -37,6 +37,12 @@ class PaymentController extends Controller
         $order = Order::find($id);
         //ending get order details
 
+        if(Auth::user()->id != $order->user_id){
+
+            return redirect('unauthorized');
+
+        }
+
         //get order addons
         $orderaddons = OrderAddon::with('itemDetail')->where('order_id',$id)->get();
         //ending get order addons
@@ -110,53 +116,26 @@ class PaymentController extends Controller
 
 
         $amount = $request->amount;
-        //Stripe::setApiKey(config('services.stripe.secret'));
-        /*
-        Stripe::setApiKey(env('STRIPE_SECRET'));
-
-        try {
-
-            //storing card for future
-
-            if($authUser->stripe_token == "" || $authUser->stripe_token == null){
         
-                $customer = \Stripe\Customer::create(array(
-                    'source'   => $request->stripeToken,
-                    'email'    => $authUser->email,
-                    'name'     => $authUser->name
-                ));
-    
-                $customertoken = $customer->id;
-    
-                $user = User::find($order->user_id);
-                $user->stripe_token = $customertoken;
-                $user->update();
-    
-            }else{
-    
-                $customertoken = $authUser->stripe_token;
-            }
-
-            //sending email
-            $this->sendEmail($request->order_id);
-            //ending sending email
-
-            return redirect()->to('/thank_u')->with('success', 'Order Created Successful!');
-
-        }   catch (\Exception $ex) {
-            return back()->withErrors('Error! ' . $ex->getMessage());
-        } */ 
 
         //creating authorized.net customer profile
         $customerid = $this->createCustomerProfile($authUser->email);
         //creating authorized.net customer payment profile
-        $customer_paymentid = $this->createCustomerPaymentProfile($request->card_number, $request->card_expiry, $request->card_code, $customerid);
+        $customer_paymentid = $this->createCustomerPaymentProfile($request->card_number, $request->card_expiry, $request->card_code, $customerid, $order);
+        
+        if($customerid != null && $customerid != ""){
 
         $authUser->authorized_user_id = $customerid;
         $authUser->authorized_user_payment_id = $customer_paymentid;
         $authUser->update();
 
         return redirect()->to('/thank_u')->with('success', 'Order Created Successful!');
+        
+        }else{
+            
+             return back()->withErrors('Error! There is some problem with your card.');
+            
+        }
     }
 
     public function sendEmail($orderid){
@@ -308,6 +287,7 @@ class PaymentController extends Controller
 
     public function createCustomerProfile($email=null)
     {
+        try {
         // Set up merchant authentication
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
         $merchantAuthentication->setName(env('AUTHORIZE_NET_API_LOGIN_ID'));
@@ -325,14 +305,24 @@ class PaymentController extends Controller
 
         // Send the API request
         $controller = new AnetController\CreateCustomerProfileController($apiRequest);
-        $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+        $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::PRODUCTION);
 
-        // Handle the response (e.g., store the customerProfileId in your database)
+        $customerProfileId = $response->getCustomerProfileId();
 
-        return $response->getCustomerProfileId();
+       // Check if the API request was successful
+        if (($response != null) && ($response->getMessages()->getResultCode() == "Ok")) {
+            return $response->getCustomerProfileId();
+        } else {
+            $errorMessages = $response->getMessages()->getMessage();
+            throw new \Exception('Customer ID is not returned. Error: ' . $errorMessages[0]->getText());
+        }
+
+        } catch (\Exception $e) {
+            return back()->withErrors('Error: ' . $e->getMessage());
+        }
     }
 
-    public function createCustomerPaymentProfile($card_num=null, $card_exp=null, $card_cvv=null, $customerProfileId=null)
+    public function createCustomerPaymentProfile($card_num=null, $card_exp=null, $card_cvv=null, $customerProfileId=null, $order=null)
     {
 
         // Formatting the card number
@@ -376,7 +366,22 @@ class PaymentController extends Controller
 
         // Send the API request
         $controller = new AnetController\CreateCustomerPaymentProfileController($apiRequest);
-        $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+        $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::PRODUCTION);
+
+
+        
+        // Create the Bill To info
+        $billto = new AnetAPI\CustomerAddressType();
+        $billto->setFirstName(Auth::user()->name);
+        $billto->setLastName("");
+        $billto->setAddress($order->billing_address);
+        $billto->setCity($order->home_city);
+        $billto->setState($order->home_state);
+        $billto->setZip($order->zip);
+        $billto->setCountry("USA");
+
+        // Add the billing address to the payment profile
+        $paymentprofile->setBillTo($billto);
 
         //return $response;
         return $response->getCustomerPaymentProfileId();
@@ -412,7 +417,12 @@ class PaymentController extends Controller
         $controller = new AnetController\CreateTransactionController($apiRequest);
         $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
 
-        return $response;
+        if ($response != null && $response->getMessages()->getResultCode() == "Ok") {
+        $tresponse = $response->getTransactionResponse();
+        return $tresponse->getTransId();
+        }else{
+            return 0;
+        }
         // Handle the response (e.g., check if the transaction was successful and update your database accordingly)
     }
 

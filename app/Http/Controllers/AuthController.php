@@ -30,10 +30,14 @@ class AuthController extends Controller
         return view('landing.register');
     }
 
+    public function showBasicForm()
+    {
+        return view('landing.basic');
+    }
+
     public function register(Request $request)
     {
         // Add your validation rules here
-       
            
         $request->validate([
             'name' => 'required',
@@ -67,10 +71,10 @@ class AuthController extends Controller
             
         ]);
 
-        
 
         // Log the user in
         Auth::login($user);
+        
 
         //storing values to order table
 
@@ -99,6 +103,7 @@ class AuthController extends Controller
         $order->hotel_city = $request->hotel_city;
         $order->delivery_location = $request->hotel_name;
         $order->state = $request->state;
+        $order->zip = $request->zip;
         $order->user_id = Auth::user()->id;
   
         $order->nevada_arrival_date = $request->nevada_arrival_date;
@@ -135,6 +140,75 @@ class AuthController extends Controller
         //ending storing values to order table
 
         return redirect()->intended(url('/'));
+    }
+
+    function basicInfo(Request $request){
+
+        //storing values to order table
+
+        $order_num = Session::get('order_num');
+        $images = $request->file('files');
+         if ($request->hasFile('files')) :
+                 foreach ($images as $item):
+                $imageName = time() . '_' . $item->getClientOriginalName();
+                $item->move(public_path('src/assets/uploads/Profile/'), $imageName);
+                $imagePath = '/src/assets/uploads/Profile/' . $imageName;
+                     $pass = Passport::create([
+                        'user_id' => Auth::user()->id,
+                       
+                        'passport_pic' =>$imagePath
+                    ]);
+                 endforeach;
+                
+         endif; 
+
+        if(isset($order_num)){
+
+        $order = Order::where('order_num',$order_num)->first();
+        $order->billing_address = $request->billing_address;
+        $order->home_state = $request->home_state;
+        $order->home_city = $request->home_city;
+        $order->hotel_city = $request->hotel_city;
+        $order->delivery_location = $request->hotel_name;
+        $order->state = $request->state;
+        $order->zip = $request->zip;
+        $order->user_id = Auth::user()->id;
+  
+        $order->nevada_arrival_date = $request->nevada_arrival_date;
+        $order->our_pharmacy_text = $request->our_pharmacy_text;
+        $order->update();
+         
+        //sending mail
+        $this->sendEmail($order->id);
+        //ending sending mail
+
+        //sending sms
+        if(isset($request->phone)){
+            $this->sendSMS($request->phone, 'Your Order has been placed. Please update your location in your account when you are in Nevada');
+        }
+       
+        //ending sending sms
+
+            if(Auth::user()->user_role == 1){
+                $dashboard = "admin";
+            }elseif(Auth::user()->user_role == 2){
+                $dashboard = "doctor";
+            }elseif(Auth::user()->user_role == 3){
+                $dashboard = "pharmacy_manager";
+            }else{
+                $dashboard = "admin";
+            }
+
+            Session::forget('order_num');
+
+            return redirect()->to('/patient/make-payment/'.$order->id);
+        
+        }
+
+        //ending storing values to order table
+
+        return redirect()->intended(url('/'));
+
     }
 
     public function showLoginForm()
@@ -194,6 +268,15 @@ class AuthController extends Controller
             $order->nevada_arrival_date = $request->nevada_arrival_date;
             $order->our_pharmacy_text = $request->our_pharmacy_text;
             $order->update();
+
+            //sending mail
+            $this->sendEmail($order->id);
+            //ending sending mail
+
+            //sending sms
+            if(isset(Auth::user()->phone)){
+                $this->sendSMS(Auth::user()->phone, 'Your Order has been placed. Please update your location in your account when you are in Nevada');
+            }
 
             Session::forget('order_num');
             $orderid = $order->id;

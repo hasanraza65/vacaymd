@@ -66,7 +66,7 @@
                                             </td>
                                             <td>
                                                 @if($datas->payment_status == 1)
-                                                <a href="/steps?type={{strtolower($datas->treatment_req)}}" class="btn btn-primary">Reorder</a>
+                                                <a href="https://vacaymd.com/" class="btn btn-primary">Reorder</a>
                                                 <!---
                                                   <form action="/patient/re-order" method="post">
                                                     @csrf 

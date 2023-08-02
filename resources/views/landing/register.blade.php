@@ -77,6 +77,7 @@
             </ul>
         </div>
     @endif
+    
 
 <form action="/register" method="POST" enctype="multipart/form-data">
     @csrf

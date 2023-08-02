@@ -38,6 +38,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         // Add your validation rules here
+        
            
         $request->validate([
             'name' => 'required',
@@ -319,6 +320,7 @@ class AuthController extends Controller
         
         $email = new Mail();
         $from_email=env('MAIL_FROM_ADDRESS');
+
         $email->setFrom($from_email, "Vacay MD");
         $email->setSubject("New Order");
         $email->addTo($to, $to_name);
@@ -390,6 +392,14 @@ class AuthController extends Controller
         $user->update();
 
 
+    }
+    
+    public function fromMail(){
+        
+            $from_email = env('MAIL_FROM_ADDRESS');
+            
+            return 'from email: '.$from_email;
+        
     }
 }
 

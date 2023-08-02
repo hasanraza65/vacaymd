@@ -115,6 +115,10 @@ Route::middleware(['auth'])->group(function () {
         //addons items routes
         Route::resource('/upsaleitems', App\Http\Controllers\Admin\UpSaleItemController::class);
         //ending addons items routes
+
+        //state routes
+        Route::resource('/state', App\Http\Controllers\Admin\StateController::class);
+        //state routes
     });
 
     //ending ADMIN ROUTES
@@ -235,9 +239,7 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
-Route::get('/steps', function () {
-    return view('landing.steps');
-});
+
 Route::get('/terms_of_use', function () {
     return view('landing.terms_of_use');
 });
@@ -268,7 +270,6 @@ Route::get('/check-email', [App\Http\Controllers\AuthController::class, 'checkEm
 Route::get('/test-mail', [App\Http\Controllers\Patient\OrdersController::class, 'sendEmail']);
 
 
-Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -287,4 +288,25 @@ Route::get('/createcustomer', [App\Http\Controllers\Patient\PaymentController::c
 Route::get('/customerpayment', [App\Http\Controllers\Patient\PaymentController::class,'createCustomerPaymentProfile']);
 Route::get('/chargecustomer', [App\Http\Controllers\Patient\PaymentController::class,'chargeCustomerProfile']);
 //endng authorize.net payment gateway route
+
+Route::get('/clear-cache', function() {
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('config:cache');
+    Artisan::call('view:clear');
+    Artisan::call('route:clear');
+    return "Cache is cleared";
+});
+
+
+Route::get('/clear-config', function() {
+    Artisan::call('config:clear');
+    return "Configuration cache cleared!";
+});
+
+Route::get('/frommail', [App\Http\Controllers\AuthController::class, 'fromMail']);
+
+
+Route::get('/choose-state', [App\Http\Controllers\HomeController::class, 'chooseState']);
+Route::get('/steps', [App\Http\Controllers\HomeController::class, 'chooseTreatment']);
 

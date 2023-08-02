@@ -251,7 +251,11 @@ class OrderController extends Controller
             //charging customer 
             $amount = $data->total_amount;
             $user = User::find($data->user_id);
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> d6d522638a0a8b7ce64d7b66b5271b948df4b692
             $is_payment = $this->chargeCustomerProfile($user->authorized_user_id,$user->authorized_user_payment_id, $amount);
 
                 if($is_payment != 0){
@@ -591,24 +595,37 @@ class OrderController extends Controller
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
         $merchantAuthentication->setName(env('AUTHORIZE_NET_API_LOGIN_ID'));
         $merchantAuthentication->setTransactionKey(env('AUTHORIZE_NET_TRANSACTION_KEY'));
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> d6d522638a0a8b7ce64d7b66b5271b948df4b692
         // Set the profile to charge
         $profileToCharge = new AnetAPI\CustomerProfilePaymentType();
         $profileToCharge->setCustomerProfileId($customerProfileId);
         $paymentProfile = new AnetAPI\PaymentProfileType();
         $paymentProfile->setPaymentProfileId($customerPaymentProfileId);
         $profileToCharge->setPaymentProfile($paymentProfile);
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> d6d522638a0a8b7ce64d7b66b5271b948df4b692
         // Create the transaction data
         $transactionRequestType = new AnetAPI\TransactionRequestType();
         $transactionRequestType->setTransactionType("authCaptureTransaction");
         $transactionRequestType->setAmount($amount);
         $transactionRequestType->setProfile($profileToCharge);
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> d6d522638a0a8b7ce64d7b66b5271b948df4b692
         // Create the API request object
         $apiRequest = new AnetAPI\CreateTransactionRequest();
         $apiRequest->setMerchantAuthentication($merchantAuthentication);
         $apiRequest->setTransactionRequest($transactionRequestType);
+<<<<<<< HEAD
         
         // Send the API request
         $controller = new AnetController\CreateTransactionController($apiRequest);
@@ -667,4 +684,20 @@ class OrderController extends Controller
 
     }
 
+=======
+
+        // Send the API request
+        $controller = new AnetController\CreateTransactionController($apiRequest);
+        $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+
+        if ($response != null && $response->getMessages()->getResultCode() == "Ok") {
+            $tresponse = $response->getTransactionResponse();
+            return $tresponse->getTransId();
+            }else{
+                return 0;
+            }
+        // Handle the response (e.g., check if the transaction was successful and update your database accordingly)
+    }
+
+>>>>>>> d6d522638a0a8b7ce64d7b66b5271b948df4b692
 }

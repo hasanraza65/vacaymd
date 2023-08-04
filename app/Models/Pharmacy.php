@@ -14,4 +14,8 @@ class Pharmacy extends Model
     {
         return $this->belongsTo(User::class,'manager_id');
     }
+    public function state()
+    {
+        return $this->belongsTo(State::class,'state_id');
+    }
 }

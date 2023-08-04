@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Pharmacy;
 use App\Models\User;
+use App\Models\State;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +17,7 @@ class PharmacyController extends Controller
      */
     public function index(){
 
-        $data = Pharmacy::with('userDetail')->get();
+        $data = Pharmacy::with('userDetail','state')->get();
         return view('admin.pharmacies.index',compact(['data']));
 
     }
@@ -28,8 +29,9 @@ class PharmacyController extends Controller
     {
 
         $users = User::where('user_role',3)->get();
-
-        return view('admin.pharmacies.create',compact(['users']));
+        $states = State::all();
+     
+        return view('admin.pharmacies.create',compact(['users','states']));
     }
 
     /**
@@ -37,8 +39,33 @@ class PharmacyController extends Controller
      */
     public function store(Request $request)
     {
+     
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => [
+                'required',
+                'string',
+                'min:8', // Minimum 6 characters
+                'regex:/[a-z]/', // At least one lowercase letter
+                'regex:/[A-Z]/', // At least one uppercase letter
+                'regex:/[0-9]/', // At least one number
+                'regex:/[@$!%*#?&]/', // At least one special character
+            ],
+           
+        ]);
+    
+        $user = new User();
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->password = Hash::make($data['password']);
+        $user->phone = $request->pharmacy_phone;
+        $user->user_role =3;
+        $user->save();
+        $this->sendEmail($user->id);
+        
         $data = new Pharmacy();
-        $data->create($request->all());
+        $data->create($request->except('name','email','password')+['manager_id' => $user->id]);
        
         return redirect('/admin/pharmacies')->with('success', 'Pharmacy created successfully');
         // return redirect()->back()->with('success', 'Pharmacy created successfully');
@@ -58,9 +85,10 @@ class PharmacyController extends Controller
     public function edit($id)
     {
         $data = Pharmacy::find($id);
+        $states = State::all();
         $users = User::where('user_role',3)->get();
 
-        return view('admin.pharmacies.edit',compact(['data','users']));
+        return view('admin.pharmacies.edit',compact(['data','users','states']));
     }
 
     /**
@@ -125,7 +153,14 @@ class PharmacyController extends Controller
      */
     public function destroy($id)
     {
-        $data = Pharmacy::find($id)->delete();
+        $pharmacy = Pharmacy::find($id);
+        $user_id=$pharmacy->manager_id;
+        $user = User::find($user_id);
+        if($user){
+            $user = User::where('id',$user_id)->delete();
+        }
+        $data = Pharmacy::where('id',$id)->delete();
+     
 
         return response('Deleted');
     }

@@ -307,6 +307,6 @@ Route::get('/clear-config', function() {
 Route::get('/frommail', [App\Http\Controllers\AuthController::class, 'fromMail']);
 
 
-Route::get('/choose-state', [App\Http\Controllers\HomeController::class, 'chooseState']);
-Route::get('/steps', [App\Http\Controllers\HomeController::class, 'chooseTreatment']);
+Route::get('/choose-state', [App\Http\Controllers\StepsController::class, 'chooseState']);
+Route::get('/steps', [App\Http\Controllers\StepsController::class, 'chooseTreatment']);
 

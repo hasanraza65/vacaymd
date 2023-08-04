@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Patient reached nevada</title>
+    <title>Patient reached {{$orderData->selected_state_name}}</title>
     <style>
       /* Set the background color of the body to light grey */
       body {
@@ -74,7 +74,7 @@
       <div class="card-body">
         <br>
         <center>
-        <b><p>Your current location has been updated to Nevada.</p></b><br>
+        <b><p>Your current location has been updated to {{$orderData->selected_state_name}}.</p></b><br>
         </center>
 
 

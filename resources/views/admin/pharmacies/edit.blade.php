@@ -58,6 +58,14 @@
                         </div> --->
 
                         <!--- pharmacy manager ---> 
+                        <div class="mt-4">
+                            <label for="name">Choose State</label>
+                            <select class="form-select" name="state_id">
+                                @foreach($states as $state)
+                                <option value="{{$state->id}}" {{ ($data->state_id == $state->id) ? 'selected' : '' }}>{{$state->state_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                         <div class="row mt-4">
                             <div class="col">
@@ -195,7 +203,7 @@ $(document).ready(function() {
 
 
 // Assume phoneValidity is globally declared and initially set to false.
-var phoneValidity = false;
+var phoneValidity = true;
 
 // Phone validation
 $('#phone').on('keyup', function() {

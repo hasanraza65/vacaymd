@@ -9,6 +9,7 @@
 
 <form action="/patient/order" method="POST">
     <input type="hidden" name="problem_type" value="UTI">
+    <input type="hidden" name="selected_state_id" value="<?=$_GET['state']?>">
     @csrf
 
     <div class="step-form container">

@@ -25,12 +25,12 @@
                             <div class="col-md-3">
                                 <div class="widget-content widget-content-area br-8 p-4 mb-2">
                                 <b>Current Location</b><br>
-                                @if($data->state == 'Nevada' && $data->reached_nevada == 1)   
-                                <span style="font-size: 17px" class="badge badge-light-success mt-4 mb-1">Reached Nevada</span>
-                                @elseif($data->reached_nevada == 0 && $data->state == 'Nevada')
-                                <span style="font-size: 17px" class="badge badge-light-success mt-4 mb-1">Nevada</span>
+                                @if($data->state ==$data->selected_state_name && $data->reached_nevada == 1)   
+                                <span style="font-size: 17px" class="badge badge-light-success mt-4 mb-1">Reached {{$data->selected_state_name}}</span>
+                                @elseif($data->reached_nevada == 0 && $data->state == $data->selected_state_name)
+                                <span style="font-size: 17px" class="badge badge-light-success mt-4 mb-1">{{$data->selected_state_name}}</span>
                                 @else
-                                <span style="font-size: 17px" class="badge badge-light-warning mt-4 mb-1">Coming to Nevada</span>
+                                <span style="font-size: 17px" class="badge badge-light-warning mt-4 mb-1">Coming to {{$data->selected_state_name}}</span>
                                 @endif
                                
                                 </div>

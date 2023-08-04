@@ -215,22 +215,22 @@
                     <div class="col-md-6">
                         <div class="mb-">
                             <select id="state" name="state" class="form-select input-custom" required>
-                                <option value="">Are you in Nevada now?</option>
+                                <option value="">Are you in {{$orderdata->selected_state_name}} now?</option>
                                 <option value="Nevada">Yes</option>
-                                <option value="Coming To Nevada">Coming to Nevada</option>
+                                <option value="Coming To Nevada">Coming to {{$orderdata->selected_state_name}}</option>
                             </select>
                         </div>
                     </div>
 
                         <div id="arrival_date" class="col-md-6 nevada_options d-none">
                             <div class="mb-3">
-                                <input placeholder="When you will reach Nevada: " name="nevada_arrival_date" type="text" onfocus="(this.type='date')" class="form-control input-custom">
+                                <input placeholder="When you will reach {{$orderdata->selected_state_name}}: " name="nevada_arrival_date" type="text" onfocus="(this.type='date')" class="form-control input-custom">
                             </div>
                         </div>
 
                         <div id="nevada_delivery_address" class="col-md-6 nevada_options d-none">
                             <div class="mb-3">
-                                <input placeholder="Las Vegas delivery address:" name="hotel_name" type="text" class="form-control input-custom" >
+                                <input placeholder="Delivery address:" name="hotel_name" type="text" class="form-control input-custom" >
                             </div>
                         </div>
     

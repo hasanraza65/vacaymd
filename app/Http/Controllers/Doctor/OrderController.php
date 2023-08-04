@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\User;
+use App\Models\State;
 use App\Models\OrderDetail;
 use App\Models\PatientNote;
 use App\Models\Prescription;
@@ -125,10 +126,31 @@ class OrderController extends Controller
         $data = Order::with('orderDetail')
         ->with('userDetail')
         ->find($id);
-
-        $prescriptions = Prescription::all();
+        $stateProblems=[];
+        $state = State::find($data->selected_state_id);
+        if($state){
+            if($state->on_ed==1){
+                $stateProblems[]='ED';
+            }
+            if($state->on_uti==1){
+                $stateProblems[]='UTI';
+            }
+            if($state->on_hangover==1){
+                $stateProblems[]='HANGOVER';
+            }
+            if($state->on_suncare==1){
+                $stateProblems[]='SUNCARE';
+            }
+            if($state->on_periodavoidance==1){
+                $stateProblems[]='PERIODAVOIDANCE';
+            }
+            if($state->on_motionsickness==1){
+                $stateProblems[]='MOTIONSICKNESS';
+            }
+        }
+        $prescriptions = Prescription::whereIn('for_problem',$stateProblems)->get();
         
-        $pharmacies = Pharmacy::all();
+        $pharmacies = Pharmacy::where('state_id',$data->selected_state_id)->get();
         $passports = Passport::where('user_id',$data->user_id)->get();
 
         $messages = Message::with('userDetail')
@@ -251,11 +273,7 @@ class OrderController extends Controller
             //charging customer 
             $amount = $data->total_amount;
             $user = User::find($data->user_id);
-<<<<<<< HEAD
             
-=======
-
->>>>>>> d6d522638a0a8b7ce64d7b66b5271b948df4b692
             $is_payment = $this->chargeCustomerProfile($user->authorized_user_id,$user->authorized_user_payment_id, $amount);
 
                 if($is_payment != 0){
@@ -595,37 +613,24 @@ class OrderController extends Controller
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
         $merchantAuthentication->setName(env('AUTHORIZE_NET_API_LOGIN_ID'));
         $merchantAuthentication->setTransactionKey(env('AUTHORIZE_NET_TRANSACTION_KEY'));
-<<<<<<< HEAD
     
-=======
-
->>>>>>> d6d522638a0a8b7ce64d7b66b5271b948df4b692
         // Set the profile to charge
         $profileToCharge = new AnetAPI\CustomerProfilePaymentType();
         $profileToCharge->setCustomerProfileId($customerProfileId);
         $paymentProfile = new AnetAPI\PaymentProfileType();
         $paymentProfile->setPaymentProfileId($customerPaymentProfileId);
         $profileToCharge->setPaymentProfile($paymentProfile);
-<<<<<<< HEAD
     
-=======
-
->>>>>>> d6d522638a0a8b7ce64d7b66b5271b948df4b692
         // Create the transaction data
         $transactionRequestType = new AnetAPI\TransactionRequestType();
         $transactionRequestType->setTransactionType("authCaptureTransaction");
         $transactionRequestType->setAmount($amount);
         $transactionRequestType->setProfile($profileToCharge);
-<<<<<<< HEAD
     
-=======
-
->>>>>>> d6d522638a0a8b7ce64d7b66b5271b948df4b692
         // Create the API request object
         $apiRequest = new AnetAPI\CreateTransactionRequest();
         $apiRequest->setMerchantAuthentication($merchantAuthentication);
         $apiRequest->setTransactionRequest($transactionRequestType);
-<<<<<<< HEAD
         
         // Send the API request
         $controller = new AnetController\CreateTransactionController($apiRequest);
@@ -684,20 +689,4 @@ class OrderController extends Controller
 
     }
 
-=======
-
-        // Send the API request
-        $controller = new AnetController\CreateTransactionController($apiRequest);
-        $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
-
-        if ($response != null && $response->getMessages()->getResultCode() == "Ok") {
-            $tresponse = $response->getTransactionResponse();
-            return $tresponse->getTransId();
-            }else{
-                return 0;
-            }
-        // Handle the response (e.g., check if the transaction was successful and update your database accordingly)
-    }
-
->>>>>>> d6d522638a0a8b7ce64d7b66b5271b948df4b692
 }

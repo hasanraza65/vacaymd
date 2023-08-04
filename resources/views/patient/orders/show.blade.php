@@ -50,12 +50,12 @@
                                     @if($data->state == 'Coming To Nevada' && $data->reached_nevada == 0)   
                                     <form action="/patient/update_location_status" method="post">
                                     <input type="hidden" name="order_id" value="{{$data->id}}">
-                                    <input type="hidden" name="state" value="Nevada">
+                                    <input type="hidden" name="state" value="{{$data->selected_state_name}}">
                                     @csrf
 
                                     <b>Update About Your Location</b>
                                     <div class="input-group  mt-3 mb-2">
-                                        <button class="btn btn-primary" type="submit" id="button-addon2">I have reached Nevada</button>
+                                        <button class="btn btn-primary" type="submit" id="button-addon2">I have reached {{$data->selected_state_name}}</button>
                                     </div>
 
                                     </form>
@@ -63,7 +63,7 @@
                                     
                                     <b>Your Current Location</b>
                                     <div class="input-group">
-                                        <span style="font-size: 17px" class="badge badge-light-primary mt-4 mb-1">Reached Nevada</span>
+                                        <span style="font-size: 17px" class="badge badge-light-primary mt-4 mb-1">Reached {{$data->selected_state_name}}</span>
                                     </div>
 
                                     @else 

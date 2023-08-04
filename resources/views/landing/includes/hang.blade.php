@@ -10,6 +10,7 @@
 <form action="/patient/order" method="POST">
     @csrf
     <input type="hidden" name="problem_type" value="HANGOVER">
+    <input type="hidden" name="selected_state_id" value="<?=$_GET['state']?>">
 
     <div class="step-form container">
 

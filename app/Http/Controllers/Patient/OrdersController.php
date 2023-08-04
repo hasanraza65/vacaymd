@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Patient;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Models\State;
 use App\Models\OrderDetail;
 use App\Models\OrderAmounts;
 use App\Models\OrderAddon;
@@ -81,12 +82,18 @@ class OrdersController extends Controller
      */
     public function store(Request $request)
     {
-       
+        $statename='';
+        $statedata = State::find($request->selected_state_id);
+        if($statedata){
+            $statename=$statedata->state_name;
+        }
         $data = new Order();
         $data->session_id = Session::getId();
         $order_num = $this->generateUniqueOrderNum();
         $data->order_num = $order_num;
         $data->treatment_req = $request->problem_type;
+        $data->selected_state_id = $request->selected_state_id;
+        $data->selected_state_name = $statename;
         $data->total_amount =79;
         $data->save();
 
@@ -310,13 +317,13 @@ class OrdersController extends Controller
         $email = new Mail();
         $from_email=env('MAIL_FROM_ADDRESS');
         $email->setFrom($from_email, "Vacay MD");
-        $email->setSubject("Patient Reached Nevada");
+        $email->setSubject("Patient Reached ".$orderData->selected_state_name);
         $email->addTo($to, $to_name);
         $htmlContent = View::make('emails.updated_location')
         ->with(['orderData' => $orderData])
         ->render();
 
-        $sms_message = "Patient of order #".$orderData->order_num.' has been reached Nevada';
+        $sms_message = "Patient of order #".$orderData->order_num.' has been reached '.$orderData->selected_state_name;
         if($orderData->pharmacyDetail->pharmacy_phone != null && $orderData->pharmacyDetail->pharmacy_phone != ""){
             $this->sendSMS($orderData->pharmacyDetail->pharmacy_phone, $sms_message);
             }
@@ -339,13 +346,13 @@ class OrdersController extends Controller
         $email = new Mail();
         $from_email=env('MAIL_FROM_ADDRESS');
         $email->setFrom($from_email, "Vacay MD");
-        $email->setSubject("Patient Reached Nevada");
+        $email->setSubject("Patient Reached ".$orderData->selected_state_name);
         $email->addTo($to, $to_name);
         $htmlContent = View::make('emails.updated_location')
         ->with(['orderData' => $orderData])
         ->render();
 
-        $sms_message = "Patient of order #".$orderData->order_num.' has been reached Nevada';
+        $sms_message = "Patient of order #".$orderData->order_num.' has been reached '.$orderData->selected_state_name;
         if($orderData->doctorDetail->phone != null && $orderData->doctorDetail->phone != ""){
             $this->sendSMS($orderData->doctorDetail->phone, $sms_message);
             }
@@ -367,7 +374,7 @@ class OrdersController extends Controller
         //ending getting order data
         $email = new Mail();
         $email->setFrom("notification@skvclients.com", "Vacay MD");
-        $email->setSubject("Reached Nevada");
+        $email->setSubject("Reached ".$orderData->selected_state_name);
         $email->addTo($to, $to_name);
         $htmlContent = View::make('emails.updated_location_my')
         ->with(['orderData' => $orderData])
@@ -388,8 +395,9 @@ class OrdersController extends Controller
 
 
     public function register(){
-
-        return view('landing.register');
+        $order_num = Session::get('order_num');
+        $orderdata = Order::where('order_num',$order_num)->first();
+        return view('landing.register',compact('orderdata'));
 
     }
 

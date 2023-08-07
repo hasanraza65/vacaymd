@@ -14,5 +14,10 @@ class Doctor extends Model
     {
         return $this->belongsTo(User::class,'user_id');
     }
+    public function state()
+    {
+        return $this->belongsTo(State::class,'state_id');
+    }
+
 
 }

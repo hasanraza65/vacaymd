@@ -91,6 +91,15 @@
                             </div>
                             
                         </div>
+                        <div class="mt-4">
+                            <label for="name">Choose State</label>
+                            <select class="form-select" required name="state_id">
+                              <option value="">Select state</option>
+                                @foreach($states as $state)
+                                <option value="{{$state->id}}">{{$state->state_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                         <div class="mt-4">
                             <input type="submit" class="btn btn-primary">

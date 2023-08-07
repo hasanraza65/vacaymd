@@ -86,6 +86,16 @@
                             </div>
                             
                         </div>
+                        <div class="mt-4">
+                            <label for="name">Choose State</label>
+                            <select class="form-select" name="state_id" required>
+                            <option value="">Select state</option>
+                                @foreach($states as $state)
+                                <option value="{{$state->id}}" <?php if($data->state_id == $state->id){ echo 'selected';}?>>{{$state->state_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
 
                         <input type="hidden" value="{{$data->userDetail->id}}" name="user_id">
 

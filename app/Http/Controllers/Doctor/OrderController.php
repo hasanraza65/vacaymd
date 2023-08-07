@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\State;
+use App\Models\Doctor;
 use App\Models\OrderDetail;
 use App\Models\PatientNote;
 use App\Models\Prescription;
@@ -42,7 +43,12 @@ class OrderController extends Controller
         return view('emails.order_approved', compact(['orderData']));
     }
     public function index(){
-
+        $state_id=0;
+        $doc_user_id=Auth::user()->id;
+        $doctor=Doctor::where('user_id',$doc_user_id)->first();
+        if($doctor){
+            $state_id=$doctor->state_id;
+        }
         $start_date = request('start_date');
         $end_date = request('end_date');
         $today = date('Y-m-d');
@@ -58,6 +64,8 @@ class OrderController extends Controller
         $dataQuery = Order::with('userDetail')
         ->whereNull('assigned_to')
         ->whereNotNull('user_id')
+        ->whereNotNull('selected_state_id')
+        ->where('selected_state_id',$state_id)
         ->whereNull('pharmacy_id')
         ->whereHas('userDetail', function ($query) {
             $query->whereNotNull('authorized_user_payment_id');
@@ -68,6 +76,8 @@ class OrderController extends Controller
         $assigned_tomeQuery = Order::with('userDetail')
         ->where('assigned_to', Auth::user()->id)
         ->whereNotNull('user_id')
+        ->whereNotNull('selected_state_id')
+        ->where('selected_state_id',$state_id)
         ->where('payment_status', 1)
         ->whereHas('userDetail')
         ->whereNot('order_status','Rejected')
@@ -76,6 +86,8 @@ class OrderController extends Controller
         $completedQuery = Order::with('userDetail')
         ->where('order_status', 'Completed')
         ->whereNotNull('user_id')
+        ->whereNotNull('selected_state_id')
+        ->where('selected_state_id',$state_id)
         ->whereHas('userDetail')
         ->whereNot('order_status','Rejected')
         ->where('payment_status', 1);
@@ -553,15 +565,24 @@ class OrderController extends Controller
 
 
     public static function dashboard(){
-
+        $state_id=0;
+        $doc_user_id=Auth::user()->id;
+        $doctor=Doctor::where('user_id',$doc_user_id)->first();
+        if($doctor){
+            $state_id=$doctor->state_id;
+        }
         $data['patients'] = Order::select('user_id')
         ->where('assigned_to', Auth::user()->id)
         ->whereNotNull('user_id')
+        ->whereNotNull('selected_state_id')
+        ->where('selected_state_id',$state_id)
         ->groupBy('user_id')
         ->count();
 
         $data['pending_orders'] = Order::whereNull('assigned_to')
         ->whereNotNull('user_id')
+        ->whereNotNull('selected_state_id')
+        ->where('selected_state_id',$state_id)
         ->whereHas('userDetail', function ($query) {
             $query->whereNotNull('authorized_user_payment_id');
         })

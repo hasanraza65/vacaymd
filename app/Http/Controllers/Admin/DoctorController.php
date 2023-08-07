@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\State;
 use App\Models\Doctor;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
@@ -23,7 +24,7 @@ class DoctorController extends Controller
     }
     public function index(){
 
-        $data = Doctor::with('userDetail')
+        $data = Doctor::with('userDetail','state')
         ->whereHas('userDetail')
         ->get();
         
@@ -32,8 +33,8 @@ class DoctorController extends Controller
     }
 
     public function create(){
-
-        return view('admin.doctors.create');
+        $states = State::all();
+        return view('admin.doctors.create',compact(['states']));
 
     }
 
@@ -87,6 +88,7 @@ class DoctorController extends Controller
         $doctor->available_from = $request->available_from;
         $doctor->available_to = $request->available_to;
         $doctor->user_id = $user->id;
+        $doctor->state_id =  $request->state_id;
         $doctor->save();
         $this->sendEmail($user->id);
         return redirect('/admin/doctors')->with('success', 'Doctor created successfully');
@@ -99,8 +101,9 @@ class DoctorController extends Controller
 
         $data = Doctor::with('userDetail')
                 ->find($id);
+        $states = State::all();
         
-        return view('admin.doctors.edit',compact(['data']));
+        return view('admin.doctors.edit',compact(['data','states']));
 
     }
 
@@ -163,6 +166,7 @@ class DoctorController extends Controller
         $doctor->experience = $request->experience;
         $doctor->available_from = $request->available_from;
         $doctor->available_to = $request->available_to;
+        $doctor->state_id = $request->state_id;
         $doctor_data = $doctor->update();
         return redirect('/admin/doctors')->with('success', 'User updated successfully');
         // return redirect()->back()->with('success', 'User updated successfully');

@@ -53,7 +53,7 @@
 
                         <div class="row mt-2">
                             
-                            <div class="col-sm-4 ">
+                            <!-- <div class="col-sm-4 ">
                                 <input type="hidden" name="on_suncare" value="0">
                                 <input name="on_suncare" value="1" class="form-check-input" type="checkbox" id="inlineCheckbox4" {{ ($data->on_suncare == 1) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="inlineCheckbox4">Sun care</label>
@@ -67,7 +67,7 @@
                                 <input type="hidden" name="on_motionsickness" value="0">
                                 <input name="on_motionsickness" value="1" class="form-check-input" type="checkbox" id="inlineCheckbox6" {{ ($data->on_motionsickness == 1) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="inlineCheckbox6">Motion Sickness</label>
-                            </div>
+                            </div> -->
                         </div>
 
 

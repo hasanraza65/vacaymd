@@ -102,7 +102,7 @@ class OrdersController extends Controller
         //saving order details
 
         // Get all the request data
-        $data = $request->except(['problem_type','I_agree']);
+        $data = $request->except(['problem_type','I_agree','selected_state_id']);
 
         // Loop through the request data and insert each key-value pair into the meta table
         foreach ($data as $key => $value) {
@@ -195,6 +195,8 @@ class OrdersController extends Controller
         $data->home_state = $old_order->home_state;
         $data->home_city = $old_order->home_city;
         $data->hotel_city = $old_order->hotel_city;
+        $data->selected_state_id = $old_order->selected_state_id;
+        $data->selected_state_name =$old_order->selected_state_name;
         $data->our_pharmacy_text = $old_order->our_pharmacy_text;
         $data->confirm_patient_id = $old_order->confirm_patient_id;
         $data->save();

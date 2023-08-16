@@ -45,6 +45,7 @@
                                             <th>Dilvery Location</th>
                                             <th>Payment Status</th>
                                             <th>Patient DOB</th>
+                                            <th>Age</th>
                                             <th>Date</th>
                                             <th class="no-content">Action</th>
                                         </tr>
@@ -71,6 +72,7 @@
 
                                             </td>
                                             <td>{{ \Carbon\Carbon::parse($datas->userDetail->dob)->format('m/d/Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($datas->userDetail?->dob)->age }} year</td>
                                             <td>{{ \Carbon\Carbon::parse($datas->created_at)->format('m/d/Y') }}</td>
                                             <td class="">
                                                 <a href="/pharmacy/orders/{{$datas->id}}" class="bs-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-original-title="Show" data-bs-original-title="Show" aria-label="Show"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye p-1 br-8 mb-1"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>
@@ -98,6 +100,7 @@
                                             <th>Dilvery Location</th>
                                             <th>Payment Status</th>
                                             <th>Patient DOB</th>
+                                            <th>Age</th>
                                             <th>Date</th>
                                             <th class="no-content">Action</th>
                                         </tr>
@@ -122,6 +125,7 @@
 
                                             </td>
                                             <td>{{ \Carbon\Carbon::parse($datas->userDetail->dob)->format('m/d/Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($datas->userDetail?->dob)->age }} year</td>
                                             <td>{{ \Carbon\Carbon::parse($datas->created_at)->format('m/d/Y') }}</td>
                                             <td class="">
                                                 <a href="/pharmacy/orders/{{$datas->id}}" class="bs-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-original-title="Show" data-bs-original-title="Show" aria-label="Show"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye p-1 br-8 mb-1"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>
@@ -147,6 +151,7 @@
                                             <th>Dilvery Location</th>
                                             <th>Payment Status</th>
                                             <th>Patient DOB</th>
+                                            <th>Age</th>
                                             <th>Date</th>
                                             <th class="no-content">Action</th>
                                         </tr>
@@ -171,6 +176,7 @@
 
                                             </td>
                                             <td>{{ \Carbon\Carbon::parse($datas->userDetail->dob)->format('m/d/Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($datas->userDetail?->dob)->age }} year</td>
                                             <td>{{ \Carbon\Carbon::parse($datas->created_at)->format('m/d/Y') }}</td>
                                             <td class="">
                                                 <a href="/pharmacy/orders/{{$datas->id}}" class="bs-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-original-title="Show" data-bs-original-title="Show" aria-label="Show"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye p-1 br-8 mb-1"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>

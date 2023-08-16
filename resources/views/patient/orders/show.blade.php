@@ -93,8 +93,10 @@
                                         <th>Dilvery Location</th>
                                         @endif
                                         <th>Patient DOB</th>
+                                        <th>Age</th>
                                         <th>Bill Amount</th>
                                         <th>Date</th>
+                                       
                                     </tr>
                                     <tr>
                                         <td>{{$data->order_num}}</td>
@@ -105,6 +107,7 @@
                                         <td>{{$data->delivery_location}}</td>
                                         @endif
                                         <td>{{ \Carbon\Carbon::parse($data->userDetail->dob)->format('m/d/Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($data->userDetail?->dob)->age }} year</td>
                                         <td>${{number_format($data->total_amount,2)}}</td>
                                         <td>{{ \Carbon\Carbon::parse($data->created_at)->format('m/d/Y') }}</td>
                                     </tr>
@@ -161,16 +164,20 @@
                 <th>Answer</th>
             </tr>
             @foreach($data->orderDetail as $orderDetails)
-                @php
-                    $question = Str::endsWith($orderDetails->key, 'free text')
-                        ? '<b style="color: red;">' . Str::replaceLast(' free text', '', $orderDetails->key) . '</b>'
-                        : $orderDetails->key;
-                @endphp
-                <tr>
-                    <td>{!! $question !!}</td>
-                    <td><?php echo $orderDetails->value;?></td>
-                </tr>
-            @endforeach
+    @php
+        $question = Str::endsWith($orderDetails->key, 'free text')
+            ? '<b>' . Str::replaceLast(' free text', '', $orderDetails->key) . '</b>'
+            : $orderDetails->key;
+        $value = Str::endsWith($orderDetails->key, 'free text')
+            ? '<b style="color: red;">' . $orderDetails->value . '</b>'
+            : $orderDetails->value;
+    @endphp
+    <tr>
+        <td>{!! $question !!}</td>
+        <td>{!! $value !!}</td>
+    </tr>
+@endforeach
+
         </table>
     </div>
 </div>

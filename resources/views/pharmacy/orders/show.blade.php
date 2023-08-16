@@ -121,6 +121,7 @@
                                         <th>Billing Address</th>
                                         <th>Delivery Location</th>
                                         <th>Patient Age</th>
+                                        <th>Age</th>
                                         <th>Bill Amount</th>
                                         <th>Date</th>
                                     </tr>
@@ -132,6 +133,7 @@
                                         <td>{{$data->billing_address}}</td>
                                         <td>{{$data->delivery_location}}</td>
                                         <td>{{ \Carbon\Carbon::parse($data->userDetail->dob)->format('m/d/Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($data->userDetail?->dob)->age }} year</td>
                                         <td>${{number_format($data->total_amount,2)}}</td>
                                         <td>{{ \Carbon\Carbon::parse($data->created_at)->format('m/d/Y') }}</td>
                                     </tr>

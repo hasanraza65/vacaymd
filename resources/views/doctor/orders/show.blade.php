@@ -233,33 +233,39 @@
                         <div class="widget-content widget-content-area br-8 p-4 mb-2">
     <b>Questions & Answers</b>
     <div id="toggleAccordion" class="no-icons accordion">
-        @foreach($data->orderDetail as $orderDetails)
-            @if($orderDetails->value)
-                <div class="card">
-                    <div class="card-header" id="...">
-                        <section class="mb-0 mt-0">
-                            <div role="menu" class="" data-bs-target="#defaultAccordionOne_{{$orderDetails->id}}" aria-expanded="false" aria-controls="defaultAccordionOne_{{$orderDetails->id}}">
-                                <strong>
-                                    @php
-                                        $question = Str::endsWith($orderDetails->key, 'free text')
-                                            ? '<span style="color: red;">' . Str::replaceLast(' free text', '', $orderDetails->key) . '</span>'
-                                            : $orderDetails->key;
-                                    @endphp
-                                    {!! $question !!}
-                                </strong>
-                                <div class="icons"><svg> ... </svg></div>
-                            </div>
-                        </section>
+    @foreach($data->orderDetail as $orderDetails)
+    @if($orderDetails->value)
+        <div class="card">
+            <div class="card-header" id="...">
+                <section class="mb-0 mt-0">
+                    <div role="menu" class="" data-bs-target="#defaultAccordionOne_{{$orderDetails->id}}" aria-expanded="false" aria-controls="defaultAccordionOne_{{$orderDetails->id}}">
+                        <strong>
+                            @php
+                                $question = Str::endsWith($orderDetails->key, 'free text')
+                                    ? '<span style="color: black;">' . Str::replaceLast(' free text', '', $orderDetails->key) . '</span>'
+                                    : $orderDetails->key;
+                                $value = Str::endsWith($orderDetails->key, 'free text')
+                                    ? '<span style="color: red; font-weight: bold;">' . $orderDetails->value . '</span>'
+                                    : $orderDetails->value;
+                            @endphp
+                            {!! $question !!}
+                        </strong>
+                        <div class="icons"><svg> ... </svg></div>
                     </div>
+                </section>
+            </div>
 
-                    <div id="defaultAccordionOne_{{$orderDetails->id}}" aria-labelledby="..." data-bs-parent="#toggleAccordion">
-                        <div class="card-body p-1 m-1">
-                            <strong class="text-dark" style="font-size: 20px; margin: 0px !important;"><?php echo $orderDetails->value; ?></strong>
-                        </div>
-                    </div>
+            <div id="defaultAccordionOne_{{$orderDetails->id}}" aria-labelledby="..." data-bs-parent="#toggleAccordion">
+                <div class="card-body p-1 m-1">
+                    <strong class="text-dark" style=" margin: 0px !important;">
+                        {!! $value !!}
+                    </strong>
                 </div>
-            @endif
-        @endforeach
+            </div>
+        </div>
+    @endif
+@endforeach
+
     </div>
 </div>
 

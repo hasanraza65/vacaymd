@@ -32,6 +32,7 @@
                                             <th>Billing Address</th>
                                             <th>Dilvery Location</th>
                                             <th>Patient DOB</th>
+                                            <th>Age</th>
                                             <th>Bill Amount</th>
                                             <th>Payment Status</th>
                                             <th>Date</th>
@@ -56,7 +57,7 @@
                                             <td class="{{$bold_class}} action_btn"> @if($datas->order_status == 'Pending')
                                                                                     <span style="font-size: 17px" class="badge badge-light-warning ">{{$datas->order_status}}</span>
                                                                                     @elseif($datas->order_status == 'Completed' || $datas->order_status == 'Approved')
-                                                                                    <span style="font-size: 17px" class="badge badge-light-success">{{$data->order_status}}</span>
+                                                                                    <span style="font-size: 17px" class="badge badge-light-success">{{$datas->order_status}}</span>
                                                                                     @elseif($datas->order_status == 'In Process')
                                                                                     <span style="font-size: 17px" class="badge badge-light-info ">{{$datas->order_status}}</span>
                                                                                     @elseif($datas->order_status == 'Cancelled' || $datas->order_status == 'Rejected')
@@ -68,6 +69,7 @@
                                             <td class="{{$bold_class}}" >{{$datas->billing_address}}</td>
                                             <td class="{{$bold_class}}" >{{$datas->delivery_location}}</td>
                                             <td class="{{$bold_class}}" >{{ \Carbon\Carbon::parse($datas->userDetail->dob)->format('m/d/Y') }}</td>
+                                            <td class="{{$bold_class}}" >{{ \Carbon\Carbon::parse($datas->userDetail->dob)->age }} year</td>
                                             <td class="{{$bold_class}}" >${{number_format($datas->total_amount,2)}}</td>
                                             <td class="{{$bold_class}}" >@if($datas->payment_status == 1)
                                                 Paid 

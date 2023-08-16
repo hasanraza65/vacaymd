@@ -28,6 +28,7 @@
                                             <th>Order ID</th>
                                             <th>Bill Amount</th>
                                             <th>Date</th>
+                                            <th>Age</th>
                                             <th>Payment Status</th>
                                             <th>Invoice</th>
                                             <th>Reorder</th>
@@ -43,6 +44,8 @@
                                             <td class="action_btn"  onclick="window.location ='/patient/orders/{{$datas->id}}'">{{$datas->order_num}}</td>
                                             <td class="action_btn"  onclick="window.location ='/patient/orders/{{$datas->id}}'">{{number_format($datas->total_amount,2)}}</td>
                                             <td>{{ \Carbon\Carbon::parse($datas->created_at)->format('m/d/Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($datas->userDetail?->dob)->age }} year</td>
+
                                             <td>
                                                 @if($datas->payment_status == 1)
                                                 <span class="badge badge-light-success mb-2 me-4">Paid</span>

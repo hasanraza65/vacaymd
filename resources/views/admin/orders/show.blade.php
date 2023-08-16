@@ -80,7 +80,8 @@
                                         <th>Patient Email</th>
                                         <th>Billing Address</th>
                                         <th>Dilvery Location</th>
-                                        <th>Patient Age</th>
+                                        <th>Patient DOB</th>
+                                        <th>Age</th>
                                         <th>Bill Amount</th>
                                         <th>Date</th>
                                     </tr>
@@ -91,6 +92,7 @@
                                         <td>{{$data->billing_address}}</td>
                                         <td>{{$data->delivery_location}}</td>
                                         <td>{{ \Carbon\Carbon::parse($data->userDetail->dob)->format('m/d/Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($data->userDetail->dob)->age }} year</td>
                                         <td>${{number_format($data->total_amount,2)}}</td>
                                         <td>{{ \Carbon\Carbon::parse($data->created_at)->format('m/d/Y') }}</td>
                                     </tr>
@@ -111,11 +113,26 @@
                                         <th>Answer</th>
                                     </tr>
                                     @foreach($data->orderDetail as $orderDetails)
-                                    <tr>
-                                        <td>{{$orderDetails->key}}</td>
-                                        <td><?=$orderDetails->value?></td>
-                                    </tr>
-                                    @endforeach
+    <tr>
+        <td>
+            @php
+                $question = Str::endsWith($orderDetails->key, 'free text')
+                    ? '<span style="">' . Str::replaceLast(' free text', '', $orderDetails->key) . '</span>'
+                    : $orderDetails->key;
+                echo $question;
+            @endphp
+        </td>
+        <td>
+            @php
+                $value = Str::endsWith($orderDetails->key, 'free text')
+                    ? '<span style="color: red; font-weight: bold;">' . $orderDetails->value . '</span>'
+                    : $orderDetails->value;
+                echo $value;
+            @endphp
+        </td>
+    </tr>
+@endforeach
+
 
                                 </table>
                             </div>

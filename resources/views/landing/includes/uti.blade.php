@@ -158,7 +158,7 @@
                     <label class="mouse-none">I was not prescribed OR I do not remember the name of the antibiotic I was prescribed.
                     </label>
                 </label>
-                <textarea id="If_you_have_been_successfully_treated_for_a_UTI_before_please_write_down_the_name_of_the_anti_biotic_your_physician_prescribed_text" class="form-control mt-3 textarea-custom" name="If_you_have_been_successfully_treated_for_a_UTI_before,_please_write_down_the_name_of_the_anti-biotic_your_physician_prescribed" placeholder="Write down the names of the anti-biotic here"></textarea>
+                <textarea id="If_you_have_been_successfully_treated_for_a_UTI_before_please_write_down_the_name_of_the_anti_biotic_your_physician_prescribed_text" class="form-control mt-3 textarea-custom" name="If_you_have_been_successfully_treated_for_a_UTI_before,_please_write_down_the_name_of_the_anti-biotic_your_physician_prescribed_free_text" placeholder="Write down the names of the anti-biotic here"></textarea>
             </div>
 
         </div>
@@ -336,7 +336,7 @@
                     </label>
                 </label>
 
-                <textarea id="Are_you_allergic_to_any_other_meds" class="form-control mt-3 textarea-custom d-none" placeholder="Each medicine name at one line which you are allergic." name="Are_you_allergic_to_any_other_meds_(Meds_Names))" class="mt-4" ></textarea>
+                <textarea id="Are_you_allergic_to_any_other_meds" class="form-control mt-3 textarea-custom d-none" placeholder="Each medicine name at one line which you are allergic." name="Are_you_allergic_to_any_other_meds_(Meds_Names))_free_text" class="mt-4" ></textarea>
 
                 <label class="button-container custom-radio w-100 mb-4 mt-3 meds-uti-section" onclick="hideField('Are_you_allergic_to_any_other_meds')">
                     <input type="radio" class="custom-radio-circle meds-uti-input" name="Are_you_allergic_to_any_other_meds?" value="No" required>
@@ -354,7 +354,7 @@
 
             <div class="question-div mt-4">
                 <span class="question">Please let us know if you have any questions or concerns</span>
-                <textarea class="form-control mt-3 textarea-custom" placeholder="Enter your answer" name="Please_let_us_know_if_you_have_any_questions_or_concerns" class="mt-4"></textarea>
+                <textarea class="form-control mt-3 textarea-custom" placeholder="Enter your answer" name="Please_let_us_know_if_you_have_any_questions_or_concerns_free_text" class="mt-4"></textarea>
             </div>
 
         </div>
@@ -407,7 +407,7 @@
 
                 <span class="question">You can ask any question to your medical provider here </span>
 
-                <textarea class="form-control mt-3 textarea-custom" placeholder="Write your questions here" name="Question_for_provider" class="mt-4"></textarea>
+                <textarea class="form-control mt-3 textarea-custom" placeholder="Write your questions here" name="Question_for_provider_free_text" class="mt-4"></textarea>
 
                 <label class="button-container custom-radio w-100 mb-4 mt-4 qustions-uti-section">
                     <input type="radio" class="custom-radio-circle qustions-uti-input" name="Question_for_provider" value="No question">

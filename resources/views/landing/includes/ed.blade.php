@@ -90,7 +90,7 @@
                     </label>
                 </label>
 
-                <textarea id="Have_you_ever_been_treated_for_ED_with_medication" placeholder="Please enter the names of the medication" class="form-control mt-3 textarea-custom d-none mt-4 mb-4" name="Please_let_us_know_the_name_of_the_medication rounded"></textarea>
+                <textarea id="Have_you_ever_been_treated_for_ED_with_medication" placeholder="Please enter the names of the medication" class="form-control mt-3 textarea-custom d-none mt-4 mb-4" name="Please_let_us_know_the_name_of_the_medication_free_text"></textarea>
 
                 <label class="button-container custom-radio w-100 mb-4 treated-section" onclick="hideField('Have_you_ever_been_treated_for_ED_with_medication')">
                     <input type="radio" class="custom-radio-circle treated-section-input" name="Have_you_ever_been_treated_for_ED_with_medication_?" value="No" required>
@@ -127,7 +127,7 @@
 
                 <div class="question-div mt-4">
                     <span class="question">Please let us know if you are allergic to any other medications</span>
-                    <textarea class="form-control mt-3 textarea-custom" name="Please_let_us_know_if_you_are_allergic_to_any_other_medications" class="mt-4" placeholder="Please enter the names of the medication"></textarea>
+                    <textarea class="form-control mt-3 textarea-custom" name="Please_let_us_know_if_you_are_allergic_to_any_other_medications_free_text" class="mt-4" placeholder="Please enter the names of the medication"></textarea>
                 </div>
 
             </div>
@@ -322,7 +322,7 @@
 
             <div class="question-div mt-4">
                 <span class="question">Please let us know if you have any other medical conditions other than those listed above </span>
-                <textarea class="form-control mt-3 textarea-custom" name="Please_let_us_know_if_you_have_any_other_medical_conditions_other_than_those_listed_above" placeholder="Please enter here any other medical conditions" class="mt-4" ></textarea>
+                <textarea class="form-control mt-3 textarea-custom" name="Please_let_us_know_if_you_have_any_other_medical_conditions_other_than_those_listed_above_free_text" placeholder="Please enter here any other medical conditions" class="mt-4" ></textarea>
 
             </div>
 
@@ -389,7 +389,7 @@
 
                     <span class="question">Please list all medications you take daily-</span>
 
-                    <textarea class="form-control mt-3 textarea-custom" name="Please_list_all_medications_you_take_daily-" class="mt-4" placeholder="Enter your answer"></textarea>
+                    <textarea class="form-control mt-3 textarea-custom" name="Please_list_all_medications_you_take_daily-_free_text" class="mt-4" placeholder="Enter your answer"></textarea>
 
                 </div>
 
@@ -488,7 +488,7 @@
 
                 <span class="question">You can ask any question to your medical provider here </span>
 
-                <textarea class="form-control mt-3 textarea-custom" placeholder="Write your question here" name="Question_for_provider"></textarea>
+                <textarea class="form-control mt-3 textarea-custom" placeholder="Write your question here" name="Question_for_provider_free_text"></textarea>
 
 
                 <label class="button-container custom-radio w-100 mb-4 mt-4 questions-ed-section">

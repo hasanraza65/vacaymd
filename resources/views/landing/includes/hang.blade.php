@@ -344,7 +344,7 @@
 
             <div class="question-div">
                 <span class="question">You can ask any question to your medical provider here </span>
-                <textarea class="form-control mt-3 textarea-custom" placeholder="Write your question here" name="Question_for_provider"></textarea>
+                <textarea class="form-control mt-3 textarea-custom" placeholder="Write your question here" name="Question_for_provider_free_text"></textarea>
                 <label class="button-container custom-radio w-100 mb-4 mt-3 hang-provider-section">
                     <input type="radio" class="custom-radio-circle hang-provider-input" name="Question_for_provider" value="No question">
                     <label class="mouse-none">

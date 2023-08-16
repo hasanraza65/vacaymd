@@ -152,29 +152,28 @@
                         </div>
                         @endif
 
-                        <!--- questions table ---> 
-
                         <div class="widget-content widget-content-area br-8 p-4 mb-2">
-                            <b>Questions & Answers</b>
-                            <div class="table-responsive mt-4">
-                                <table class="table table-bordered">
-                                    
-                                    <tr>
-                                        <th>Question</th>
-                                        <th>Answer</th>
-                                    </tr>
-                                    @foreach($data->orderDetail as $orderDetails)
-                                    <tr>
-                                        <td>{{$orderDetails->key}}</td>
-                                        <td><?php echo $orderDetails->value;?></td>
-                                    </tr>
-                                    @endforeach
-
-                                </table>
-                            </div>
-                        </div>
-
-                        <!--- ending question table --->
+    <b>Questions & Answers</b>
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered">
+            <tr>
+                <th>Question</th>
+                <th>Answer</th>
+            </tr>
+            @foreach($data->orderDetail as $orderDetails)
+                @php
+                    $question = Str::endsWith($orderDetails->key, 'free text')
+                        ? '<b style="color: red;">' . Str::replaceLast(' free text', '', $orderDetails->key) . '</b>'
+                        : $orderDetails->key;
+                @endphp
+                <tr>
+                    <td>{!! $question !!}</td>
+                    <td><?php echo $orderDetails->value;?></td>
+                </tr>
+            @endforeach
+        </table>
+    </div>
+</div>
 
                         @include('patient.orders.includes.chat')
                             

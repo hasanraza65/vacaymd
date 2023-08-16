@@ -164,30 +164,31 @@
                         <div class="widget-content widget-content-area br-8 p-4 mb-2">
                             <b>Patient Details</b>
                             <div class="table-responsive mt-4">
-                                <table class="table table-bordered">
-                                    
-                                    <tr>
-                                        <th>Order ID</th>
-                                        <th>Patient Name</th>
-                                        <th>Patient Email</th>
-                                        <th>Billing Address</th>
-                                        <th>Dilvery Location</th>
-                                        <th>Patient DOB</th>
-                                        <th>Bill Amount</th>
-                                        <th>Date</th>
-                                    </tr>
-                                    <tr>
-                                        <td>{{$data->order_num}}</td>
-                                        <td>{{$data->userDetail->name}}</td>
-                                        <td>{{$data->userDetail->email}}</td>
-                                        <td>{{$data->billing_address}}</td>
-                                        <td>{{$data->delivery_location}}</td>
-                                        <td>{{ \Carbon\Carbon::parse($data->userDetail->dob)->format('m/d/Y') }}</td>
-                                        <td>${{number_format($data->total_amount,2)}}</td>
-                                        <td>{{ \Carbon\Carbon::parse($data->created_at)->format('m/d/Y') }}</td>
-                                    </tr>
+                            <table class="table table-bordered">
+    <tr>
+        <th>Order ID</th>
+        <th>Patient Name</th>
+        <th>Patient Email</th>
+        <th>Billing Address</th>
+        <th>Delivery Location</th>
+        <th>Patient DOB</th>
+        <th>Age</th> <!-- Added column for Age -->
+        <th>Bill Amount</th>
+        <th>Date</th>
+    </tr>
+    <tr>
+        <td>{{$data->order_num}}</td>
+        <td>{{$data->userDetail->name}}</td>
+        <td>{{$data->userDetail->email}}</td>
+        <td>{{$data->billing_address}}</td>
+        <td>{{$data->delivery_location}}</td>
+        <td>{{ \Carbon\Carbon::parse($data->userDetail->dob)->format('m/d/Y') }}</td>
+        <td>{{ \Carbon\Carbon::parse($data->userDetail->dob)->age }} year</td> <!-- Calculate and display age -->
+        <td>${{number_format($data->total_amount,2)}}</td>
+        <td>{{ \Carbon\Carbon::parse($data->created_at)->format('m/d/Y') }}</td>
+    </tr>
+</table>
 
-                                </table>
                             </div>
                         </div>
                         @if($data->addons && $data->addons->count() > 0)
@@ -229,40 +230,39 @@
                         </div>
                         @endif
 
-                        <!--- questions table ---> 
-
                         <div class="widget-content widget-content-area br-8 p-4 mb-2">
-                            <b>Questions & Answers</b>
-                            <div  id="toggleAccordion" class="no-icons accordion">
-                                   @foreach($data->orderDetail as $orderDetails)
-                                
-                                   @if($orderDetails->value)
-                                   <div class="card">
-                                       <div class="card-header" id="...">
-                                           <section class="mb-0 mt-0">
-                                               <div role="menu" class=""  data-bs-target="#defaultAccordionOne_{{$orderDetails->id}}" aria-expanded="false" aria-controls="defaultAccordionOne_{{$orderDetails->id}}">
-                                               <strong >
-                                                <?php echo $orderDetails->key ?> </strong><div class="icons"><svg> ... </svg></div>
-                                               </div>
-                                           </section>
-                                       </div>
-                               
-                                  <div id="defaultAccordionOne_{{$orderDetails->id}}"  aria-labelledby="..." data-bs-parent="#toggleAccordion">
-                                           <div class="card-body p-1 m-1">
-                                           <strong class="text-dark" style="font-size:20px;margin:0px !important;"><?php echo  $orderDetails->value;?></strong>
-                               
-                                           </div>
-                                       </div>
-                                   </div>
-                                   @endif
-                                   @endforeach
-    
-   
-                               </div>
-                           
-                        </div>
+    <b>Questions & Answers</b>
+    <div id="toggleAccordion" class="no-icons accordion">
+        @foreach($data->orderDetail as $orderDetails)
+            @if($orderDetails->value)
+                <div class="card">
+                    <div class="card-header" id="...">
+                        <section class="mb-0 mt-0">
+                            <div role="menu" class="" data-bs-target="#defaultAccordionOne_{{$orderDetails->id}}" aria-expanded="false" aria-controls="defaultAccordionOne_{{$orderDetails->id}}">
+                                <strong>
+                                    @php
+                                        $question = Str::endsWith($orderDetails->key, 'free text')
+                                            ? '<span style="color: red;">' . Str::replaceLast(' free text', '', $orderDetails->key) . '</span>'
+                                            : $orderDetails->key;
+                                    @endphp
+                                    {!! $question !!}
+                                </strong>
+                                <div class="icons"><svg> ... </svg></div>
+                            </div>
+                        </section>
+                    </div>
 
-                        <!--- ending question table --->
+                    <div id="defaultAccordionOne_{{$orderDetails->id}}" aria-labelledby="..." data-bs-parent="#toggleAccordion">
+                        <div class="card-body p-1 m-1">
+                            <strong class="text-dark" style="font-size: 20px; margin: 0px !important;"><?php echo $orderDetails->value; ?></strong>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        @endforeach
+    </div>
+</div>
+
 
                         @include('doctor.orders.includes.chat')
                             

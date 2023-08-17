@@ -34,7 +34,7 @@
     </li>
 
     <!--- Orders --->
-    <li class="menu {{ request()->is('admin/orders') ? 'active' : '' }}">
+    <li class="menu {{ request()->is('admin/orders') || request()->is('admin/orders/*') ? 'active' : '' }}">
         <a href="/admin/orders" aria-expanded="false" class="dropdown-toggle">
             <div class="">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg>
@@ -157,7 +157,7 @@
 
     <!--- orders for patients ---> 
 
-    <li class="menu {{ request()->is('patient/orders') ? 'active' : '' }}">
+    <li class="menu {{ request()->is('patient/orders') ||  request()->is('patient/orders/*') ? 'active' : '' }}">
         <a href="/patient/orders" aria-expanded="false" class="dropdown-toggle">
             <div class="">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg>
@@ -186,7 +186,7 @@
     @if(Auth::user()->user_role == 2)
 
     <!--- Doctors Orders ---> 
-    <li class="menu {{ request()->is('doctor/orders') ? 'active' : '' }}">
+    <li class="menu {{ request()->is('doctor/orders') || request()->is('doctor/orders/*') ? 'active' : '' }}">
         <a href="/doctor/orders" aria-expanded="false" class="dropdown-toggle">
             <div class="">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg>
@@ -203,7 +203,7 @@
     @if(Auth::user()->user_role == 3)
 
     <!--- pharmacy Managers Orders ---> 
-    <li class="menu {{ request()->is('pharmacy/orders') ? 'active' : '' }}">
+    <li class="menu {{ request()->is('pharmacy/orders') || request()->is('pharmacy/orders/*') ? 'active' : '' }}">
         <a href="/pharmacy/orders" aria-expanded="false" class="dropdown-toggle">
             <div class="">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg>
